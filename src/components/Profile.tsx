@@ -106,7 +106,10 @@ const Profile = () => {
 				<div className="">
 					{pools.map((pool) => {
 						return (
-							<Card className={classes.root + 'd-inline-flex'}>
+							<Card
+								className={classes.root + 'd-inline-flex'}
+								style={{ margin: '0.5rem' }}
+							>
 								<CardActionArea href={'/pool/' + pool.id}>
 									<CardContent>
 										<Typography gutterBottom variant="h5" component="h2">

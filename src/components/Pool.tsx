@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card';
 import Textarea from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import Comment from './Comment';
-import getSessionId from '../lib/getSessionId';
 import { makeAPIPostCall } from '../api/utils';
 
 export default function Pool({ registered = false }: { registered?: boolean }) {
