@@ -1,19 +1,37 @@
 import { useState, useEffect, FormEventHandler, useCallback } from 'react';
 import { useParams } from 'react-router';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import Textarea from '@material-ui/core/TextareaAutosize';
+import Typography from '@material-ui/core/Typography';
+import Comment from './Comment';
 
-const Pool = () => {
+export default function Pool({ registered = false }: { registered?: boolean }) {
 	const id = useParams<{ id: string }>().id;
-	const [state, setState] = useState({
-		id: 1,
-		pool_title: 'TJ Carpool',
-		pool_text: 'Carpool from TJ track to homes',
+	const [pool, setPool] = useState<Carpool.Pool>({
+		id: '123',
+		title: 'TJ Carpool',
+		description: 'Carpool from TJ track to homes',
 		start_time: '4/10/2021 3:00 PM',
 		end_time: '4/10/2021 4:00 PM',
 		capacity: 2,
-		participants: [],
-		comments: ['What is the covid vaccination status of all the participants?'],
+		participant_ids: [],
+		comments: [
+			{
+				author_id: 'myfatemi04',
+				id: '1234',
+				body: "what's the vaccination status of everyone?",
+			},
+		],
+		driver_id: 'None',
+		create_time: '1234',
+		update_time: '1234',
+		group_id: 'tj',
+		status: 'pending',
+		direction: 'dropoff',
+		author_id: 'michael',
+		type: 'offer',
 	});
-	const [registered, setRegistered] = useState(false);
 	const onComment = useCallback<FormEventHandler<HTMLFormElement>>((e) => {
 		e.preventDefault();
 
@@ -29,70 +47,45 @@ const Pool = () => {
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
-					setState(data);
+					setPool(data);
 				}
 			});
 	}, [id]);
 
 	return (
-		<div className="bg-dark" style={{ minHeight: '100vh' }}>
-			<h1
-				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
-				className="d-flex justify-content-center p-4"
+		<Card style={{ margin: '3rem auto', padding: '1rem 1rem', width: '50%' }}>
+			<Typography variant="h2" align="center">
+				{pool.title}
+			</Typography>
+			<Typography variant="subtitle1">
+				<b>Capacity</b>: {pool.participant_ids.length} / {pool.capacity}
+			</Typography>
+			<Typography variant="subtitle1">
+				<b>Start Time</b>: {pool.start_time}
+			</Typography>
+			<Typography variant="subtitle1">
+				<b>End Time</b>: {pool.end_time}
+			</Typography>
+			<Typography variant="body1">{pool.description}</Typography>
+			<Button
+				variant="contained"
+				color="primary"
+				style={{ marginTop: '0.5rem' }}
 			>
-				Pool {id}
-			</h1>
-			<div className="container " style={{ fontFamily: 'Courier New' }}>
-				<div className="card card-body " style={{ backgroundColor: '#F1EAE8' }}>
-					<h1 className="card-title">{state.pool_title}</h1>
-					<p className="text-left">
-						Capacity: {state.participants.length} / {state.capacity}
-					</p>
-					<p className="text-left">Start Time: {state.start_time}</p>
-					<p className="text-left">End Time: {state.end_time}</p>
-					<p className="text-left">{state.pool_text}</p>
-					<form
-						action={'register_pool/' + id}
-						method="POST"
-						className="text-left"
-					>
-						<input
-							type="submit"
-							value={!registered ? 'Register' : 'Unregister'}
-							className={
-								'text-left btn btn-' + (!registered ? 'success' : 'danger')
-							}
-						/>
-					</form>
-				</div>
-
-				<form onSubmit={onComment}>
-					<div id="form-group" className="text-left">
-						<textarea
-							className="form-control"
-							id="comment"
-							placeholder="Enter comment here..."
-						/>
-						<input className="btn btn-primary" type="submit" value="Submit" />
-					</div>
-					<br />
-				</form>
-				<div className="text-left">
-					<h4 className="text-white">Comments:</h4>
-					{state.comments.map((comment) => {
-						return (
-							<div
-								className="card card-body"
-								style={{ backgroundColor: '#D6D1D0' }}
-							>
-								<p className="card-text">{comment}</p>
-							</div>
-						);
-					})}
-				</div>
+				{registered ? 'Unregister' : 'Register'}
+			</Button>
+			<hr />
+			<Textarea
+				cols={80}
+				placeholder="Post a comment..."
+				style={{ margin: '0.5rem 0rem' }}
+			/>
+			<Button variant="contained">Post Comment</Button>
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
+				{pool.comments.map((comment) => (
+					<Comment comment={comment} key={comment.id} />
+				))}
 			</div>
-		</div>
+		</Card>
 	);
-};
-
-export default Pool;
+}
