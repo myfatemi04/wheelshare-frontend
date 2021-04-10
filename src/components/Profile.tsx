@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useContext, useEffect, useState } from 'react';
-import { API_ENDPOINT } from '../api/api';
+import { makeAPIGetCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 
 const useStyles = makeStyles({
@@ -21,7 +21,8 @@ const useStyles = makeStyles({
 const Profile = () => {
 	const { user, isLoggedIn } = useContext(AuthenticationContext);
 	const [groups, setGroups] = useState<Carpool.Group[]>([]);
-	const [pools, setPools] = useState([
+	const [pools, setPools] = useState<Carpool.Pool[]>([
+		/*
 		{
 			id: 1,
 			pool_title: 'TJ Carpool',
@@ -69,19 +70,17 @@ const Profile = () => {
 			comments: [
 				'What is the covid vaccination status of all the participants?',
 			],
-		},
+		},*/
 	]);
 	const classes = useStyles();
 
 	useEffect(() => {
 		console.log(process.env);
-		fetch(`${API_ENDPOINT}/my_pools`)
-			.then((response) => response.json())
-			.then((json) => {
-				if (json) {
-					setPools(json.data);
-				}
-			});
+		makeAPIGetCall('/my_pools').then((response) => {
+			if (response.data.data) {
+				setPools(response.data.data);
+			}
+		});
 	}, []);
 
 	if (!user) {
@@ -113,14 +112,14 @@ const Profile = () => {
 								<CardActionArea href={'/pool/' + pool.id}>
 									<CardContent>
 										<Typography gutterBottom variant="h5" component="h2">
-											{pool.pool_title}
+											{pool.title}
 										</Typography>
 										<Typography
 											variant="body2"
 											color="textSecondary"
 											component="p"
 										>
-											{pool.pool_text}
+											{pool.description}
 										</Typography>
 									</CardContent>
 								</CardActionArea>
