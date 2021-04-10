@@ -3,15 +3,8 @@ import React, { useState, useEffect } from 'react';
 const CreatePool = (props) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
-		const requestOptions = {
-			method: 'Pool',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
-			},
-			body: JSON.stringify({ Poolid: props.id }),
-		};
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/createPool`, requestOptions)
+
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/createPool`)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log(data);

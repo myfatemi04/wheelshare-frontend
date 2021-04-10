@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const UpdatePool = (props) => {
 	const id = props.match.params.id;
 	const [state, setState] = useState({
+		id: 1,
 		pool_title: 'TJ Carpool',
 		pool_text: 'Carpool from TJ track to homes',
 		start_time: '4/10/2021 3:00 PM',
@@ -11,15 +12,9 @@ const UpdatePool = (props) => {
 		participants: [],
 		comments: ['What is the covid vaccination status of all the participants?'],
 	});
-	const requestOptions = {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`,
-		},
-	};
 
 	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`, requestOptions)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
@@ -29,15 +24,7 @@ const UpdatePool = (props) => {
 	};
 	const onSubmit = (e) => {
 		e.preventDefault();
-		const requestOptions = {
-			method: 'Pool',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
-			},
-			body: JSON.stringify({ Poolid: props.id }),
-		};
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/createPool`, requestOptions)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/create_pool`)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log(data);
@@ -58,7 +45,7 @@ const UpdatePool = (props) => {
 				<form onSubmit={onSubmit}>
 					<div className="form-group">
 						<h1 className="form-title" style={{ fontFamily: 'Impact' }}>
-							Create Pool
+							Update Pool
 						</h1>
 						<label className="" for="title">
 							Pool Title:{' '}
@@ -124,7 +111,7 @@ const UpdatePool = (props) => {
 					<input
 						className="btn btn-success text-left"
 						type="submit"
-						value="Submit"
+						value="Update"
 					/>
 					<br />
 				</form>

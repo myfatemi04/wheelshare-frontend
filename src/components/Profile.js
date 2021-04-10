@@ -43,17 +43,9 @@ const Profile = (props) => {
 		],
 		groups: [],
 	});
-	const [stocks, setStocks] = useState([]);
-
-	const requestOptions = {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`,
-		},
-	};
 
 	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/profile/`, requestOptions)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/profile/`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
