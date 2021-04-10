@@ -38,7 +38,7 @@ const Pool = () => {
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
 				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
-				className=" d-flex justify-content-center p-4"
+				className="d-flex justify-content-center p-4"
 			>
 				Pool {id}
 			</h1>
