@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 
-const CreateGroup = (props) => {
-	const onSubmit = (e) => {
+const CreateGroup = () => {
+	const onSubmit = useCallback<React.FormEventHandler<HTMLFormElement>>((e) => {
 		e.preventDefault();
 
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/createPool`)
@@ -9,7 +9,8 @@ const CreateGroup = (props) => {
 			.then((data) => {
 				console.log(data);
 			});
-	};
+	}, []);
+
 	return (
 		<div
 			className="bg-dark"
@@ -24,7 +25,7 @@ const CreateGroup = (props) => {
 						<h1 className="form-title" style={{ fontFamily: 'Impact' }}>
 							Create Group
 						</h1>
-						<label className="" for="title">
+						<label className="" htmlFor="title">
 							Group Title:{' '}
 						</label>
 						<input
@@ -33,7 +34,7 @@ const CreateGroup = (props) => {
 							name="title"
 							className="form-control d-flex"
 							placeholder="Enter title here..."
-						></input>
+						/>
 					</div>
 				</form>
 			</div>

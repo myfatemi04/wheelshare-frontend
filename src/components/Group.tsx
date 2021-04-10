@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { API_ENDPOINT } from '../api';
 
-const Group = (props) => {
-	const id = props.match.params.id;
+const maybePluralize = (count: number, noun: string, suffix = 's') =>
+	`${count} ${noun}${count !== 1 ? suffix : ''}`;
+
+const Group = () => {
+	// eslint-disable-next-line
+	const { id } = useParams<{ id: string }>();
 	const [pools, setPools] = useState([
 		{
 			id: 1,
@@ -65,8 +70,6 @@ const Group = (props) => {
 			});
 	}, []);
 
-	const maybePluralize = (count, noun, suffix = 's') =>
-		`${count} ${noun}${count !== 1 ? suffix : ''}`;
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1

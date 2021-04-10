@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-const Profile = (props) => {
+const Profile = () => {
 	const [state, setState] = useState({
-		user: { username: 'HyperionLegion' },
+		user: {
+			username: 'HyperionLegion',
+		},
 		pools: [
 			{
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
+				title: 'TJ Carpool',
+				description: 'Carpool from TJ track to homes',
 				start_time: '4/10/2021 3:00 PM',
 				id: 1,
 				end_time: '4/10/2021 4:00 PM',
@@ -17,8 +19,8 @@ const Profile = (props) => {
 				],
 			},
 			{
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
+				title: 'TJ Carpool',
+				description: 'Carpool from TJ track to homes',
 				start_time: '4/10/2021 3:00 PM',
 				id: 2,
 				end_time: '4/10/2021 4:00 PM',
@@ -29,8 +31,8 @@ const Profile = (props) => {
 				],
 			},
 			{
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
+				title: 'TJ Carpool',
+				description: 'Carpool from TJ track to homes',
 				start_time: '4/10/2021 3:00 PM',
 				id: 3,
 				end_time: '4/10/2021 4:00 PM',
@@ -75,7 +77,7 @@ const Profile = (props) => {
 								className="text-left m-2 p-1"
 								style={{ backgroundColor: '#D6D1D0' }}
 							>
-								<a href={'pool/' + pool.id}>{pool.pool_title}</a>
+								<a href={'pool/' + pool.id}>{pool.title}</a>
 							</div>
 						);
 					})}

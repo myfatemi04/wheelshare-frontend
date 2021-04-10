@@ -40,20 +40,16 @@ const Groups = (props) => {
 			</a>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.Groups.map((Group, el) => {
-					let background;
-					if (el % 2 == 0) {
-						background = '#F1EAE8';
-					} else {
-						background = '#FFFFFF';
-					}
+				{state.Groups.map((group, index) => {
 					return (
 						<div
 							className="card card-body text-left"
-							style={{ backgroundColor: background }}
+							style={{
+								backgroundColor: index % 2 === 0 ? '#F1EAE8' : '#FFFFFF',
+							}}
 						>
-							<form action={'/requestgroup/' + Group.id} method="POST">
-								<p className="card-title">{Group.group_title}</p>
+							<form action={'/requestgroup/' + group.id} method="POST">
+								<p className="card-title">{group.group_title}</p>
 								<input
 									type="submit"
 									value="Request to Join"

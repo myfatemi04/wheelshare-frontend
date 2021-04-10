@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { API_ENDPOINT } from '../api';
 
-const MyPools = (props) => {
-	// const id = props.match.params.id;
-	const [pools, setPools] = useState([
+const maybePluralize = (count: number, noun: string, suffix = 's') =>
+	`${count} ${noun}${count !== 1 ? suffix : ''}`;
+
+const Pools = () => {
+	const [pools, setPools] = useState<Carpool.Pool[]>([
+		/*
 		{
 			id: 1,
 			pool_title: 'TJ Carpool',
@@ -51,7 +54,7 @@ const MyPools = (props) => {
 			comments: [
 				'What is the covid vaccination status of all the participants?',
 			],
-		},
+		},*/
 	]);
 
 	useEffect(() => {
@@ -65,8 +68,6 @@ const MyPools = (props) => {
 			});
 	}, []);
 
-	const maybePluralize = (count, noun, suffix = 's') =>
-		`${count} ${noun}${count !== 1 ? suffix : ''}`;
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
@@ -97,10 +98,10 @@ const MyPools = (props) => {
 							style={{ backgroundColor: background }}
 						>
 							<a href={'/Pool/' + pool.id} className="card-title">
-								{pool.pool_title}
+								{pool.title}
 							</a>
 							<p className="text-left">
-								Capacity: {pool.participants.length} / {pool.capacity}
+								Capacity: {pool.participant_ids.length} / {pool.capacity}
 							</p>
 							<p className="text-left">Start Time: {pool.start_time}</p>
 							<p className="text-left">End Time: {pool.end_time}</p>
@@ -115,4 +116,4 @@ const MyPools = (props) => {
 	);
 };
 
-export default MyPools;
+export default Pools;

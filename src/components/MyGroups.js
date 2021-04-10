@@ -40,9 +40,9 @@ const MyGroups = (props) => {
 			</a>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.MyGroups.map((Group, el) => {
+				{state.MyGroups.map((group, index) => {
 					let background;
-					if (el % 2 == 0) {
+					if (index % 2 === 0) {
 						background = '#F1EAE8';
 					} else {
 						background = '#FFFFFF';
@@ -52,8 +52,8 @@ const MyGroups = (props) => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/group/' + Group.id} className="card-title">
-								{Group.group_title}
+							<a href={'/group/' + group.id} className="card-title">
+								{group.group_title}
 							</a>
 						</div>
 					);

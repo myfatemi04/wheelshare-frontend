@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useCallback,
+	FormEventHandler,
+} from 'react';
+import { useParams } from 'react-router-dom';
 
-const UpdatePool = (props) => {
-	const id = props.match.params.id;
+const UpdatePool = () => {
+	const id = useParams<{ id: string }>().id;
 
 	// eslint-disable-next-line
 	const [pool, setPool] = useState({
@@ -24,7 +30,7 @@ const UpdatePool = (props) => {
 				}
 			});
 	}, [id]);
-	const onSubmit = (e) => {
+	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/update_pool`)
 			.then((response) => response.json())
@@ -49,7 +55,7 @@ const UpdatePool = (props) => {
 						<h1 className="form-title" style={{ fontFamily: 'Impact' }}>
 							Update Pool
 						</h1>
-						<label className="" for="title">
+						<label className="" htmlFor="title">
 							Pool Title:{' '}
 						</label>
 						<input
@@ -61,7 +67,7 @@ const UpdatePool = (props) => {
 						></input>
 					</div>
 					<div className="form-group">
-						<label className="" for="capacity">
+						<label className="" htmlFor="capacity">
 							Pool Capacity:
 						</label>
 						<input
@@ -73,7 +79,7 @@ const UpdatePool = (props) => {
 						></input>
 					</div>
 					<div className="form-group">
-						<label className="" for="pool_start">
+						<label className="" htmlFor="pool_start">
 							Start Time:
 						</label>
 						<input
@@ -85,7 +91,7 @@ const UpdatePool = (props) => {
 						></input>
 					</div>
 					<div className="form-group">
-						<label className="" for="pool_end">
+						<label className="" htmlFor="pool_end">
 							End Time:
 						</label>
 						<input
@@ -97,11 +103,10 @@ const UpdatePool = (props) => {
 						></input>
 					</div>
 					<div className="form-group">
-						<label className="" for="title">
+						<label className="" htmlFor="title">
 							Pool Description:
 						</label>
 						<textarea
-							type="text"
 							id="Pool-text"
 							name="Pool-text"
 							style={{ height: '200px' }}
