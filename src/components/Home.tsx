@@ -1,7 +1,10 @@
-import { ION_AUTHORIZATION_ENDPOINT } from '../api/api';
 import Button from '@material-ui/core/Button';
+import { useContext } from 'react';
+import { ION_AUTHORIZATION_ENDPOINT } from '../api/api';
+import AuthenticationContext from './AuthenticationContext';
 
 export default function Home() {
+	const { user, isLoggedIn } = useContext(AuthenticationContext);
 	return (
 		<div
 			style={{
@@ -12,11 +15,15 @@ export default function Home() {
 		>
 			<h1>Home</h1>
 			<div style={{ display: 'flex', flexDirection: 'row' }}>
-				<Button
-					onClick={() => (window.location.href = ION_AUTHORIZATION_ENDPOINT)}
-				>
-					Sign In with Ion
-				</Button>
+				{!isLoggedIn ? (
+					<Button
+						onClick={() => (window.location.href = ION_AUTHORIZATION_ENDPOINT)}
+					>
+						Sign In with Ion
+					</Button>
+				) : (
+					'Hello ' + user?.first_name + '!'
+				)}
 			</div>
 			<div className="d-flex flex-column">
 				<section

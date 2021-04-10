@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getMe } from '../api/api';
-import AuthContext, { AuthState } from './AuthenticationContext';
+import Authentication, { AuthState } from './AuthenticationContext';
 
 export default function AuthenticationWrapper({
 	children,
@@ -18,7 +18,11 @@ export default function AuthenticationWrapper({
 	const refreshAuthState = useCallback(() => {
 		if (sessionId) {
 			getMe().then((user) => {
-				setAuthState({ isLoggedIn: true, user, refreshAuthState });
+				if (user) {
+					setAuthState({ isLoggedIn: true, user, refreshAuthState });
+				} else {
+					setAuthState({ isLoggedIn: false, user: null, refreshAuthState });
+				}
 			});
 		} else {
 			setAuthState({ isLoggedIn: false, user: null, refreshAuthState });
@@ -33,7 +37,9 @@ export default function AuthenticationWrapper({
 		return null;
 	} else {
 		return (
-			<AuthContext.Provider value={authState}>{children}</AuthContext.Provider>
+			<Authentication.Provider value={authState}>
+				{children}
+			</Authentication.Provider>
 		);
 	}
 }
