@@ -16,6 +16,7 @@ import Main from './components/Main';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
+import Authenticator from './components/Authenticator';
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 				<Nav />
 				<Switch>
 					<Route component={Main} path="/about" />
+					<Route component={Authenticator} path="/auth/:provider/callback" />
 					<Route component={CreatePool} path="/create_pool" />
 					<Route component={CreateGroup} path="/create_group" />
 					<Route component={Groups} path="/groups" />
