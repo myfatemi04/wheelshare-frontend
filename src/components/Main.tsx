@@ -20,6 +20,7 @@ export default function Main() {
 						<img
 							className="text-center img-fluid"
 							src="images/logo.png"
+							alt="Carpool App"
 							width="350px"
 						/>
 					</div>

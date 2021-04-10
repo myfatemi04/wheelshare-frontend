@@ -40,6 +40,7 @@ export default function Home() {
 						<br />
 						<div className="text-center">
 							<img
+								alt="Carpool App"
 								className="text-center img-fluid"
 								src="images/logo.png"
 								width="350px"
