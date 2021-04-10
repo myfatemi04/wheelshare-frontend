@@ -20,7 +20,6 @@ function App() {
 			<BrowserRouter>
 				<Nav />
 				<Switch>
-					<Route component={Home} path="/" />
 					<Route component={Signup} path="/register" />
 					<Route component={Signin} path="/login" />
 					<Route component={Main} path="/about" />
@@ -29,6 +28,7 @@ function App() {
 					<Route component={Pools} path="/pools" />
 					<Route component={Pool} path="/pool/:id" />
 					<Route component={Profile} path="/profile" />
+					<Route component={Home} path="/" />
 				</Switch>
 			</BrowserRouter>
 		</div>

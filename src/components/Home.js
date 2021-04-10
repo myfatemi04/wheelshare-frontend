@@ -9,12 +9,7 @@ export default function Home() {
 		>
 			<h1>Home</h1>
 			<div style={{ display: 'flex', flexDirection: 'row' }}>
-				<a href="/signin" className="mx-2">
-					Sign In
-				</a>
-				<a href="/signup" className="mx-2">
-					Sign Up
-				</a>
+				<a href="/">Log In with Ion</a>
 			</div>
 		</div>
 	);
