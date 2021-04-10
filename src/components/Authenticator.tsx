@@ -12,7 +12,7 @@ export default function Authenticator() {
 
 	useEffect(() => {
 		fetch(`${API_ENDPOINT}/create_session`, {
-			method: 'post',
+			method: 'POST',
 			body: JSON.stringify({
 				code,
 				provider,
