@@ -13,6 +13,9 @@ export default function Authenticator() {
 	useEffect(() => {
 		fetch(`${API_ENDPOINT}/create_session`, {
 			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify({
 				code,
 				provider,
