@@ -60,23 +60,21 @@ const Profile = () => {
 		callAPI();
 	}, []);
 	return (
-		<div className="" style={{ minHeight: '100vh' }}>
+		<div className="" style={{ minHeight: '100vh', backgroundColor: '#F1EAE8' }}>
 			<h1
 				className="d-flex justify-content-center p-4"
-				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
+				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Courier New' }}
 			>
 				Profile
 			</h1>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
-				<h1>Hello {state.user.username}!</h1>
-				<h2>Your Pools:</h2>
+				<h2><u>{state.user.username}'s Pools</u></h2>
 				<div className="">
 					{state.pools.map((pool) => {
 						return (
 							<div
 								className="text-left m-2 p-1"
-								style={{ backgroundColor: '#D6D1D0' }}
-							>
+								style={{minHeight: 50, minWidth: '200px', maxWidth: '200px', border: '3px #000000 solid', verticalAlign: 'center', textAlign: 'center', padding: '10px 10px 5px 10px', margin: '0px 10px 0px 10px', display: 'inline'}}>
 								<a href={'pool/' + pool.id}>{pool.title}</a>
 							</div>
 						);
