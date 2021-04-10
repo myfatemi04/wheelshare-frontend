@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { API_ENDPOINT } from '../api';
 
 const Pools = (props) => {
 	const [pools, setPools] = useState([
+		/*
 		{
 			id: 1,
 			pool_title: 'TJ Carpool',
@@ -49,22 +51,20 @@ const Pools = (props) => {
 			comments: [
 				'What is the covid vaccination status of all the participants?',
 			],
-		},
+		},*/
 	]);
 
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pools/`)
+	useEffect(() => {
+		console.log(process.env);
+		fetch(`${API_ENDPOINT}/my_pools`)
 			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setPools(data.Pools);
+			.then((json) => {
+				if (json) {
+					setPools(json.data);
 				}
 			});
-	};
-
-	useEffect(() => {
-		callAPI();
 	}, []);
+
 	const maybePluralize = (count, noun, suffix = 's') =>
 		`${count} ${noun}${count !== 1 ? suffix : ''}`;
 	return (

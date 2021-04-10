@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Nav from './components/Nav';
-import Signin from './components/auth/Signin';
-import Signup from './components/auth/Signup';
 import Pools from './components/Pools';
 import Pool from './components/Pool';
 import Profile from './components/Profile';
@@ -20,8 +18,6 @@ function App() {
 			<BrowserRouter>
 				<Nav />
 				<Switch>
-					<Route component={Signup} path="/register" />
-					<Route component={Signin} path="/login" />
 					<Route component={Main} path="/about" />
 					<Route component={CreatePool} path="/create_pool" />
 					<Route component={UpdatePool} path="/update_pool" />

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const UpdatePool = (props) => {
 	const id = props.match.params.id;
+
+	// eslint-disable-next-line
 	const [pool, setPool] = useState({
 		id: 1,
 		pool_title: 'TJ Carpool',
