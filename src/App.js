@@ -24,8 +24,6 @@ function App() {
 			<BrowserRouter>
 				<Nav />
 				<Switch>
-					<Route component={Signup} path="/register" />
-					<Route component={Signin} path="/login" />
 					<Route component={Main} path="/about" />
 					<Route component={CreatePool} path="/create_pool" />
 					<Route component={CreateGroup} path="/create_group" />

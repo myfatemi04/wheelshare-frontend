@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_ENDPOINT } from '../api';
 
 const Group = (props) => {
 	const id = props.match.params.id;
@@ -55,20 +56,17 @@ const Group = (props) => {
 		],
 	});
 
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pools/`)
+	useEffect(() => {
+		console.log(process.env);
+		fetch(`${API_ENDPOINT}/my_pools`)
 			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setPools(data.Pools);
+			.then((json) => {
+				if (json) {
+					setPools(json.data);
 				}
 			});
-	};
-
-	useEffect(() => {
-		console.log('hello');
-		callAPI();
 	}, []);
+
 	const maybePluralize = (count, noun, suffix = 's') =>
 		`${count} ${noun}${count !== 1 ? suffix : ''}`;
 	return (
