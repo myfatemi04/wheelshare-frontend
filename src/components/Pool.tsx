@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEventHandler } from 'react';
+import { useState, useEffect, FormEventHandler, useCallback } from 'react';
 import { useParams } from 'react-router';
 
 const Pool = () => {
@@ -14,16 +14,7 @@ const Pool = () => {
 		comments: ['What is the covid vaccination status of all the participants?'],
 	});
 
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
-	const onComment: FormEventHandler<HTMLFormElement> = (e) => {
+	const onComment = useCallback<FormEventHandler<HTMLFormElement>>((e) => {
 		e.preventDefault();
 
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/comments`)
@@ -31,10 +22,18 @@ const Pool = () => {
 			.then((data) => {
 				console.log(data);
 			});
-	};
-	useEffect(() => {
-		callAPI();
 	}, []);
+
+	useEffect(() => {
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data !== undefined) {
+					setState(data);
+				}
+			});
+	}, [id]);
+
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1

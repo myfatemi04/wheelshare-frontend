@@ -32,7 +32,7 @@ const UpdatePool = () => {
 	}, [id]);
 	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/create_pool`)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/update_pool`)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log(data);
