@@ -22,46 +22,58 @@ const Profile = () => {
 		user: {
 			username: 'HyperionLegion',
 		},
-		pools: [
-			{
-				title: 'TJ Carpool',
-				description: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				id: 1,
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				title: 'TJ Carpool',
-				description: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				id: 2,
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				title: 'TJ Carpool',
-				description: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				id: 3,
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-		],
 		groups: [],
 	});
+	const [pools, setPools] = useState([
+		{
+			id: 1,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+		{
+			id: 2,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+		{
+			id: 3,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+		{
+			id: 4,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+	]);
 	const classes = useStyles();
 
 	const callAPI = () => {
@@ -75,7 +87,14 @@ const Profile = () => {
 	};
 
 	useEffect(() => {
-		callAPI();
+		console.log(process.env);
+		fetch(`${API_ENDPOINT}/my_pools`)
+			.then((response) => response.json())
+			.then((json) => {
+				if (json) {
+					setPools(json.data);
+				}
+			});
 	}, []);
 	return (
 		<div
@@ -93,20 +112,20 @@ const Profile = () => {
 					<u>{state.user.username}'s Pools</u>
 				</h2>
 				<div className="">
-					{state.pools.map((pool) => {
+					{pools.map((pool) => {
 						return (
 							<Card className={classes.root + 'd-inline-flex'}>
 								<CardActionArea href={'/pool/' + pool.id}>
 									<CardContent>
 										<Typography gutterBottom variant="h5" component="h2">
-											{pool.title}
+											{pool.pool_title}
 										</Typography>
 										<Typography
 											variant="body2"
 											color="textSecondary"
 											component="p"
 										>
-											{pool.description}
+											{pool.pool_text}
 										</Typography>
 									</CardContent>
 								</CardActionArea>
