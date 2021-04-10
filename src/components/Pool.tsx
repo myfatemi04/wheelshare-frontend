@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, FormEventHandler } from 'react';
+import { useParams } from 'react-router';
 
-const Pool = (props) => {
-	const id = props.match.params.id;
+const Pool = () => {
+	const id = useParams<{ id: string }>().id;
 	const [state, setState] = useState({
 		pool_title: 'TJ Carpool',
 		id: 1,
@@ -22,7 +23,7 @@ const Pool = (props) => {
 				}
 			});
 	};
-	const onComment = (e) => {
+	const onComment: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/comments`)
@@ -57,7 +58,6 @@ const Pool = (props) => {
 						<textarea
 							className="form-control"
 							id="comment"
-							type="text"
 							placeholder="Enter comment here..."
 						/>
 						<input className="btn btn-primary" type="submit" value="Submit" />
