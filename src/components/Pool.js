@@ -1,8 +1,8 @@
-import { useState, useEffect, FormEventHandler, useCallback } from 'react';
-import { useParams } from 'react-router';
+import React, { useState, useEffect, Component } from 'react';
 
-const Pool = () => {
-	const id = useParams<{ id: string }>().id;
+const Pool = (props) => {
+	const poolid = props.match.params.id;
+	const registered = false;
 	const [state, setState] = useState({
 		pool_title: 'TJ Carpool',
 		id: 1,
@@ -13,8 +13,17 @@ const Pool = () => {
 		participants: [],
 		comments: ['What is the covid vaccination status of all the participants?'],
 	});
-	const [registered, setRegistered] = useState(false);
-	const onComment = useCallback<FormEventHandler<HTMLFormElement>>((e) => {
+
+	const callAPI = () => {
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${poolid}`)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data !== undefined) {
+					setState(data);
+				}
+			});
+	};
+	const onComment = (e) => {
 		e.preventDefault();
 
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/comments`)
@@ -22,25 +31,18 @@ const Pool = () => {
 			.then((data) => {
 				console.log(data);
 			});
-	}, []);
+	};
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	}, [id]);
-
+		callAPI();
+	}, []);
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
 				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
 				className=" d-flex justify-content-center p-4"
 			>
-				Pool {id}
+				Pool {poolid}
 			</h1>
 			<div className="container " style={{ fontFamily: 'Courier New' }}>
 				<div className="card card-body " style={{ backgroundColor: '#F1EAE8' }}>
@@ -52,7 +54,7 @@ const Pool = () => {
 					<p className="text-left">End Time: {state.end_time}</p>
 					<p className="text-left">{state.pool_text}</p>
 					<form
-						action={'register_pool/' + id}
+						action={'register_pool/' + poolid}
 						method="POST"
 						className="text-left"
 					>
@@ -71,6 +73,7 @@ const Pool = () => {
 						<textarea
 							className="form-control"
 							id="comment"
+							type="text"
 							placeholder="Enter comment here..."
 						/>
 						<input className="btn btn-primary" type="submit" value="Submit" />
