@@ -54,15 +54,8 @@ const Pools = (props) => {
 		],
 	});
 
-	const requestOptions = {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`,
-		},
-	};
-
 	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/Pools/`, requestOptions)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pools/`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
@@ -95,7 +88,7 @@ const Pools = (props) => {
 				<br></br>
 				{state.Pools.map((Pool, el) => {
 					let background;
-					if (el % 2 == 0) {
+					if (el % 2 === 0) {
 						background = '#F1EAE8';
 					} else {
 						background = '#FFFFFF';

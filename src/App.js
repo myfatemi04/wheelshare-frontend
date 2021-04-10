@@ -13,7 +13,6 @@ import Main from './components/Main';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
-import ProtectedRoute from './components/ProtectedRoute.js';
 
 function App() {
 	return (
@@ -25,11 +24,11 @@ function App() {
 					<Route component={Signup} path="/register" />
 					<Route component={Signin} path="/login" />
 					<Route component={Main} path="/about" />
-					<ProtectedRoute component={CreatePool} path="/create_pool" />
-					<ProtectedRoute component={UpdatePool} path="/update_pool" />
-					<ProtectedRoute component={Pools} path="/pools" />
-					<ProtectedRoute component={Pool} path="/pool/:id" />
-					<ProtectedRoute component={Profile} path="/profile" />
+					<Route component={CreatePool} path="/create_pool" />
+					<Route component={UpdatePool} path="/update_pool" />
+					<Route component={Pools} path="/pools" />
+					<Route component={Pool} path="/pool/:id" />
+					<Route component={Profile} path="/profile" />
 				</Switch>
 			</BrowserRouter>
 		</div>

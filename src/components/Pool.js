@@ -13,15 +13,8 @@ const Pool = (props) => {
 		comments: ['What is the covid vaccination status of all the participants?'],
 	});
 
-	const requestOptions = {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem('token')}`,
-		},
-	};
-
 	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`, requestOptions)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
@@ -31,15 +24,8 @@ const Pool = (props) => {
 	};
 	const onComment = (e) => {
 		e.preventDefault();
-		const requestOptions = {
-			method: 'pool',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
-			},
-			body: JSON.stringify({ poolid: props.id }),
-		};
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/comments`, requestOptions)
+
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/comments`)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log(data);
