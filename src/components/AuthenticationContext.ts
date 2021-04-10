@@ -10,10 +10,10 @@ export type AuthState = {
 	refreshAuthState: (() => void) | null;
 };
 
-const Authentication = createContext<AuthState>({
+const AuthenticationContext = createContext<AuthState>({
 	isLoggedIn: false,
 	user: null,
 	refreshAuthState: null,
 });
 
-export default Authentication;
+export default AuthenticationContext;

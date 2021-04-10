@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getMe } from '../api/api';
-import Authentication, { AuthState } from './AuthenticationContext';
+import AuthenticationContext, { AuthState } from './AuthenticationContext';
 
 export default function AuthenticationWrapper({
 	children,
@@ -37,9 +37,9 @@ export default function AuthenticationWrapper({
 		return null;
 	} else {
 		return (
-			<Authentication.Provider value={authState}>
+			<AuthenticationContext.Provider value={authState}>
 				{children}
-			</Authentication.Provider>
+			</AuthenticationContext.Provider>
 		);
 	}
 }
