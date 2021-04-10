@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { API_ENDPOINT } from '../api/api';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import { useContext, useEffect, useState } from 'react';
+import { API_ENDPOINT } from '../api/api';
+import AuthenticationContext from './AuthenticationContext';
 
 const useStyles = makeStyles({
 	root: {
@@ -17,13 +17,10 @@ const useStyles = makeStyles({
 		height: 140,
 	},
 });
+
 const Profile = () => {
-	const [state, setState] = useState({
-		user: {
-			username: 'HyperionLegion',
-		},
-		groups: [],
-	});
+	const { user, isLoggedIn } = useContext(AuthenticationContext);
+	const [groups, setGroups] = useState<Carpool.Group[]>([]);
 	const [pools, setPools] = useState([
 		{
 			id: 1,
@@ -76,16 +73,6 @@ const Profile = () => {
 	]);
 	const classes = useStyles();
 
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/profile/`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
-
 	useEffect(() => {
 		console.log(process.env);
 		fetch(`${API_ENDPOINT}/my_pools`)
@@ -96,6 +83,11 @@ const Profile = () => {
 				}
 			});
 	}, []);
+
+	if (!user) {
+		return <h1>Please Sign In</h1>;
+	}
+
 	return (
 		<div
 			className=""
@@ -103,13 +95,13 @@ const Profile = () => {
 		>
 			<h1
 				className="d-flex justify-content-center p-4"
-				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Courier New' }}
+				style={{ backgroundColor: '#F1EAE8' }}
 			>
 				Profile
 			</h1>
-			<div className="container" style={{ fontFamily: 'Courier New' }}>
+			<div className="container">
 				<h2>
-					<u>{state.user.username}'s Pools</u>
+					<u>{user.username}'s Pools</u>
 				</h2>
 				<div className="">
 					{pools.map((pool) => {
