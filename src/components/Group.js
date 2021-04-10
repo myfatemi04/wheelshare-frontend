@@ -60,7 +60,7 @@ const Group = (props) => {
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
-					setState(data);
+					setPools(data.Pools);
 				}
 			});
 	};
@@ -88,9 +88,9 @@ const Group = (props) => {
 			</a>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.Pools.map((Pool, el) => {
+				{pools.map((pool, index) => {
 					let background;
-					if (el % 2 == 0) {
+					if (index % 2 === 0) {
 						background = '#F1EAE8';
 					} else {
 						background = '#FFFFFF';
@@ -100,16 +100,16 @@ const Group = (props) => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/Pool/' + Pool.id} className="card-title">
-								{Pool.pool_title}
+							<a href={'/Pool/' + pool.id} className="card-title">
+								{pool.pool_title}
 							</a>
 							<p className="text-left">
-								Capacity: {Pool.participants.length} / {Pool.capacity}
+								Capacity: {pool.participants.length} / {pool.capacity}
 							</p>
-							<p className="text-left">Start Time: {Pool.start_time}</p>
-							<p className="text-left">End Time: {Pool.end_time}</p>
+							<p className="text-left">Start Time: {pool.start_time}</p>
+							<p className="text-left">End Time: {pool.end_time}</p>
 							<p className="text-warning">
-								{maybePluralize(Pool.comments.length, 'comment')}
+								{maybePluralize(pool.comments.length, 'comment')}
 							</p>
 						</div>
 					);

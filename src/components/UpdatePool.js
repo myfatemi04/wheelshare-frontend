@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const UpdatePool = (props) => {
 	const id = props.match.params.id;
-	const [state, setState] = useState({
+	const [pool, setPool] = useState({
 		id: 1,
 		pool_title: 'TJ Carpool',
 		pool_text: 'Carpool from TJ track to homes',
@@ -13,15 +13,15 @@ const UpdatePool = (props) => {
 		comments: ['What is the covid vaccination status of all the participants?'],
 	});
 
-	const callAPI = () => {
+	const callAPI = useCallback(() => {
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {
-					setState(data);
+					setPool(data);
 				}
 			});
-	};
+	}, [id]);
 	const onSubmit = (e) => {
 		e.preventDefault();
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/update_pool`)
@@ -32,7 +32,7 @@ const UpdatePool = (props) => {
 	};
 	useEffect(() => {
 		callAPI();
-	}, []);
+	}, [callAPI]);
 	return (
 		<div
 			className="bg-dark"

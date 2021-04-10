@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Nav from './components/Nav';
 import Signin from './components/auth/Signin';
@@ -12,6 +12,7 @@ import Groups from './components/Groups';
 import MyGroups from './components/MyGroups';
 
 import UpdatePool from './components/UpdatePool';
+import Home from './components/Home';
 import Main from './components/Main';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -34,6 +35,7 @@ function App() {
 					<Route component={Group} path="/group/:id" />
 					<Route component={Pool} path="/group/:id/pool/:poolid" />
 					<Route component={Profile} path="/profile" />
+					<Route component={Home} path="/" />
 				</Switch>
 			</BrowserRouter>
 		</div>
