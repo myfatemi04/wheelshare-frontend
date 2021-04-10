@@ -4,8 +4,8 @@ import { useParams } from 'react-router';
 const Pool = () => {
 	const id = useParams<{ id: string }>().id;
 	const [state, setState] = useState({
-		pool_title: 'TJ Carpool',
 		id: 1,
+		pool_title: 'TJ Carpool',
 		pool_text: 'Carpool from TJ track to homes',
 		start_time: '4/10/2021 3:00 PM',
 		end_time: '4/10/2021 4:00 PM',

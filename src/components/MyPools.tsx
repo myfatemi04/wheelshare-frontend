@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_ENDPOINT } from '../api';
 
-const MyPools = (props) => {
+const MyPools = () => {
 	// const id = props.match.params.id;
 	const [pools, setPools] = useState([
 		{
@@ -65,7 +65,7 @@ const MyPools = (props) => {
 			});
 	}, []);
 
-	const maybePluralize = (count, noun, suffix = 's') =>
+	const maybePluralize = (count: number, noun: string, suffix = 's') =>
 		`${count} ${noun}${count !== 1 ? suffix : ''}`;
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>

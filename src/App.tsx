@@ -13,8 +13,8 @@ import MyPools from './components/MyPools';
 import UpdatePool from './components/UpdatePool';
 import Home from './components/Home';
 import Main from './components/Main';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+//import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
 import Authenticator from './components/Authenticator';
 

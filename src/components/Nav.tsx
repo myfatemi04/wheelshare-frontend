@@ -1,6 +1,8 @@
+import AppBar from '@material-ui/core/AppBar';
+
 const Nav = () => {
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+		<AppBar className="navbar navbar-expand-lg navbar-dark bg-dark">
 			<button
 				className="navbar-toggler"
 				type="button"
@@ -41,7 +43,7 @@ const Nav = () => {
 					</li>
 				</ul>
 			</div>
-		</nav>
+		</AppBar>
 	);
 };
 

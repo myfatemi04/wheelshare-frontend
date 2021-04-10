@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-const Groups = (props) => {
+const MyGroups = () => {
 	const [state, setState] = useState({
-		Groups: [
+		MyGroups: [
 			{
 				id: 1,
 				group_title: 'TJ',
@@ -29,7 +29,7 @@ const Groups = (props) => {
 				className="d-flex justify-content-center p-4"
 				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
 			>
-				Groups
+				My Groups
 			</h1>
 			<a
 				className="btn btn-large btn-success"
@@ -40,22 +40,21 @@ const Groups = (props) => {
 			</a>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.Groups.map((group, index) => {
+				{state.MyGroups.map((group, index) => {
+					let background;
+					if (index % 2 === 0) {
+						background = '#F1EAE8';
+					} else {
+						background = '#FFFFFF';
+					}
 					return (
 						<div
 							className="card card-body text-left"
-							style={{
-								backgroundColor: index % 2 === 0 ? '#F1EAE8' : '#FFFFFF',
-							}}
+							style={{ backgroundColor: background }}
 						>
-							<form action={'/requestgroup/' + group.id} method="POST">
-								<p className="card-title">{group.group_title}</p>
-								<input
-									type="submit"
-									value="Request to Join"
-									className="btn btn-success d-flex"
-								/>
-							</form>
+							<a href={'/group/' + group.id} className="card-title">
+								{group.group_title}
+							</a>
 						</div>
 					);
 				})}
@@ -64,4 +63,4 @@ const Groups = (props) => {
 	);
 };
 
-export default Groups;
+export default MyGroups;
