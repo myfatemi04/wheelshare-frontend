@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Pool = (props) => {
-	const poolid = props.match.params.poolid;
-	const id = props.match.params.id;
+	const poolid = props.match.params.id;
 	const [state, setState] = useState({
 		pool_title: 'TJ Carpool',
 		id: 1,
@@ -15,7 +14,7 @@ const Pool = (props) => {
 	});
 
 	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${poolid}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data !== undefined) {

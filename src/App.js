@@ -9,7 +9,7 @@ import CreatePool from './components/CreatePool';
 import CreateGroup from './components/CreateGroup';
 import Groups from './components/Groups';
 import MyGroups from './components/MyGroups';
-
+import MyPools from './components/MyPools';
 import UpdatePool from './components/UpdatePool';
 import Home from './components/Home';
 import Main from './components/Main';
@@ -28,9 +28,10 @@ function App() {
 					<Route component={CreateGroup} path="/create_group" />
 					<Route component={Groups} path="/groups" />
 					<Route component={MyGroups} path="/mygroups" />
+					<Route component={MyPools} path="/mypools" />
 					<Route component={UpdatePool} path="/update_pool" />
 					<Route component={Group} path="/group/:id" />
-					<Route component={Pool} path="/group/:id/pool/:poolid" />
+					<Route component={Pool} path="/pool/:id" />
 					<Route component={Profile} path="/profile" />
 					<Route component={Home} path="/" />
 				</Switch>

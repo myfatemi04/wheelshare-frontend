@@ -36,6 +36,11 @@ const Nav = (props) => {
 							MyGroups
 						</a>
 					</li>
+					<li className="nav-item">
+						<a className="nav-link text-white" href="/mypools">
+							MyPools
+						</a>
+					</li>
 				</ul>
 			</div>
 		</nav>
