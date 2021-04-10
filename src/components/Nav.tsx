@@ -21,7 +21,6 @@ const useStyles = makeStyles({
 	},
 });
 const navLinks = [
-	{ title: `Carpool`, path: `/` },
 	{ title: `Profile`, path: `/profile` },
 	{ title: `Groups`, path: `/groups` },
 	{ title: `MyGroups`, path: `/mygroups` },
