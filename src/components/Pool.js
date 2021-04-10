@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 
 const Pool = (props) => {
 	const poolid = props.match.params.id;
+	const registered = false;
 	const [state, setState] = useState({
 		pool_title: 'TJ Carpool',
 		id: 1,
@@ -31,6 +32,7 @@ const Pool = (props) => {
 				console.log(data);
 			});
 	};
+
 	useEffect(() => {
 		callAPI();
 	}, []);
@@ -51,7 +53,21 @@ const Pool = (props) => {
 					<p className="text-left">Start Time: {state.start_time}</p>
 					<p className="text-left">End Time: {state.end_time}</p>
 					<p className="text-left">{state.pool_text}</p>
+					<form
+						action={'register_pool/' + poolid}
+						method="POST"
+						className="text-left"
+					>
+						<input
+							type="submit"
+							value={!registered ? 'Register' : 'Unregister'}
+							className={
+								'text-left btn btn-' + (!registered ? 'success' : 'danger')
+							}
+						/>
+					</form>
 				</div>
+
 				<form onSubmit={onComment}>
 					<div id="form-group" className="text-left">
 						<textarea
