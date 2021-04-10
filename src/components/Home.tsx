@@ -1,4 +1,4 @@
-import { ION_AUTHORIZATION_ENDPOINT } from '../api';
+import { ION_AUTHORIZATION_ENDPOINT } from '../api/api';
 import Button from '@material-ui/core/Button';
 
 export default function Home() {

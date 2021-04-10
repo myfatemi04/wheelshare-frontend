@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Redirect, useLocation, useParams } from 'react-router-dom';
-import { API_ENDPOINT } from '../api';
+import { API_ENDPOINT } from '../api/api';
 
 export default function Authenticator() {
 	const { provider } = useParams<{ provider: string }>();

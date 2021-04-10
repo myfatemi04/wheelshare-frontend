@@ -4,6 +4,14 @@ declare namespace Carpool {
 		member_ids: string[];
 	}
 
+	// Omits the email attribute
+	export interface PublicUser {
+		id: string;
+		username: string;
+		first_name: string;
+		last_name: string;
+	}
+
 	export interface User {
 		id: string;
 		email: string;

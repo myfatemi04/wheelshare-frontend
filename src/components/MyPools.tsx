@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_ENDPOINT } from '../api';
+import { API_ENDPOINT } from '../api/api';
 
 const MyPools = () => {
 	// const id = props.match.params.id;
