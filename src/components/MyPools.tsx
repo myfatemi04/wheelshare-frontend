@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { API_ENDPOINT } from '../api/api';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
+const useStyles = makeStyles({
+	root: {
+		maxWidth: 345,
+	},
+	media: {
+		height: 140,
+	},
+});
 const MyPools = () => {
 	// const id = props.match.params.id;
 	const [pools, setPools] = useState([
@@ -67,6 +83,8 @@ const MyPools = () => {
 
 	const maybePluralize = (count: number, noun: string, suffix = 's') =>
 		`${count} ${noun}${count !== 1 ? suffix : ''}`;
+	const classes = useStyles();
+
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
@@ -92,22 +110,32 @@ const MyPools = () => {
 						background = '#FFFFFF';
 					}
 					return (
-						<div
-							className="card card-body text-left"
-							style={{ backgroundColor: background }}
-						>
-							<a href={'/Pool/' + pool.id} className="card-title">
-								{pool.pool_title}
-							</a>
-							<p className="text-left">
-								Capacity: {pool.participants.length} / {pool.capacity}
-							</p>
-							<p className="text-left">Start Time: {pool.start_time}</p>
-							<p className="text-left">End Time: {pool.end_time}</p>
-							<p className="text-warning">
-								{maybePluralize(pool.comments.length, 'comment')}
-							</p>
-						</div>
+						<Card className={classes.root + 'd-inline-flex'}>
+							<CardActionArea>
+								<CardContent>
+									<Typography gutterBottom variant="h5" component="h2">
+										{pool.pool_title}
+									</Typography>
+									<Typography
+										variant="body2"
+										color="textSecondary"
+										component="p"
+									>
+										Lizards are a widespread group of squamate reptiles, with
+										over 6,000 species, ranging across all continents except
+										Antarctica
+									</Typography>
+								</CardContent>
+							</CardActionArea>
+							<CardActions>
+								<Button size="small" color="primary">
+									Share
+								</Button>
+								<Button size="small" color="primary">
+									Learn More
+								</Button>
+							</CardActions>
+						</Card>
 					);
 				})}
 			</div>

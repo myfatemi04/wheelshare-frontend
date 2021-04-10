@@ -1,5 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { API_ENDPOINT } from '../api/api';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
+const useStyles = makeStyles({
+	root: {
+		maxWidth: 345,
+	},
+	media: {
+		height: 140,
+	},
+});
 const Profile = () => {
 	const [state, setState] = useState({
 		user: {
@@ -45,6 +62,7 @@ const Profile = () => {
 		],
 		groups: [],
 	});
+	const classes = useStyles();
 
 	const callAPI = () => {
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/profile/`)
@@ -60,7 +78,10 @@ const Profile = () => {
 		callAPI();
 	}, []);
 	return (
-		<div className="" style={{ minHeight: '100vh', backgroundColor: '#F1EAE8' }}>
+		<div
+			className=""
+			style={{ minHeight: '100vh', backgroundColor: '#F1EAE8' }}
+		>
 			<h1
 				className="d-flex justify-content-center p-4"
 				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Courier New' }}
@@ -68,19 +89,52 @@ const Profile = () => {
 				Profile
 			</h1>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
-				<h2><u>{state.user.username}'s Pools</u></h2>
+				<h2>
+					<u>{state.user.username}'s Pools</u>
+				</h2>
 				<div className="">
 					{state.pools.map((pool) => {
 						return (
-							<div
-								className="text-left m-2 p-1"
-								style={{minHeight: 50, minWidth: '200px', maxWidth: '200px', border: '3px #000000 solid', verticalAlign: 'center', textAlign: 'center', padding: '10px 10px 5px 10px', margin: '0px 10px 0px 10px', display: 'inline'}}>
-								<a href={'pool/' + pool.id}>{pool.title}</a>
-							</div>
+							<Card className={classes.root + 'd-inline-flex'}>
+								<CardActionArea href={'/pool/' + pool.id}>
+									<CardContent>
+										<Typography gutterBottom variant="h5" component="h2">
+											{pool.title}
+										</Typography>
+										<Typography
+											variant="body2"
+											color="textSecondary"
+											component="p"
+										>
+											{pool.description}
+										</Typography>
+									</CardContent>
+								</CardActionArea>
+								<CardActions>
+									<Button
+										size="small"
+										color="primary"
+										onClick={() => {
+											let link: string = 'localhost:3000/pool/' + pool.id;
+											navigator.clipboard.writeText(link);
+										}}
+									>
+										Share
+									</Button>
+									<Button
+										href={'/pool/' + pool.id}
+										size="small"
+										color="primary"
+									>
+										Learn More
+									</Button>
+								</CardActions>
+							</Card>
 						);
 					})}
 				</div>
 			</div>
+			<script></script>
 		</div>
 	);
 };
