@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const Pools = (props) => {
+const Group = (props) => {
+	const id = props.match.params.id;
 	const [state, setState] = useState({
 		Pools: [
 			{
@@ -65,6 +66,7 @@ const Pools = (props) => {
 	};
 
 	useEffect(() => {
+		console.log('hello');
 		callAPI();
 	}, []);
 	const maybePluralize = (count, noun, suffix = 's') =>
@@ -117,4 +119,4 @@ const Pools = (props) => {
 	);
 };
 
-export default Pools;
+export default Group;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Pool = (props) => {
+	const poolid = props.match.params.poolid;
 	const id = props.match.params.id;
 	const [state, setState] = useState({
 		pool_title: 'TJ Carpool',
@@ -40,7 +41,7 @@ const Pool = (props) => {
 				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
 				className=" d-flex justify-content-center p-4"
 			>
-				Pool {id}
+				Pool {poolid}
 			</h1>
 			<div className="container " style={{ fontFamily: 'Courier New' }}>
 				<div className="card card-body " style={{ backgroundColor: '#F1EAE8' }}>
