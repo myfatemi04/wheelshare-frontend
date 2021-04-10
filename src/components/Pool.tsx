@@ -1,10 +1,12 @@
-import { useState, useEffect, FormEventHandler, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Textarea from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import Comment from './Comment';
+import getSessionId from '../lib/getSessionId';
+import { makeAPIPostCall } from '../api/utils';
 
 export default function Pool({ registered = false }: { registered?: boolean }) {
 	const id = useParams<{ id: string }>().id;
@@ -32,15 +34,41 @@ export default function Pool({ registered = false }: { registered?: boolean }) {
 		author_id: 'michael',
 		type: 'offer',
 	});
-	const onComment = useCallback<FormEventHandler<HTMLFormElement>>((e) => {
-		e.preventDefault();
 
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/comments`)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-			});
-	}, []);
+	const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
+	const [commentStatus, setCommentStatus] = useState<
+		null | 'pending' | 'errored'
+	>(null);
+
+	const onComment = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+		(e) => {
+			e.preventDefault();
+
+			if (!commentTextareaRef.current) {
+				// Wait for ref to be ready
+				return;
+			}
+
+			if (commentTextareaRef.current.value.length === 0) {
+				// Noop, no comment to send
+				return;
+			}
+
+			setCommentStatus('pending');
+
+			makeAPIPostCall('/comment', {
+				body: commentTextareaRef.current!.value,
+			})
+				.then(() => {
+					setCommentStatus(null);
+					commentTextareaRef.current!.value = '';
+				})
+				.catch(() => {
+					setCommentStatus('errored');
+				});
+		},
+		[]
+	);
 
 	useEffect(() => {
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
@@ -77,10 +105,22 @@ export default function Pool({ registered = false }: { registered?: boolean }) {
 			<hr />
 			<Textarea
 				cols={80}
+				ref={commentTextareaRef}
 				placeholder="Post a comment..."
+				disabled={commentStatus === 'pending'}
 				style={{ margin: '0.5rem 0rem' }}
 			/>
-			<Button variant="contained">Post Comment</Button>
+			<Button
+				variant="contained"
+				onClick={onComment}
+				style={{ margin: '0.5rem 0rem' }}
+				disabled={commentStatus === 'pending'}
+			>
+				Post Comment
+			</Button>
+			<Typography variant="subtitle1">
+				{commentStatus === 'errored' && 'Error posting comment'}
+			</Typography>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				{pool.comments.map((comment) => (
 					<Comment comment={comment} key={comment.id} />
