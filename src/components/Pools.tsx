@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { API_ENDPOINT } from '../api';
+import { API_ENDPOINT } from '../api/api';
 
 const maybePluralize = (count: number, noun: string, suffix = 's') =>
 	`${count} ${noun}${count !== 1 ? suffix : ''}`;

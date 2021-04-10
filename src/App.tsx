@@ -16,10 +16,11 @@ import Main from './components/Main';
 //import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
 import Authenticator from './components/Authenticator';
+import AuthenticationWrapper from './components/AuthenticationWrapper';
 
 function App() {
 	return (
-		<div className="App">
+		<AuthenticationWrapper>
 			<BrowserRouter>
 				<Nav />
 				<Switch>
@@ -37,7 +38,7 @@ function App() {
 					<Route component={Home} path="/" />
 				</Switch>
 			</BrowserRouter>
-		</div>
+		</AuthenticationWrapper>
 	);
 }
 
