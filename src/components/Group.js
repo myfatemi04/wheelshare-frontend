@@ -3,58 +3,56 @@ import { API_ENDPOINT } from '../api';
 
 const Group = (props) => {
 	const id = props.match.params.id;
-	const [state, setState] = useState({
-		Pools: [
-			{
-				id: 1,
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				id: 2,
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				id: 3,
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				id: 4,
-				pool_title: 'TJ Carpool',
-				pool_text: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participants: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-		],
-	});
+	const [pools, setPools] = useState([
+		{
+			id: 1,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+		{
+			id: 2,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+		{
+			id: 3,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+		{
+			id: 4,
+			pool_title: 'TJ Carpool',
+			pool_text: 'Carpool from TJ track to homes',
+			start_time: '4/10/2021 3:00 PM',
+			end_time: '4/10/2021 4:00 PM',
+			capacity: 2,
+			participants: [],
+			comments: [
+				'What is the covid vaccination status of all the participants?',
+			],
+		},
+	]);
 
 	useEffect(() => {
 		console.log(process.env);

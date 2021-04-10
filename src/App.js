@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Nav from './components/Nav';
-import Signin from './components/auth/Signin';
-import Signup from './components/auth/Signup';
+
 import Group from './components/Group';
 import Pool from './components/Pool';
 import Profile from './components/Profile';
