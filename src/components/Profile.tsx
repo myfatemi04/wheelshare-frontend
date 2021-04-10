@@ -1,154 +1,107 @@
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import { useContext, useEffect, useState } from 'react';
-import { API_ENDPOINT } from '../api/api';
-import AuthenticationContext from './AuthenticationContext';
+import { CenterFocusStrong } from '@material-ui/icons';
+import React, { useState, useEffect } from 'react';
 
-const useStyles = makeStyles({
-	root: {
-		maxWidth: 345,
-	},
-	media: {
-		height: 140,
-	},
-});
+const maybePluralize = (count: number, noun: string, suffix = 's') =>
+	`${count} ${noun}${count !== 1 ? suffix : ''}`;
 
 const Profile = () => {
-	const { user, isLoggedIn } = useContext(AuthenticationContext);
-	const [groups, setGroups] = useState<Carpool.Group[]>([]);
-	const [pools, setPools] = useState([
-		{
-			id: 1,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
+	const [state, setState] = useState({
+		user: {
+			username: 'HyperionLegion',
 		},
-		{
-			id: 2,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-		{
-			id: 3,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-		{
-			id: 4,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-	]);
-	const classes = useStyles();
+		pools: [
+			{
+				title: 'TJ Carpool',
+				description: 'Carpool from TJ track to homes',
+				start_time: '4/10/2021 3:00 PM',
+				id: 1,
+				end_time: '4/10/2021 4:00 PM',
+				capacity: 2,
+				participant_ids: [],
+				comments: [
+					'What is the covid vaccination status of all the participants?',
+				],
+			},
+			{
+				title: 'TJ Carpool',
+				description: 'Carpool from TJ track to homes',
+				start_time: '4/10/2021 3:00 PM',
+				id: 2,
+				end_time: '4/10/2021 4:00 PM',
+				capacity: 2,
+				participant_ids: [],
+				comments: [
+					'What is the covid vaccination status of all the participants?',
+				],
+			},
+			{
+				title: 'TJ Carpool',
+				description: 'Carpool from TJ track to homes',
+				start_time: '4/10/2021 3:00 PM',
+				id: 3,
+				end_time: '4/10/2021 4:00 PM',
+				capacity: 2,
+				participant_ids: [],
+				comments: [
+					'What is the covid vaccination status of all the participants?',
+				],
+			},
+		],
+		groups: [],
+	});
 
-	useEffect(() => {
-		console.log(process.env);
-		fetch(`${API_ENDPOINT}/my_pools`)
+	const callAPI = () => {
+		fetch(`${process.env.REACT_APP_API_ENDPOINT}/profile/`)
 			.then((response) => response.json())
-			.then((json) => {
-				if (json) {
-					setPools(json.data);
+			.then((data) => {
+				if (data !== undefined) {
+					setState(data);
 				}
 			});
+	};
+
+	useEffect(() => {
+		callAPI();
 	}, []);
-
-	if (!user) {
-		return <h1>Please Sign In</h1>;
-	}
-
 	return (
-		<div
-			className=""
-			style={{ minHeight: '100vh', backgroundColor: '#F1EAE8' }}
-		>
+		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
 				className="d-flex justify-content-center p-4"
-				style={{ backgroundColor: '#F1EAE8' }}
+				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Courier New' }}
 			>
 				Profile
 			</h1>
-			<div className="container">
-				<h2>
-					<u>{user.username}'s Pools</u>
-				</h2>
+			<div className="container" style={{ fontFamily: 'Courier New', alignSelf: 'center' }}>
+				<h2 style={{color: '#FFFFFF'}}><u>{state.user.username}'s Pools</u></h2>
 				<div className="">
-					{pools.map((pool) => {
+					{state.pools.map((pool, index) => {
+						let background;
+						if (index % 2 === 0) {
+							background = '#F1EAE8';
+						} else {
+							background = '#FFFFFF';
+						}
 						return (
-							<Card
-								className={classes.root + 'd-inline-flex'}
-								style={{ margin: '0.5rem' }}
+							<div
+								className="card card-body text-left"
+								style={{ backgroundColor: background }}
 							>
-								<CardActionArea href={'/pool/' + pool.id}>
-									<CardContent>
-										<Typography gutterBottom variant="h5" component="h2">
-											{pool.pool_title}
-										</Typography>
-										<Typography
-											variant="body2"
-											color="textSecondary"
-											component="p"
-										>
-											{pool.pool_text}
-										</Typography>
-									</CardContent>
-								</CardActionArea>
-								<CardActions>
-									<Button
-										size="small"
-										color="primary"
-										onClick={() => {
-											let link: string = 'localhost:3000/pool/' + pool.id;
-											navigator.clipboard.writeText(link);
-										}}
-									>
-										Share
-									</Button>
-									<Button
-										href={'/pool/' + pool.id}
-										size="small"
-										color="primary"
-									>
-										Learn More
-									</Button>
-								</CardActions>
-							</Card>
+								<a href={'/Pool/' + pool.id} className="card-title">
+									{pool.title}
+								</a>
+								<p className="text-left">
+									Capacity: {pool.participant_ids.length} / {pool.capacity}
+								</p>
+								<p className="text-left">Start Time: {pool.start_time}</p>
+								<p className="text-left">End Time: {pool.end_time}</p>
+								<p className="" style={{color: '#9E6105'}}>
+									{maybePluralize(pool.comments.length, 'comment')}
+								</p>
+							</div>
 						);
 					})}
 				</div>
 			</div>
-			<script></script>
 		</div>
 	);
 };
