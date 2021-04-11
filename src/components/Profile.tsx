@@ -1,103 +1,95 @@
-import { CenterFocusStrong } from '@material-ui/icons';
-import React, { useState, useEffect } from 'react';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { useContext, useEffect, useState } from 'react';
+import { makeAPIGetCall } from '../api/utils';
+import AuthenticationContext from './AuthenticationContext';
 
-const maybePluralize = (count: number, noun: string, suffix = 's') =>
-	`${count} ${noun}${count !== 1 ? suffix : ''}`;
+const useStyles = makeStyles({
+	root: {
+		maxWidth: 345,
+	},
+	media: {
+		height: 140,
+	},
+});
 
 const Profile = () => {
-	const [state, setState] = useState({
-		user: {
-			username: 'HyperionLegion',
-		},
-		pools: [
-			{
-				title: 'TJ Carpool',
-				description: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				id: 1,
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participant_ids: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				title: 'TJ Carpool',
-				description: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				id: 2,
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participant_ids: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-			{
-				title: 'TJ Carpool',
-				description: 'Carpool from TJ track to homes',
-				start_time: '4/10/2021 3:00 PM',
-				id: 3,
-				end_time: '4/10/2021 4:00 PM',
-				capacity: 2,
-				participant_ids: [],
-				comments: [
-					'What is the covid vaccination status of all the participants?',
-				],
-			},
-		],
-		groups: [],
-	});
-
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/profile/`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
+	const { user } = useContext(AuthenticationContext);
+	// const [groups, setGroups] = useState<Carpool.Group[]>([]);
+	const [pools, setPools] = useState<Carpool.Pool[]>([]);
+	const classes = useStyles();
 
 	useEffect(() => {
-		callAPI();
+		makeAPIGetCall('/my_pools').then((res) => {
+			if (res.data.data) setPools(res.data.data);
+		});
 	}, []);
+
+	if (!user) {
+		return <h1>Please Sign In</h1>;
+	}
+
 	return (
-		<div className="bg-dark" style={{ minHeight: '100vh' }}>
+		<div
+			className=""
+			style={{ minHeight: '100vh', backgroundColor: '#F1EAE8' }}
+		>
 			<h1
 				className="d-flex justify-content-center p-4"
-				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Courier New' }}
+				style={{ backgroundColor: '#F1EAE8' }}
 			>
 				Profile
 			</h1>
-			<div className="container" style={{ fontFamily: 'Courier New', alignSelf: 'center' }}>
-				<h2 style={{color: '#FFFFFF'}}><u>{state.user.username}'s Pools</u></h2>
+			<div className="container">
+				<h2>
+					<u>{user.username}'s Pools</u>
+				</h2>
 				<div className="">
-					{state.pools.map((pool, index) => {
-						let background;
-						if (index % 2 === 0) {
-							background = '#F1EAE8';
-						} else {
-							background = '#FFFFFF';
-						}
+					{pools.map((pool) => {
 						return (
-							<div
-								className="card card-body text-left"
-								style={{ backgroundColor: background }}
+							<Card
+								className={classes.root + 'd-inline-flex'}
+								style={{ margin: '0.5rem' }}
 							>
-								<a href={'/Pool/' + pool.id} className="card-title">
-									{pool.title}
-								</a>
-								<p className="text-left">
-									Capacity: {pool.participant_ids.length} / {pool.capacity}
-								</p>
-								<p className="text-left">Start Time: {pool.start_time}</p>
-								<p className="text-left">End Time: {pool.end_time}</p>
-								<p className="" style={{color: '#9E6105'}}>
-									{maybePluralize(pool.comments.length, 'comment')}
-								</p>
-							</div>
+								<CardActionArea href={'/pool/' + pool.id}>
+									<CardContent>
+										<Typography gutterBottom variant="h5" component="h2">
+											{pool.title}
+										</Typography>
+										<Typography
+											variant="body2"
+											color="textSecondary"
+											component="p"
+										>
+											{pool.description}
+										</Typography>
+									</CardContent>
+								</CardActionArea>
+								<CardActions>
+									<Button
+										size="small"
+										color="primary"
+										onClick={() => {
+											let link: string = 'localhost:3000/pool/' + pool.id;
+											navigator.clipboard.writeText(link);
+										}}
+									>
+										Share
+									</Button>
+									<Button
+										href={'/pool/' + pool.id}
+										size="small"
+										color="primary"
+									>
+										Learn More
+									</Button>
+								</CardActions>
+							</Card>
 						);
 					})}
 				</div>

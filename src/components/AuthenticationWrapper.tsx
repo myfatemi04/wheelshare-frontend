@@ -7,7 +7,7 @@ export default function AuthenticationWrapper({
 }: {
 	children: React.ReactNode;
 }) {
-	const sessionId = localStorage.getItem('session_id');
+	const sessionToken = localStorage.getItem('session_token');
 	// Prevent race conditions
 	const [authState, setAuthState] = useState<AuthState>({
 		isLoggedIn: null,
@@ -16,7 +16,7 @@ export default function AuthenticationWrapper({
 	});
 
 	const refreshAuthState = useCallback(() => {
-		if (sessionId) {
+		if (sessionToken) {
 			getMe().then((user) => {
 				if (user) {
 					setAuthState({ isLoggedIn: true, user, refreshAuthState });
@@ -27,7 +27,7 @@ export default function AuthenticationWrapper({
 		} else {
 			setAuthState({ isLoggedIn: false, user: null, refreshAuthState });
 		}
-	}, [sessionId]);
+	}, [sessionToken]);
 
 	useEffect(() => {
 		refreshAuthState();
