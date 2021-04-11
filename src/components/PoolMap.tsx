@@ -1,5 +1,4 @@
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { GOOGLE_MAPS_API_KEY } from '../api/google';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const center = {
 	lat: 0,
@@ -13,15 +12,16 @@ const position = {
 
 export default function PoolMap() {
 	return (
-		<LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
-			<GoogleMap
-				mapContainerStyle={{ width: '400px', height: '400px' }}
-				center={center}
-				onLoad={() => console.log('Loaded Base Map')}
-				onTilesLoaded={() => console.log('Loaded Tile Map')}
-			>
-				<Marker position={position} />
-			</GoogleMap>
-		</LoadScript>
+		<MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+			<TileLayer
+				attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+			/>
+			<Marker position={position}>
+				<Popup>
+					A pretty CSS3 popup. <br /> Easily customizable.
+				</Popup>
+			</Marker>
+		</MapContainer>
 	);
 }
