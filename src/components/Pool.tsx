@@ -89,13 +89,28 @@ export default function Pool() {
 		}
 	}, [user, id, pool]);
 
+	const onUnregister = useCallback(() => {
+		if (user) {
+			makeAPIPostCall(`/pools/${id}/leave`).then(() => {
+				if (pool) {
+					let participants: string[] = [];
+					pool.participant_ids.forEach((e) => participants.push(e));
+					setPool({
+						...pool,
+						participant_ids: [...participants],
+					});
+				}
+			});
+		}
+	}, [user, id, pool]);
+
 	useEffect(() => {
 		makeAPIGetCall(`/pools/${id}`).then((response) => {
 			if (response.data.data) {
 				setPool(response.data.data);
 			}
 		});
-	}, [id]);
+	}, [id, pool]);
 
 	return (
 		<Card style={{ margin: '3rem auto', padding: '1rem 1rem', width: '50%' }}>
@@ -119,7 +134,11 @@ export default function Pool() {
 							variant="contained"
 							color="primary"
 							style={{ marginTop: '0.5rem' }}
-							onClick={onRegister}
+							onClick={
+								pool.participant_ids?.includes(user._id)
+									? onUnregister
+									: onRegister
+							}
 						>
 							{pool.participant_ids?.includes(user._id)
 								? 'Unregister'
