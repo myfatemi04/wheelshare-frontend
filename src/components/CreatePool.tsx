@@ -4,7 +4,6 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useEffect, useState } from 'react';
-import { searchForPlaces } from '../api/google';
 import { makeAPIPostCall, makeAPIGetCall } from '../api/utils';
 import { useHistory } from 'react-router-dom';
 
@@ -195,26 +194,6 @@ const CreatePool = ({ groupID }: { groupID?: string }) => {
 						</select>
 					</div>
 					<div className="form-group">
-						<label className="" htmlFor="location">
-							Location:
-						</label>
-						<input
-							type="text"
-							className="form-control"
-							id="location_input"
-						></input>
-						<button
-							onClick={(e) => {
-								e.preventDefault();
-								let input = document.getElementById(
-									'location_input'
-								) as HTMLInputElement;
-								let places = searchForPlaces(input.value);
-								console.log(places);
-							}}
-						>
-							Search
-						</button>
 						<PlacesAutocomplete
 							value={address}
 							onChange={handleChange}

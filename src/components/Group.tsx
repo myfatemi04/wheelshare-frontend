@@ -6,6 +6,7 @@ import { makeAPIGetCall } from '../api/utils';
 import CreatePool from './CreatePool';
 import Pool from './Pool';
 
+// eslint-disable-next-line
 const SAMPLE_POOLS: Carpool.Pool[] = [
 	{
 		_id: '1234',
