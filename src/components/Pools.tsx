@@ -105,7 +105,7 @@ const Pools = () => {
 							</p>
 							<p className="text-left">Start Time: {pool.start_time}</p>
 							<p className="text-left">End Time: {pool.end_time}</p>
-							<p className="text-warning">
+							<p className="" style={{color: '#9E6105'}}>
 								{maybePluralize(pool.comments.length, 'comment')}
 							</p>
 						</div>
