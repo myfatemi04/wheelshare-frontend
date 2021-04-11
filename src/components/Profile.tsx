@@ -56,7 +56,7 @@ const Profile = () => {
 								className={classes.root + 'd-inline-flex'}
 								style={{ margin: '0.5rem' }}
 							>
-								<CardActionArea href={'/pool/' + pool.id}>
+								<CardActionArea href={'/pool/' + pool._id}>
 									<CardContent>
 										<Typography gutterBottom variant="h5" component="h2">
 											{pool.title}
@@ -75,14 +75,14 @@ const Profile = () => {
 										size="small"
 										color="primary"
 										onClick={() => {
-											let link: string = 'localhost:3000/pool/' + pool.id;
+											let link: string = 'localhost:3000/pool/' + pool._id;
 											navigator.clipboard.writeText(link);
 										}}
 									>
 										Share
 									</Button>
 									<Button
-										href={'/pool/' + pool.id}
+										href={'/pool/' + pool._id}
 										size="small"
 										color="primary"
 									>

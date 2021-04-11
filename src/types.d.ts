@@ -1,6 +1,6 @@
 declare namespace Carpool {
 	export interface Group {
-		id: string;
+		_id: string;
 		name: string;
 		member_ids: string[];
 		creator_id: string;
@@ -8,14 +8,14 @@ declare namespace Carpool {
 
 	// Omits the email attribute
 	export interface PublicUser {
-		id: string;
+		_id: string;
 		username: string;
 		first_name: string;
 		last_name: string;
 	}
 
 	export interface User {
-		id: string;
+		_id: string;
 		email: string;
 		username: string;
 		first_name: string;
@@ -31,7 +31,7 @@ declare namespace Carpool {
 	export type Status = 'pending' | 'cancelled' | 'completed' | 'interrupted';
 
 	export interface Pool {
-		id: string;
+		_id: string;
 		title: string;
 		description: string;
 		participant_ids: string[];

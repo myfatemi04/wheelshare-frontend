@@ -10,7 +10,7 @@ const maybePluralize = (count: number, noun: string, suffix = 's') =>
 
 const SAMPLE_POOLS: Carpool.Pool[] = [
 	{
-		id: '1234',
+		_id: '1234',
 		title: 'TJ Carpool',
 		description: 'Carpool from TJ track to homes',
 		start_time: '4/10/2021 3:00 PM',
@@ -90,7 +90,7 @@ export default function Group() {
 				{pools.map((pool, index) => {
 					return (
 						<Card style={{ margin: '0.5em' }} key={index}>
-							<a href={'/Pool/' + pool.id} className="card-title">
+							<a href={'/pool/' + pool._id} className="card-title">
 								{pool.title}
 							</a>
 							<p className="text-left">

@@ -97,7 +97,7 @@ const Pools = () => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/Pool/' + pool.id} className="card-title">
+							<a href={'/pool/' + pool._id} className="card-title">
 								{pool.title}
 							</a>
 							<p className="text-left">
@@ -105,7 +105,7 @@ const Pools = () => {
 							</p>
 							<p className="text-left">Start Time: {pool.start_time}</p>
 							<p className="text-left">End Time: {pool.end_time}</p>
-							<p className="" style={{color: '#9E6105'}}>
+							<p className="" style={{ color: '#9E6105' }}>
 								{maybePluralize(pool.comments.length, 'comment')}
 							</p>
 						</div>

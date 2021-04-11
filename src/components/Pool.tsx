@@ -76,7 +76,7 @@ export default function Pool() {
 
 	const onRegister = useCallback(() => {
 		if (user) {
-			let userID = user.id;
+			let userID = user._id;
 			makeAPIPostCall('/join_pool', { id }).then(() => {
 				if (pool) {
 					setPool({
@@ -122,7 +122,7 @@ export default function Pool() {
 							style={{ marginTop: '0.5rem' }}
 							onClick={onRegister}
 						>
-							{pool.participant_ids.includes(user.id)
+							{pool.participant_ids.includes(user._id)
 								? 'Unregister'
 								: 'Register'}
 						</Button>
