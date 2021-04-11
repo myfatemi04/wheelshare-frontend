@@ -12,33 +12,39 @@ export default function Home() {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
+				padding: '1rem 0rem',
+				backgroundImage: "url('images/banner-new.jpg')",
+				backgroundRepeat: 'no-repeat',
+				color: 'white',
+				// backgroundSize: '',
 			}}
 		>
-			<h1>Home</h1>
-			<div style={{ display: 'flex', flexDirection: 'row' }}>
+			<h1 style={{ textShadow: '1px 1px black', fontSize: '8rem' }}>
+				WheelShare
+			</h1>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					margin: '1rem 0rem',
+					fontSize: '2rem',
+					backgroundColor: 'rgba(1, 1, 1, 0.5)',
+					padding: '0.5rem 1rem',
+				}}
+			>
 				{!isLoggedIn ? (
 					<Button
 						onClick={() => (window.location.href = ION_AUTHORIZATION_ENDPOINT)}
 					>
-						Sign In with Ion
+						Sign in with Ion
 					</Button>
 				) : (
 					'Hello ' + user?.first_name + '!'
 				)}
 			</div>
 			<div className="d-flex flex-column">
-				<section
-					id="reinvest"
-					style={{
-						backgroundImage: "url('images/banner.jpg')",
-						backgroundRepeat: 'no-repeat',
-						backgroundSize: 'cover',
-						height: '690px',
-						paddingTop: '80px',
-					}}
-				>
+				<section id="reinvest" style={{ paddingTop: '80px' }}>
 					<div className="container">
-						<br />
 						<div className="text-center">
 							<img
 								id="logo"
@@ -51,16 +57,16 @@ export default function Home() {
 								height="750px"
 							/>
 						</div>
-						<br />
-						<br />
-						<br />
-						<h3 className="text-white bg-primary rounded-lg shadow-lg p-3 mb-5">
+						<h3 className="text-white bg-primary rounded-lg shadow-lg p-3 mb-5 mt-3">
 							Helping communities utilize carpooling
 						</h3>
 					</div>
 				</section>
 				<section id="about" className="p-4">
-					<div className="container">
+					<div
+						className="container"
+						style={{ backgroundColor: 'rgba(1, 1, 1, 0.5)' }}
+					>
 						<h1 className="d-flex justify-content-center m-2 p-2">
 							<u>About Us</u>
 						</h1>
