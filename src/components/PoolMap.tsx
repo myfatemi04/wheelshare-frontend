@@ -17,6 +17,8 @@ export default function PoolMap() {
 			<GoogleMap
 				mapContainerStyle={{ width: '400px', height: '400px' }}
 				center={center}
+				onLoad={() => console.log('Loaded Base Map')}
+				onTilesLoaded={() => console.log('Loaded Tile Map')}
 			>
 				<Marker position={position} />
 			</GoogleMap>
