@@ -8,9 +8,9 @@ export async function searchForPlaces(query: string) {
 	url.searchParams.set('input', query);
 	url.searchParams.set('inputtype', 'textquery');
 	url.searchParams.set('fields', 'place_id,name,formatted_address');
-
+	console.log(url.toString());
 	let res = await fetch(url.toString(), { mode: 'no-cors' });
-	let json = await res.json();
+	let json = await res.text();
 
 	return json;
 }
