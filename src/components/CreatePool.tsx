@@ -1,6 +1,16 @@
 import { FormEventHandler } from 'react';
+import { makeAPIPostCall } from '../api/utils';
+import React, { useState, useEffect } from 'react';
 
 const CreatePool = () => {
+	const [title, setTitle] = useState('No Title');
+	const [capacity, setCapacity] = useState(0);
+	const [start, setStart] = useState('');
+	const [end, setEnd] = useState('');
+	const [direction, setDirection] = useState('pickup');
+	const [type, setType] = useState('offer');
+	const [description, setDescription] = useState('');
+
 	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
@@ -10,6 +20,27 @@ const CreatePool = () => {
 				console.log(data);
 			});
 	};
+	const onClick = () => {
+		console.log({
+			title: title,
+			description: description,
+			start_time: start,
+			end_time: end,
+			capacity,
+			direction,
+			type,
+		});
+		makeAPIPostCall('/pool', {
+			title: title,
+			description: description,
+			start_time: start,
+			end_time: end,
+			capacity,
+			direction,
+			type,
+		});
+	};
+	useEffect(() => {}, []);
 	return (
 		<div
 			className="bg-dark"
@@ -33,6 +64,7 @@ const CreatePool = () => {
 							name="title"
 							className="form-control d-flex"
 							placeholder="Enter title here..."
+							onChange={(event) => setTitle(event.target.value)}
 						></input>
 					</div>
 					<div className="form-group">
@@ -44,7 +76,8 @@ const CreatePool = () => {
 							id="capacity"
 							name="capacity"
 							className="form-control d-flex"
-							placeholder="5"
+							placeholder="0"
+							onChange={(event) => setCapacity(parseInt(event.target.value))}
 						></input>
 					</div>
 					<div className="form-group">
@@ -57,6 +90,7 @@ const CreatePool = () => {
 							name="pool_start"
 							className="form-control"
 							placeholder=""
+							onChange={(event) => setStart(event.target.value)}
 						></input>
 					</div>
 					<div className="form-group">
@@ -69,13 +103,41 @@ const CreatePool = () => {
 							name="pool_end"
 							className="form-control"
 							placeholder="Enter text here..."
+							onChange={(event) => setEnd(event.target.value)}
 						></input>
+					</div>
+					<div className="form-group">
+						<label className="" htmlFor="pool_direction">
+							Direction:
+						</label>
+						<select
+							id="direction"
+							name="direction"
+							onChange={(event) => setDirection(event.target.value)}
+						>
+							<option value="pickup">Picking Up</option>
+							<option value="dropoff">Dropping Off</option>
+						</select>
+					</div>
+					<div className="form-group">
+						<label className="" htmlFor="pool_type">
+							Type:
+						</label>
+						<select
+							id="type"
+							name="type"
+							onChange={(event) => setType(event.target.value)}
+						>
+							<option value="offer">Offering carpool</option>
+							<option value="request">Requesting carpooll</option>
+						</select>
 					</div>
 					<div className="form-group">
 						<label className="" htmlFor="title">
 							Pool Description:
 						</label>
 						<textarea
+							onChange={(event) => setDescription(event.target.value)}
 							id="Pool-text"
 							name="Pool-text"
 							style={{ height: '200px' }}
@@ -84,11 +146,9 @@ const CreatePool = () => {
 						/>
 					</div>
 
-					<input
-						className="btn btn-success text-left"
-						type="submit"
-						value="Submit"
-					/>
+					<button className="btn btn-success text-left" onClick={onClick}>
+						Submit
+					</button>
 					<br />
 				</form>
 			</div>

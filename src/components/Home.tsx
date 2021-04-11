@@ -60,7 +60,7 @@ export default function Home() {
 							<u>About Us</u>
 						</h1>
 						<p className="d-flex justify-content-center m-2 p-2">
-							NAME is an app aimed to help communities find safe ways to
+							Wheelshare is an app aimed to help communities find safe ways to
 							carpool. The app has groups where people must be approved before
 							joining. Upon joining, users can create their own car pool inside
 							that communitiy or join others.
