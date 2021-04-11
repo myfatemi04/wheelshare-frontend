@@ -38,18 +38,27 @@ const SAMPLE_POOLS: Carpool.Pool[] = [
 export default function Group() {
 	// eslint-disable-next-line
 	const { id } = useParams<{ id: string }>();
+	const [error, setError] = useState(false);
 	const [group, setGroup] = useState<Carpool.Group>();
 	const [pools, setPools] = useState<Carpool.Pool[]>(SAMPLE_POOLS);
 
 	useEffect(() => {
 		makeAPIGetCall('/group', { groupID: id }).then((res) => {
-			setGroup(res.data.data);
+			if ('error' in res.data) {
+				setError(true);
+			} else {
+				setGroup(res.data.data);
+			}
 		});
 
 		makeAPIGetCall('/group_pools', { groupID: id }).then((res) => {
 			setPools(res.data.data);
 		});
 	}, [id]);
+
+	if (error) {
+		return <h1 style={{ textAlign: 'center' }}>Group Not Found</h1>;
+	}
 
 	if (!group) {
 		return <h1 style={{ textAlign: 'center' }}>Loading</h1>;
