@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import Textarea from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import Comment from './Comment';
-import { makeAPIPostCall } from '../api/utils';
+import { makeAPIGetCall, makeAPIPostCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 
 // eslint-disable-next-line
@@ -89,13 +89,11 @@ export default function Pool() {
 	}, [user, id, pool]);
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setPool(data);
-				}
-			});
+		makeAPIGetCall('/pool', { poolID: id }).then((response) => {
+			if (response.data.data) {
+				setPool(response.data.data);
+			}
+		});
 	}, [id]);
 
 	return (
@@ -106,7 +104,7 @@ export default function Pool() {
 						{pool.title}
 					</Typography>
 					<Typography variant="subtitle1">
-						<b>Capacity</b>: {pool.participant_ids.length} / {pool.capacity}
+						<b>Capacity</b>: {pool.participant_ids?.length} / {pool.capacity}
 					</Typography>
 					<Typography variant="subtitle1">
 						<b>Start Time</b>: {pool.start_time}
@@ -122,7 +120,7 @@ export default function Pool() {
 							style={{ marginTop: '0.5rem' }}
 							onClick={onRegister}
 						>
-							{pool.participant_ids.includes(user._id)
+							{pool.participant_ids?.includes(user._id)
 								? 'Unregister'
 								: 'Register'}
 						</Button>
