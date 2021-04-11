@@ -43,7 +43,7 @@ export default function Group() {
 	const [pools, setPools] = useState<Carpool.Pool[]>(SAMPLE_POOLS);
 
 	useEffect(() => {
-		makeAPIGetCall('/group', { groupID: id }).then((res) => {
+		makeAPIGetCall(`/groups/${id}`).then((res) => {
 			if ('error' in res.data) {
 				setError(true);
 			} else {
@@ -51,7 +51,7 @@ export default function Group() {
 			}
 		});
 
-		makeAPIGetCall('/group_pools', { groupID: id }).then((res) => {
+		makeAPIGetCall(`/groups/${id}/pools`).then((res) => {
 			setPools(res.data.data);
 		});
 	}, [id]);
@@ -90,7 +90,7 @@ export default function Group() {
 				{pools.map((pool, index) => {
 					return (
 						<Card style={{ margin: '0.5em' }} key={index}>
-							<a href={'/pool/' + pool._id} className="card-title">
+							<a href={'/pools/' + pool._id} className="card-title">
 								{pool.title}
 							</a>
 							<p className="text-left">

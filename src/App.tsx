@@ -30,8 +30,8 @@ function App() {
 					<Route component={Groups} path="/groups" />
 					<Route component={MyGroups} path="/mygroups" />
 					<Route component={UpdatePool} path="/update_pool" />
-					<Route component={Group} path="/group/:id" />
-					<Route component={Pool} path="/pool/:id" />
+					<Route component={Group} path="/groups/:id" />
+					<Route component={Pool} path="/pools/:id" />
 					<Route component={Profile} path="/profile" />
 					<Route component={Home} path="/" />
 				</Switch>

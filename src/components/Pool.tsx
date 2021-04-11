@@ -77,7 +77,7 @@ export default function Pool() {
 	const onRegister = useCallback(() => {
 		if (user) {
 			let userID = user._id;
-			makeAPIPostCall('/join_pool', { id }).then(() => {
+			makeAPIPostCall(`/pools/${id}/join`).then(() => {
 				if (pool) {
 					setPool({
 						...pool,
@@ -89,7 +89,7 @@ export default function Pool() {
 	}, [user, id, pool]);
 
 	useEffect(() => {
-		makeAPIGetCall('/pool', { poolID: id }).then((response) => {
+		makeAPIGetCall(`/pools/${id}`).then((response) => {
 			if (response.data.data) {
 				setPool(response.data.data);
 			}

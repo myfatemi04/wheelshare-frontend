@@ -30,7 +30,7 @@ const CreatePool = () => {
 	const [group, setGroup] = useState('');
 
 	const onClick = () => {
-		makeAPIPostCall('/pool', {
+		makeAPIPostCall('/pools/', {
 			title,
 			description,
 			start_time: start,

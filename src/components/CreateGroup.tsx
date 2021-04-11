@@ -22,14 +22,9 @@ const useStyles = makeStyles((theme) => ({
 const CreateGroup = () => {
 	const [title, setTitle] = useState('No Title');
 	const classes = useStyles();
-	useEffect(() => {}, []);
+
 	const onClick = () => {
-		console.log({
-			title: title,
-		});
-		makeAPIPostCall('/group', {
-			title,
-		});
+		makeAPIPostCall('/groups/', { title });
 	};
 
 	return (

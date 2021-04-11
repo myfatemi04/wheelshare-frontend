@@ -56,7 +56,7 @@ const MyPools = () => {
 	]);
 
 	useEffect(() => {
-		makeAPIGetCall('/my_pools').then((res) => {
+		makeAPIGetCall('/users/@me/pools').then((res) => {
 			if (res.data.data) {
 				setPools(res.data.data);
 			}
@@ -94,7 +94,7 @@ const MyPools = () => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/Pool/' + pool.id} className="card-title">
+							<a href={'/pools/' + pool.id} className="card-title">
 								{pool.pool_title}
 							</a>
 							<p className="text-left">

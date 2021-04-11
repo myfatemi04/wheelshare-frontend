@@ -12,7 +12,7 @@ const Groups = () => {
 	]);
 
 	useEffect(() => {
-		makeAPIGetCall('/groups').then((res) => {
+		makeAPIGetCall('/browse/groups').then((res) => {
 			if (res.data.data) {
 				setGroups(res.data.data);
 			}

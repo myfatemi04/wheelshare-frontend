@@ -25,7 +25,7 @@ const Profile = () => {
 	const classes = useStyles();
 
 	useEffect(() => {
-		makeAPIGetCall('/my_pools').then((res) => {
+		makeAPIGetCall('/users/@me/pools').then((res) => {
 			if (res.data.data) setPools(res.data.data);
 		});
 	}, []);
@@ -56,7 +56,7 @@ const Profile = () => {
 								className={classes.root + 'd-inline-flex'}
 								style={{ margin: '0.5rem' }}
 							>
-								<CardActionArea href={'/pool/' + pool._id}>
+								<CardActionArea href={'/pools/' + pool._id}>
 									<CardContent>
 										<Typography gutterBottom variant="h5" component="h2">
 											{pool.title}
@@ -75,14 +75,14 @@ const Profile = () => {
 										size="small"
 										color="primary"
 										onClick={() => {
-											let link: string = 'localhost:3000/pool/' + pool._id;
+											let link: string = 'localhost:3000/pools/' + pool._id;
 											navigator.clipboard.writeText(link);
 										}}
 									>
 										Share
 									</Button>
 									<Button
-										href={'/pool/' + pool._id}
+										href={'/pools/' + pool._id}
 										size="small"
 										color="primary"
 									>

@@ -12,7 +12,7 @@ const MyGroups = () => {
 	]);
 
 	useEffect(() => {
-		makeAPIGetCall('/groups').then((res) => {
+		makeAPIGetCall('/browse/groups').then((res) => {
 			if (res.data.data) {
 				setGroups(res.data.data);
 			}
@@ -48,7 +48,7 @@ const MyGroups = () => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/group/' + group._id} className="card-title">
+							<a href={'/groups/' + group._id} className="card-title">
 								{group.name}
 							</a>
 						</div>

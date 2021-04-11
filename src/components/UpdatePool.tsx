@@ -24,12 +24,12 @@ const UpdatePool = () => {
 
 	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		makeAPIGetCall('/update_pool').then((res) => {
+		makeAPIGetCall(`/pools/${id}`).then((res) => {
 			console.log(res);
 		});
 	};
 	useEffect(() => {
-		makeAPIGetCall('/pool', { poolID: id }).then((res) => {
+		makeAPIGetCall(`/pools/${id}`).then((res) => {
 			if (res.data.data) setPool(res.data.data);
 		});
 	}, [id]);
