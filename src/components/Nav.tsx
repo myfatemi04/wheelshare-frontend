@@ -19,6 +19,11 @@ const useStyles = makeStyles({
 		textTransform: `uppercase`,
 		color: `white`,
 	},
+	'linkText:hover': {
+		textDecoration: `none`,
+		textTransform: `uppercase`,
+		color: `white`,
+	},
 });
 const navLinks = [
 	{ title: `Profile`, path: `/profile` },
@@ -28,7 +33,7 @@ const navLinks = [
 const Nav = () => {
 	const classes = useStyles();
 	return (
-		<AppBar position="static" style={{ background: '#40E0D0' }}>
+		<AppBar position="static" style={{ background: '#4287f5' }}>
 			<Toolbar>
 				<Container maxWidth="xl" className={classes.navbarDisplayFlex}>
 					<IconButton href="/" edge="start" color="inherit" aria-label="home">

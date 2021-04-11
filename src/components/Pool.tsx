@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback, useRef, useContext } from 'react';
-import { useParams } from 'react-router';
+import { useState, useCallback, useRef, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Textarea from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import Comment from './Comment';
-import { makeAPIGetCall, makeAPIPostCall } from '../api/utils';
+import { makeAPIPostCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 import PoolMap from './PoolMap';
 
@@ -35,9 +34,13 @@ const SAMPLE_POOL = {
 	type: 'offer',
 };
 
-export default function Pool() {
-	const id = useParams<{ id: string }>().id;
-	const [pool, setPool] = useState<Carpool.Pool>();
+export default function Pool({
+	pool,
+	triggerUpdate,
+}: {
+	pool: Carpool.Pool;
+	triggerUpdate: Function;
+}) {
 	const { user } = useContext(AuthenticationContext);
 
 	const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -76,41 +79,12 @@ export default function Pool() {
 	);
 
 	const onRegister = useCallback(() => {
-		if (user) {
-			let userID = user._id;
-			makeAPIPostCall(`/pools/${id}/join`).then(() => {
-				if (pool) {
-					setPool({
-						...pool,
-						participant_ids: [...pool.participant_ids, userID],
-					});
-				}
-			});
-		}
-	}, [user, id, pool]);
+		makeAPIPostCall(`/pools/${pool._id}/join`).then(() => triggerUpdate());
+	}, [pool._id, triggerUpdate]);
 
 	const onUnregister = useCallback(() => {
-		if (user) {
-			makeAPIPostCall(`/pools/${id}/leave`).then(() => {
-				if (pool) {
-					let participants: string[] = [];
-					pool.participant_ids.forEach((e) => participants.push(e));
-					setPool({
-						...pool,
-						participant_ids: [...participants],
-					});
-				}
-			});
-		}
-	}, [user, id, pool]);
-
-	useEffect(() => {
-		makeAPIGetCall(`/pools/${id}`).then((response) => {
-			if (response.data.data) {
-				setPool(response.data.data);
-			}
-		});
-	}, [id, pool]);
+		makeAPIPostCall(`/pools/${pool._id}/leave`).then(() => triggerUpdate());
+	}, [pool._id, triggerUpdate]);
 
 	return (
 		<Card style={{ margin: '3rem auto', padding: '1rem 1rem', width: '50%' }}>

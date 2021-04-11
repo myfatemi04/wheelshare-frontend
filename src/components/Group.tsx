@@ -1,13 +1,10 @@
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeAPIGetCall } from '../api/utils';
 import CreatePool from './CreatePool';
-
-const maybePluralize = (count: number, noun: string, suffix = 's') =>
-	`${count} ${noun}${count !== 1 ? suffix : ''}`;
+import Pool from './Pool';
 
 const SAMPLE_POOLS: Carpool.Pool[] = [
 	{
@@ -41,8 +38,16 @@ export default function Group() {
 	const { id } = useParams<{ id: string }>();
 	const [error, setError] = useState(false);
 	const [group, setGroup] = useState<Carpool.Group>();
-	const [pools, setPools] = useState<Carpool.Pool[]>(SAMPLE_POOLS);
+	const [pools, setPools] = useState<Carpool.Pool[]>([]);
 	const [createPoolVisible, setCreatePoolVisible] = useState(false);
+
+	const fetchPools = useCallback(() => {
+		makeAPIGetCall(`/groups/${id}/pools`).then((res) => {
+			setPools(res.data.data);
+		});
+	}, [id]);
+
+	useEffect(() => fetchPools(), [fetchPools]);
 
 	useEffect(() => {
 		makeAPIGetCall(`/groups/${id}`).then((res) => {
@@ -51,10 +56,6 @@ export default function Group() {
 			} else {
 				setGroup(res.data.data);
 			}
-		});
-
-		makeAPIGetCall(`/groups/${id}/pools`).then((res) => {
-			setPools(res.data.data);
 		});
 	}, [id]);
 
@@ -93,19 +94,7 @@ export default function Group() {
 					{createPoolVisible && <CreatePool groupID={group._id} />}
 				</div>
 				{pools.map((pool, index) => (
-					<Card style={{ margin: '0.5rem', padding: '0.5rem' }} key={index}>
-						<a href={'/pools/' + pool._id} className="card-title">
-							{pool.title}
-						</a>
-						<p className="text-left">
-							Capacity: {pool.participant_ids.length} / {pool.capacity}
-						</p>
-						<p className="text-left">Start Time: {pool.start_time}</p>
-						<p className="text-left">End Time: {pool.end_time}</p>
-						<p className="text-warning">
-							{maybePluralize(pool.comments.length, 'comment')}
-						</p>
-					</Card>
+					<Pool pool={pool} triggerUpdate={fetchPools} key={index} />
 				))}
 			</div>
 		</div>
