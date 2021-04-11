@@ -5,6 +5,7 @@ import AuthenticationContext from './AuthenticationContext';
 
 export default function Home() {
 	const { user, isLoggedIn } = useContext(AuthenticationContext);
+
 	return (
 		<div
 			style={{
@@ -40,10 +41,14 @@ export default function Home() {
 						<br />
 						<div className="text-center">
 							<img
+								id="logo"
 								alt="Carpool App"
+								onMouseOver={(e) => (e.currentTarget.src = 'images/logo.gif')}
+								onMouseOut={(e) => (e.currentTarget.src = 'images/logo.png')}
 								className="text-center img-fluid"
 								src="images/logo.png"
-								width="350px"
+								width="500px"
+								height="750px"
 							/>
 						</div>
 						<br />
