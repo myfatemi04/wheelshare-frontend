@@ -1,7 +1,9 @@
 declare namespace Carpool {
 	export interface Group {
 		id: string;
+		name: string;
 		member_ids: string[];
+		creator_id: string;
 	}
 
 	// Omits the email attribute
