@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { makeAPIGetCall } from '../api/utils';
 
@@ -40,7 +42,13 @@ export default function Group() {
 	const [pools, setPools] = useState<Carpool.Pool[]>(SAMPLE_POOLS);
 
 	useEffect(() => {
-		makeAPIGetCall('/group', { id }).then((res) => setGroup(res.data.data));
+		makeAPIGetCall('/group', { groupID: id }).then((res) => {
+			setGroup(res.data.data);
+		});
+
+		makeAPIGetCall('/group_pools', { groupID: id }).then((res) => {
+			setPools(res.data.data);
+		});
 	}, [id]);
 
 	if (!group) {
@@ -63,23 +71,16 @@ export default function Group() {
 			<Typography variant="h3" align="center">
 				Pools
 			</Typography>
-			<a className="btn btn-large btn-success" href="/create_pool">
+			<Button
+				onClick={() => (window.location.href = '/create_pool')}
+				variant="contained"
+			>
 				Create Pool
-			</a>
+			</Button>
 			<div className="container">
-				<br></br>
 				{pools.map((pool, index) => {
-					let background;
-					if (index % 2 === 0) {
-						background = '#F1EAE8';
-					} else {
-						background = '#FFFFFF';
-					}
 					return (
-						<div
-							className="card card-body text-left"
-							style={{ backgroundColor: background }}
-						>
+						<Card style={{ margin: '0.5em' }} key={index}>
 							<a href={'/Pool/' + pool.id} className="card-title">
 								{pool.title}
 							</a>
@@ -91,7 +92,7 @@ export default function Group() {
 							<p className="text-warning">
 								{maybePluralize(pool.comments.length, 'comment')}
 							</p>
-						</div>
+						</Card>
 					);
 				})}
 			</div>
