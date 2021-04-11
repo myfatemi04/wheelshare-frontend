@@ -1,9 +1,4 @@
-import React, {
-	useState,
-	useEffect,
-	useCallback,
-	FormEventHandler,
-} from 'react';
+import { useState, useEffect, FormEventHandler } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeAPIGetCall } from '../api/utils';
 

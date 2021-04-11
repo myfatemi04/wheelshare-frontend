@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { Redirect, useLocation, useParams } from 'react-router-dom';
-import { API_ENDPOINT } from '../api/api';
 import { makeAPIPostCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 
