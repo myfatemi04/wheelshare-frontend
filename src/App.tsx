@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Nav from './components/Nav';
 
 import Group from './components/Group';
-import Pool from './components/Pool';
 import Profile from './components/Profile';
 import CreateGroup from './components/CreateGroup';
 import Groups from './components/Groups';
@@ -16,6 +15,7 @@ import './App.css';
 import Authenticator from './components/Authenticator';
 import AuthenticationWrapper from './components/AuthenticationWrapper';
 import Logout from './components/Logout';
+import PoolPage from './components/PoolPage';
 
 function App() {
 	return (
@@ -29,7 +29,7 @@ function App() {
 					<Route component={MyGroups} path="/mygroups" />
 					<Route component={UpdatePool} path="/update_pool" />
 					<Route component={Group} path="/groups/:id" />
-					<Route component={Pool} path="/pools/:id" />
+					<Route component={PoolPage} path="/pools/:id" />
 					<Route component={Groups} path="/groups" />
 					<Route component={Profile} path="/profile" />
 					<Route component={Logout} path="/logout" />

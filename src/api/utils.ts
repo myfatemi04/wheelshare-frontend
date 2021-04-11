@@ -87,9 +87,7 @@ export function makeAPIGetCall(
 export function makeAPIDeleteCall(url: string) {
 	return new Promise<AxiosResponse>((resolve, reject) => {
 		axios
-			.delete(url, {
-				headers: { Authorization: 'Bearer ' + getSessionId() },
-			})
+			.delete(url, { headers: { Authorization: 'Bearer ' + getSessionId() } })
 			.then((successfulResponse) => resolve(successfulResponse))
 			.catch((error) => {
 				if (error.response?.status === 401) {

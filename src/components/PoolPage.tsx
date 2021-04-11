@@ -17,5 +17,9 @@ export default function PoolPage() {
 
 	useEffect(() => fetchData(), [fetchData]);
 
-	return pool ? <Pool pool={pool} triggerUpdate={fetchData} /> : null;
+	if (pool != null) {
+		return <Pool pool={pool} triggerUpdate={fetchData} />;
+	} else {
+		return null;
+	}
 }

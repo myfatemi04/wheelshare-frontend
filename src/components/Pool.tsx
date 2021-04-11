@@ -46,9 +46,9 @@ export default function Pool({
 	pool: Carpool.Pool;
 	triggerUpdate: Function;
 }) {
+	console.log(pool);
 	const { user } = useContext(AuthenticationContext);
 	const [address, setAddress] = useState('');
-	const [comment, setComment] = useState('');
 	const handleChange = (address: string) => {
 		setAddress(address);
 	};
@@ -88,7 +88,7 @@ export default function Pool({
 					setCommentStatus('errored');
 				});
 		},
-		[]
+		[pool._id, triggerUpdate]
 	);
 
 	const onRegister = useCallback(() => {
