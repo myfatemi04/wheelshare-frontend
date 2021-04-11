@@ -97,10 +97,10 @@ export default function Pool({
 						<b>Capacity</b>: {pool.participant_ids?.length} / {pool.capacity}
 					</Typography>
 					<Typography variant="subtitle1">
-						<b>Start Time</b>: {pool.start_time}
+						<b>Start Time</b>: {pool.start_time || '3:00 PM'}
 					</Typography>
 					<Typography variant="subtitle1">
-						<b>End Time</b>: {pool.end_time}
+						<b>End Time</b>: {pool.end_time || '3:30 PM'}
 					</Typography>
 					<Typography variant="body1">{pool.description}</Typography>
 					{user && (
