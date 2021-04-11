@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { makeAPIGetCall } from '../api/utils';
 
 const MyGroups = () => {
-	const [state, setState] = useState({
-		MyGroups: [
-			{
-				id: 1,
-				group_title: 'TJ',
-			},
-		],
-	});
-
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/groups/`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
+	const [groups, setGroups] = useState<Carpool.Group[]>([
+		{
+			_id: '1234',
+			name: 'TJ',
+			creator_id: '12345Q',
+			member_ids: [],
+		},
+	]);
 
 	useEffect(() => {
-		callAPI();
+		makeAPIGetCall('/groups').then((res) => {
+			if (res.data.data) {
+				setGroups(res.data.data);
+			}
+		});
 	}, []);
+
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
@@ -40,7 +36,7 @@ const MyGroups = () => {
 			</a>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.MyGroups.map((group, index) => {
+				{groups.map((group, index) => {
 					let background;
 					if (index % 2 === 0) {
 						background = '#F1EAE8';
@@ -52,8 +48,8 @@ const MyGroups = () => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/group/' + group.id} className="card-title">
-								{group.group_title}
+							<a href={'/group/' + group._id} className="card-title">
+								{group.name}
 							</a>
 						</div>
 					);

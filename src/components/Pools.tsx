@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_ENDPOINT } from '../api/api';
+import { makeAPIGetCall } from '../api/utils';
 
 const maybePluralize = (count: number, noun: string, suffix = 's') =>
 	`${count} ${noun}${count !== 1 ? suffix : ''}`;
@@ -58,14 +59,11 @@ const Pools = () => {
 	]);
 
 	useEffect(() => {
-		console.log(process.env);
-		fetch(`${API_ENDPOINT}/my_pools`)
-			.then((response) => response.json())
-			.then((json) => {
-				if (json) {
-					setPools(json.data);
-				}
-			});
+		makeAPIGetCall('/my_pools').then((res) => {
+			if (res.data.data) {
+				setPools(res.data.data);
+			}
+		});
 	}, []);
 
 	return (

@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { makeAPIGetCall } from '../api/utils';
 
 const Groups = () => {
-	const [state, setState] = useState({
-		Groups: [
-			{
-				id: 1,
-				group_title: 'TJ',
-			},
-		],
-	});
-
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/groups/`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
+	const [groups, setGroups] = useState<Carpool.Group[]>([
+		{
+			_id: '1234',
+			name: 'TJ',
+			creator_id: 'michael',
+			member_ids: [],
+		},
+	]);
 
 	useEffect(() => {
-		callAPI();
+		makeAPIGetCall('/groups').then((res) => {
+			if (res.data.data) {
+				setGroups(res.data.data);
+			}
+		});
 	}, []);
+
 	return (
 		<div className="bg-dark" style={{ minHeight: '100vh' }}>
 			<h1
@@ -40,7 +36,7 @@ const Groups = () => {
 			</a>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.Groups.map((group, index) => {
+				{groups.map((group, index) => {
 					return (
 						<div
 							className="card card-body text-left"
@@ -48,8 +44,8 @@ const Groups = () => {
 								backgroundColor: index % 2 === 0 ? '#F1EAE8' : '#FFFFFF',
 							}}
 						>
-							<form action={'/requestgroup/' + group.id} method="POST">
-								<p className="card-title">{group.group_title}</p>
+							<form action={'/requestgroup/' + group._id} method="POST">
+								<p className="card-title">{group.name}</p>
 								<input
 									type="submit"
 									value="Request to Join"
