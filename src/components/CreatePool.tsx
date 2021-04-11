@@ -202,12 +202,15 @@ const CreatePool = () => {
 								loading,
 							}) => (
 								<div>
+									<label className="" htmlFor="address">
+										Address:
+									</label>
 									<input
 										name="address"
 										id="address"
 										{...getInputProps({
 											placeholder: 'Search Places ...',
-											className: 'location-search-input',
+											className: 'location-search-input form-control',
 										})}
 									/>
 									<div className="autocomplete-dropdown-container">
