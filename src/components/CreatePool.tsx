@@ -8,6 +8,12 @@ import { searchForPlaces } from '../api/google';
 import { makeAPIPostCall, makeAPIGetCall } from '../api/utils';
 import { useHistory } from 'react-router-dom';
 
+import { makeAPIPostCall } from '../api/utils';
+import PlacesAutocomplete, {
+	geocodeByAddress,
+	getLatLng,
+} from 'react-places-autocomplete';
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		maxWidth: 345,
@@ -32,8 +38,20 @@ const CreatePool = () => {
 	const classes = useStyles();
 	const [group, setGroup] = useState('');
 	const [groups, setGroups] = useState<Carpool.Group[]>([]);
+	const [address, setAddress] = useState('');
+	const handleChange = (address: string) => {
+		setAddress(address);
+	};
 
+	const handleSelect = (address: string) => {
+		setAddress(address);
+		// geocodeByAddress(address)
+		// 	.then((results) => getLatLng(results[0]))
+		// 	.then((latLng) => console.log('Success', latLng))
+		// 	.catch((error) => console.error('Error', error));
+	};
 	const onClick = () => {
+		console.log(address);
 		makeAPIPostCall('/pools/', {
 			title,
 			description,
@@ -43,6 +61,7 @@ const CreatePool = () => {
 			direction,
 			type,
 			group_id: group,
+			address,
 		}).then((res) => {
 			handleCallback(res.data);
 		});
@@ -199,18 +218,67 @@ const CreatePool = () => {
 						>
 							Search
 						</button>
-					</div>
-					<Button
-						variant="contained"
-						color="primary"
-						className={classes.button}
-						onClick={onClick}
-						startIcon={<CloudUploadIcon />}
-					>
-						Submit
-					</Button>
-				</CardContent>
-			</Card>
+							<PlacesAutocomplete
+								value={address}
+								onChange={handleChange}
+								onSelect={handleSelect}
+							>
+								{({
+									getInputProps,
+									suggestions,
+									getSuggestionItemProps,
+									loading,
+								}) => (
+									<div>
+										<label className="" htmlFor="address">
+											Address:
+										</label>
+										<input
+											name="address"
+											id="address"
+											{...getInputProps({
+												placeholder: 'Search Places ...',
+												className: 'location-search-input form-control',
+											})}
+										/>
+										<div className="autocomplete-dropdown-container">
+											{loading && <div>Loading...</div>}
+											{suggestions.map((suggestion) => {
+												const className = suggestion.active
+													? 'suggestion-item--active'
+													: 'suggestion-item';
+												// inline style for demonstration purpose
+												const style = suggestion.active
+													? { backgroundColor: '#fafafa', cursor: 'pointer' }
+													: { backgroundColor: '#ffffff', cursor: 'pointer' };
+												return (
+													<div
+														{...getSuggestionItemProps(suggestion, {
+															className,
+															style,
+														})}
+													>
+														<span>{suggestion.description}</span>
+													</div>
+												);
+											})}
+										</div>
+									</div>
+								)}
+							</PlacesAutocomplete>
+						</div>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classes.button}
+							onClick={onClick}
+							startIcon={<CloudUploadIcon />}
+						>
+							Submit
+						</Button>
+					</CardContent>
+				</Card>
+			</div>
 		</div>
 	);
 };
