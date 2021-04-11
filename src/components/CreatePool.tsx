@@ -126,7 +126,7 @@ const CreatePool = () => {
 							onChange={(event) => setType(event.target.value)}
 						>
 							<option value="offer">Offering carpool</option>
-							<option value="request">Requesting carpooll</option>
+							<option value="request">Requesting carpool</option>
 						</select>
 					</div>
 					<div className="form-group">
