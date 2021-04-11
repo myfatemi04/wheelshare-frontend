@@ -1,15 +1,29 @@
 import GoogleMapReact from 'google-map-react';
+import { makeAPIGetCall } from '../api/utils';
 
-const position = { lat: 39.043758, lng: -77.487442 };
+const position = { lat: 38.817, lng: -77.1679 };
 
-export default function PoolMap() {
+export default function PoolMap(pool: any) {
 	const renderMarkers = (map: any, maps: any) => {
-		let marker = new maps.Marker({
-			position,
-			map,
-			title: 'Hello World!',
+		let markers: any[] = [];
+		makeAPIGetCall(`/addresses/pool/${pool.pool}`).then((res) => {
+			if (res.data.data) {
+				res.data.data.forEach((element: any) => {
+					let marker = new maps.Marker({
+						position: {
+							lat: parseFloat(element.lat),
+							lng: parseFloat(element.lng),
+						},
+						map,
+						title: 'Hello World!',
+					});
+					markers.push(marker);
+				});
+			}
 		});
-		return marker;
+
+		console.log(markers);
+		return markers;
 	};
 
 	return (

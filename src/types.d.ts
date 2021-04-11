@@ -48,4 +48,12 @@ declare namespace Carpool {
 		start_time: string;
 		end_time: string;
 	}
+
+	export interface Address {
+		user: string;
+		pool: string;
+		location: string;
+		lat: string;
+		lng: string;
+	}
 }

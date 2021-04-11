@@ -8,6 +8,11 @@ import { makeAPIPostCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 import PoolMap from './PoolMap';
 
+import PlacesAutocomplete, {
+	geocodeByAddress,
+	getLatLng,
+} from 'react-places-autocomplete';
+
 // eslint-disable-next-line
 const SAMPLE_POOL = {
 	id: '123',
@@ -42,7 +47,14 @@ export default function Pool({
 	triggerUpdate: Function;
 }) {
 	const { user } = useContext(AuthenticationContext);
+	const [address, setAddress] = useState('');
+	const handleChange = (address: string) => {
+		setAddress(address);
+	};
 
+	const handleSelect = (address: string) => {
+		setAddress(address);
+	};
 	const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
 	const [commentStatus, setCommentStatus] = useState<
 		null | 'pending' | 'errored'
@@ -79,12 +91,77 @@ export default function Pool({
 	);
 
 	const onRegister = useCallback(() => {
-		makeAPIPostCall(`/pools/${pool._id}/join`).then(() => triggerUpdate());
-	}, [pool._id, triggerUpdate]);
+		makeAPIPostCall(`/pools/${pool._id}/join`)
+			.then(() => geocodeByAddress(address))
+			.then((results) => getLatLng(results[0]))
+			.then(({ lat, lng }) =>
+				makeAPIPostCall(`/addresses`, {
+					pool: pool._id,
+					location: address,
+					lat: lat,
+					lng: lng,
+				})
+			)
+			.then(() => triggerUpdate());
+	}, [pool._id, address, triggerUpdate]);
 
 	const onUnregister = useCallback(() => {
-		makeAPIPostCall(`/pools/${pool._id}/leave`).then(() => triggerUpdate());
+		makeAPIPostCall(`/pools/${pool._id}/leave`)
+			.then(() =>
+				makeAPIPostCall(`/addresses/remove`, {
+					pool: pool._id,
+				})
+			)
+			.then(() => triggerUpdate());
 	}, [pool._id, triggerUpdate]);
+
+	const mapField = (
+		<div className="form-group">
+			<PlacesAutocomplete
+				value={address}
+				onChange={handleChange}
+				onSelect={handleSelect}
+			>
+				{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+					<div>
+						<label className="" htmlFor="address">
+							Address:
+						</label>
+						<input
+							name="address"
+							id="address"
+							{...getInputProps({
+								placeholder: 'Search Places ...',
+								className: 'location-search-input form-control',
+							})}
+						/>
+						<div className="autocomplete-dropdown-container">
+							{loading && <div>Loading...</div>}
+							{suggestions.map((suggestion) => {
+								const className = suggestion.active
+									? 'suggestion-item--active'
+									: 'suggestion-item';
+								// inline style for demonstration purpose
+								const style = suggestion.active
+									? { backgroundColor: '#fafafa', cursor: 'pointer' }
+									: { backgroundColor: '#ffffff', cursor: 'pointer' };
+								return (
+									<div
+										{...getSuggestionItemProps(suggestion, {
+											className,
+											style,
+										})}
+									>
+										<span>{suggestion.description}</span>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				)}
+			</PlacesAutocomplete>
+		</div>
+	);
 
 	return (
 		<Card style={{ margin: '3rem auto', padding: '1rem 1rem', width: '50%' }}>
@@ -103,6 +180,9 @@ export default function Pool({
 						<b>End Time</b>: {pool.end_time || '3:30 PM'}
 					</Typography>
 					<Typography variant="body1">{pool.description}</Typography>
+					{user && pool.participant_ids?.includes(user._id)
+						? undefined
+						: mapField}
 					{user && (
 						<Button
 							variant="contained"
@@ -120,7 +200,7 @@ export default function Pool({
 						</Button>
 					)}
 					<hr />
-					<PoolMap />
+					<PoolMap pool={pool._id} />
 					<hr />
 					<Textarea
 						cols={80}
