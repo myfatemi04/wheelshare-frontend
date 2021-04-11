@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_ENDPOINT } from '../api/api';
+import { makeAPIGetCall } from '../api/utils';
 
 const maybePluralize = (count: number, noun: string, suffix = 's') =>
 	`${count} ${noun}${count !== 1 ? suffix : ''}`;
@@ -58,14 +59,11 @@ const Pools = () => {
 	]);
 
 	useEffect(() => {
-		console.log(process.env);
-		fetch(`${API_ENDPOINT}/my_pools`)
-			.then((response) => response.json())
-			.then((json) => {
-				if (json) {
-					setPools(json.data);
-				}
-			});
+		makeAPIGetCall(`/users/@me/pools`).then((res) => {
+			if (res.data.data) {
+				setPools(res.data.data);
+			}
+		});
 	}, []);
 
 	return (
@@ -97,7 +95,7 @@ const Pools = () => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/Pool/' + pool.id} className="card-title">
+							<a href={'/pools/' + pool._id} className="card-title">
 								{pool.title}
 							</a>
 							<p className="text-left">
@@ -105,7 +103,7 @@ const Pools = () => {
 							</p>
 							<p className="text-left">Start Time: {pool.start_time}</p>
 							<p className="text-left">End Time: {pool.end_time}</p>
-							<p className="" style={{color: '#9E6105'}}>
+							<p className="" style={{ color: '#9E6105' }}>
 								{maybePluralize(pool.comments.length, 'comment')}
 							</p>
 						</div>

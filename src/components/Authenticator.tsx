@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Redirect, useLocation, useParams } from 'react-router-dom';
-import { API_ENDPOINT } from '../api/api';
+import { makeAPIPostCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 
 export default function Authenticator() {
@@ -13,26 +13,15 @@ export default function Authenticator() {
 	);
 
 	useEffect(() => {
-		fetch(`${API_ENDPOINT}/create_session`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				code,
-				provider,
-			}),
-		})
+		makeAPIPostCall('/create_session', { code, provider })
 			.then((response) => {
-				response.json().then((json) => {
-					if (json.status === 'success') {
-						localStorage.setItem('session_token', json.token);
-						refreshAuthState && refreshAuthState();
-						setStatus('authenticated');
-					} else {
-						setStatus('errored');
-					}
-				});
+				if (response.data.status === 'success') {
+					localStorage.setItem('session_token', response.data.token);
+					refreshAuthState && refreshAuthState();
+					setStatus('authenticated');
+				} else {
+					setStatus('errored');
+				}
 			})
 			.catch(() => {
 				setStatus('errored');

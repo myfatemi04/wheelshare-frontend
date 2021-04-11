@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_ENDPOINT } from '../api/api';
+import { makeAPIGetCall } from '../api/utils';
 
 const MyPools = () => {
 	// const id = props.match.params.id;
@@ -55,14 +56,11 @@ const MyPools = () => {
 	]);
 
 	useEffect(() => {
-		console.log(process.env);
-		fetch(`${API_ENDPOINT}/my_pools`)
-			.then((response) => response.json())
-			.then((json) => {
-				if (json) {
-					setPools(json.data);
-				}
-			});
+		makeAPIGetCall('/users/@me/pools').then((res) => {
+			if (res.data.data) {
+				setPools(res.data.data);
+			}
+		});
 	}, []);
 
 	const maybePluralize = (count: number, noun: string, suffix = 's') =>
@@ -96,7 +94,7 @@ const MyPools = () => {
 							className="card card-body text-left"
 							style={{ backgroundColor: background }}
 						>
-							<a href={'/Pool/' + pool.id} className="card-title">
+							<a href={'/pools/' + pool.id} className="card-title">
 								{pool.pool_title}
 							</a>
 							<p className="text-left">

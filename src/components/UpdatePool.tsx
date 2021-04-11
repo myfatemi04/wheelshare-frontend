@@ -1,10 +1,6 @@
-import React, {
-	useState,
-	useEffect,
-	useCallback,
-	FormEventHandler,
-} from 'react';
+import { useState, useEffect, FormEventHandler } from 'react';
 import { useParams } from 'react-router-dom';
+import { makeAPIGetCall } from '../api/utils';
 
 const UpdatePool = () => {
 	const id = useParams<{ id: string }>().id;
@@ -21,26 +17,17 @@ const UpdatePool = () => {
 		comments: ['What is the covid vaccination status of all the participants?'],
 	});
 
-	const callAPI = useCallback(() => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setPool(data);
-				}
-			});
-	}, [id]);
 	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/update_pool`)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-			});
+		makeAPIGetCall(`/pools/${id}`).then((res) => {
+			console.log(res);
+		});
 	};
 	useEffect(() => {
-		callAPI();
-	}, [callAPI]);
+		makeAPIGetCall(`/pools/${id}`).then((res) => {
+			if (res.data.data) setPool(res.data.data);
+		});
+	}, [id]);
 	return (
 		<div
 			className="bg-dark"

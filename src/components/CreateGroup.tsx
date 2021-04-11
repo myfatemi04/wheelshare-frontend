@@ -1,12 +1,11 @@
-import { useCallback } from 'react';
-import { makeAPIPostCall } from '../api/utils';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { useState, useEffect } from 'react';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { useState } from 'react';
+import { makeAPIPostCall } from '../api/utils';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -22,14 +21,9 @@ const useStyles = makeStyles((theme) => ({
 const CreateGroup = () => {
 	const [title, setTitle] = useState('No Title');
 	const classes = useStyles();
-	useEffect(() => {}, []);
+
 	const onClick = () => {
-		console.log({
-			title: title,
-		});
-		makeAPIPostCall('/group', {
-			title,
-		});
+		makeAPIPostCall('/groups/', { title });
 	};
 
 	return (

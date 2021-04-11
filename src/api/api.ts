@@ -32,11 +32,11 @@ export async function createSession(
 }
 
 export async function getMe(): Promise<Carpool.User> {
-	let result = await makeAPIGetCall('/user', { userID: '@me' });
+	let result = await makeAPIGetCall('/users/@me');
 	return result.data.data;
 }
 
 export async function getPublicUser(id: string): Promise<Carpool.PublicUser> {
-	let result = await makeAPIGetCall('/user', { userID: id });
+	let result = await makeAPIGetCall(`/users/${id}`);
 	return result.data.data;
 }
