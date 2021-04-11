@@ -28,35 +28,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 const MyGroups = () => {
 	const classes = useStyles();
-	const [state, setState] = useState({
-		MyGroups: [
-			{
-				id: 1,
-				group_title: 'TJ',
-			},
-		],
-	});
 
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/groups/`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
-	const [groups, setGroups] = useState<Carpool.Group[]>([
-		{
-			_id: '1234',
-			name: 'TJ',
-			creator_id: '12345Q',
-			member_ids: [],
-		},
-	]);
+	const [groups, setGroups] = useState<Carpool.Group[]>();
 
 	useEffect(() => {
-		makeAPIGetCall('/browse/groups').then((res) => {
+		makeAPIGetCall('/users/@me/groups').then((res) => {
 			if (res.data.data) {
 				setGroups(res.data.data);
 			}
@@ -86,19 +62,19 @@ const MyGroups = () => {
 			</Box>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{groups.map((group, index) => {
-					let background;
-					if (index % 2 === 0) {
-						background = '#F1EAE8';
-					} else {
-						background = '#FFFFFF';
-					}
+				{groups?.map((group, index) => {
+					// let background;
+					// if (index % 2 === 0) {
+					// 	background = '#F1EAE8';
+					// } else {
+					// 	background = '#FFFFFF';
+					// }
 					return (
 						<Card
 							className={classes.root + 'd-inline-flex'}
 							style={{ margin: '0.5rem' }}
 						>
-							<CardActionArea href={'/group/' + group._id}>
+							<CardActionArea href={'/groups/' + group._id}>
 								<CardContent>
 									<Typography gutterBottom variant="h5" component="h2">
 										{group.name}
@@ -117,14 +93,14 @@ const MyGroups = () => {
 									color="primary"
 									onClick={() => {
 										alert('Copied to Clipboard');
-										let link: string = 'localhost:3000/group/' + group._id;
+										let link: string = 'localhost:3000/groups/' + group._id;
 										navigator.clipboard.writeText(link);
 									}}
 								>
 									Share
 								</Button>
 								<Button
-									href={'/group/' + group._id}
+									href={'/groups/' + group._id}
 									size="small"
 									color="primary"
 								>

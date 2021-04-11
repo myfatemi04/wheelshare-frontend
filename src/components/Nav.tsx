@@ -22,9 +22,8 @@ const useStyles = makeStyles({
 });
 const navLinks = [
 	{ title: `Profile`, path: `/profile` },
-	{ title: `Create Pool`, path: `/create_pool` },
-	// { title: `Groups`, path: `/groups` },
-	// { title: `MyGroups`, path: `/mygroups` },
+	{ title: `Groups`, path: `/groups` },
+	{ title: `My Groups`, path: `/mygroups` },
 ];
 const Nav = () => {
 	const classes = useStyles();

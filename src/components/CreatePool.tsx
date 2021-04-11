@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useEffect, useState } from 'react';
 import { searchForPlaces } from '../api/google';
-import { makeAPIPostCall } from '../api/utils';
+import { makeAPIPostCall, makeAPIGetCall } from '../api/utils';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreatePool = () => {
+	const history = useHistory();
 	const [title, setTitle] = useState('No Title');
 	const [capacity, setCapacity] = useState(0);
 	const [start, setStart] = useState('');
@@ -29,6 +31,7 @@ const CreatePool = () => {
 	const [description, setDescription] = useState('');
 	const classes = useStyles();
 	const [group, setGroup] = useState('');
+	const [groups, setGroups] = useState<Carpool.Group[]>([]);
 
 	const onClick = () => {
 		makeAPIPostCall('/pools/', {
@@ -40,9 +43,25 @@ const CreatePool = () => {
 			direction,
 			type,
 			group_id: group,
+		}).then((res) => {
+			handleCallback(res.data);
 		});
 	};
-	useEffect(() => {}, []);
+
+	const handleCallback = (res: any) => {
+		if (res.status === 'error') {
+			alert('There was a problem with your form!');
+		} else {
+			history.push('/profile');
+		}
+	};
+
+	useEffect(() => {
+		makeAPIGetCall('/users/@me/groups').then((res) => {
+			if (res.data.data) setGroups(res.data.data);
+		});
+	}, []);
+
 	return (
 		<div className="container">
 			<Card
@@ -143,15 +162,21 @@ const CreatePool = () => {
 						/>
 					</div>
 					<div className="form-group">
-						<label className="" htmlFor="pool_start">
+						<label className="" htmlFor="group-select">
 							Group:
 						</label>
-						<input
-							type="text"
-							className="form-control"
-							placeholder=""
+						<select
+							name="group-select"
+							id="group-select"
 							onChange={(event) => setGroup(event.target.value)}
-						></input>
+						>
+							<option value="">Select a group</option>
+							{groups.map((group) => (
+								<option key={group._id} value={group._id}>
+									{group.name}
+								</option>
+							))}
+						</select>
 					</div>
 					<div className="form-group">
 						<label className="" htmlFor="location">

@@ -8,7 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Box from '@material-ui/core/Box';
-import { makeAPIGetCall } from '../api/utils';
+import { makeAPIGetCall, makeAPIPostCall } from '../api/utils';
+import { useHistory } from 'react-router-dom';
+
+import GoogleMapReact from 'google-map-react';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -27,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 const Groups = () => {
+	const history = useHistory();
 	const classes = useStyles();
 	const [state, setState] = useState({
 		MyGroups: [
@@ -46,6 +50,7 @@ const Groups = () => {
 				}
 			});
 	};
+
 	const [groups, setGroups] = useState<Carpool.Group[]>([
 		{
 			_id: '1234',
@@ -93,7 +98,7 @@ const Groups = () => {
 							className={classes.root + 'd-inline-flex'}
 							style={{ margin: '0.5rem' }}
 						>
-							<CardActionArea href={'/group/' + group._id}>
+							<CardActionArea href={'/groups/' + group._id}>
 								<CardContent>
 									<Typography gutterBottom variant="h5" component="h2">
 										{group.name}
@@ -112,26 +117,35 @@ const Groups = () => {
 									color="primary"
 									onClick={() => {
 										alert('Copied to Clipboard');
-										let link: string = 'localhost:3000/group/' + group._id;
+										let link: string = 'localhost:3000/groups/' + group._id;
 										navigator.clipboard.writeText(link);
 									}}
 								>
 									Share
 								</Button>
 								<Button
-									href={'/group/' + group._id}
+									href={'/groups/' + group._id}
 									size="small"
 									color="primary"
 								>
 									Learn More
 								</Button>
-								<form action={'/requestgroup/' + group._id} method="POST">
-									<input
-										type="submit"
-										value="Request to Join"
-										className="btn btn-success d-flex"
-									/>
-								</form>
+								<button
+									type="submit"
+									onClick={() => {
+										makeAPIPostCall(`/groups/${group._id}/join`).then((res) => {
+											if (res.data.status === 'error') {
+												alert('There was a problem joining the group!');
+											} else {
+												history.push(`/groups/${group._id}`);
+											}
+										});
+									}}
+									value="Request to Join"
+									className="btn btn-success d-flex"
+								>
+									Join Group
+								</button>
 							</CardActions>
 						</Card>
 					);

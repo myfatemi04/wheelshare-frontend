@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useState } from 'react';
 import { makeAPIPostCall } from '../api/utils';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -19,11 +20,24 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 const CreateGroup = () => {
+	const history = useHistory();
 	const [title, setTitle] = useState('No Title');
 	const classes = useStyles();
 
 	const onClick = () => {
-		makeAPIPostCall('/groups/', { title });
+		makeAPIPostCall('/groups/', {
+			name: title,
+		}).then((res) => {
+			handleCallback(res.data);
+		});
+	};
+
+	const handleCallback = (res: any) => {
+		if (res.status === 'error') {
+			alert('There was a problem with your form!');
+		} else {
+			history.push('/profile');
+		}
 	};
 
 	return (
