@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { makeAPIGetCall } from '../api/utils';
+import CreatePool from './CreatePool';
 
 const maybePluralize = (count: number, noun: string, suffix = 's') =>
 	`${count} ${noun}${count !== 1 ? suffix : ''}`;
@@ -41,6 +42,7 @@ export default function Group() {
 	const [error, setError] = useState(false);
 	const [group, setGroup] = useState<Carpool.Group>();
 	const [pools, setPools] = useState<Carpool.Pool[]>(SAMPLE_POOLS);
+	const [createPoolVisible, setCreatePoolVisible] = useState(false);
 
 	useEffect(() => {
 		makeAPIGetCall(`/groups/${id}`).then((res) => {
@@ -80,30 +82,31 @@ export default function Group() {
 			<Typography variant="h3" align="center">
 				Pools
 			</Typography>
-			<Button
-				onClick={() => (window.location.href = '/create_pool')}
-				variant="contained"
-			>
-				Create Pool
-			</Button>
-			<div className="container">
-				{pools.map((pool, index) => {
-					return (
-						<Card style={{ margin: '0.5em' }} key={index}>
-							<a href={'/pools/' + pool._id} className="card-title">
-								{pool.title}
-							</a>
-							<p className="text-left">
-								Capacity: {pool.participant_ids.length} / {pool.capacity}
-							</p>
-							<p className="text-left">Start Time: {pool.start_time}</p>
-							<p className="text-left">End Time: {pool.end_time}</p>
-							<p className="text-warning">
-								{maybePluralize(pool.comments.length, 'comment')}
-							</p>
-						</Card>
-					);
-				})}
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
+				<div>
+					<Button
+						onClick={() => setCreatePoolVisible((v) => !v)}
+						variant="contained"
+					>
+						{createPoolVisible ? 'Cancel' : 'Create Pool'}
+					</Button>
+					{createPoolVisible && <CreatePool groupID={group._id} />}
+				</div>
+				{pools.map((pool, index) => (
+					<Card style={{ margin: '0.5rem', padding: '0.5rem' }} key={index}>
+						<a href={'/pools/' + pool._id} className="card-title">
+							{pool.title}
+						</a>
+						<p className="text-left">
+							Capacity: {pool.participant_ids.length} / {pool.capacity}
+						</p>
+						<p className="text-left">Start Time: {pool.start_time}</p>
+						<p className="text-left">End Time: {pool.end_time}</p>
+						<p className="text-warning">
+							{maybePluralize(pool.comments.length, 'comment')}
+						</p>
+					</Card>
+				))}
 			</div>
 		</div>
 	);

@@ -4,7 +4,6 @@ import Nav from './components/Nav';
 import Group from './components/Group';
 import Pool from './components/Pool';
 import Profile from './components/Profile';
-import CreatePool from './components/CreatePool';
 import CreateGroup from './components/CreateGroup';
 import Groups from './components/Groups';
 import MyGroups from './components/MyGroups';
@@ -26,7 +25,6 @@ function App() {
 				<Switch>
 					<Route component={Main} path="/about" />
 					<Route component={Authenticator} path="/auth/:provider/callback" />
-					<Route component={CreatePool} path="/create_pool" />
 					<Route component={CreateGroup} path="/create_group" />
 					<Route component={MyGroups} path="/mygroups" />
 					<Route component={UpdatePool} path="/update_pool" />

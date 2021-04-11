@@ -11,8 +11,6 @@ import Box from '@material-ui/core/Box';
 import { makeAPIGetCall, makeAPIPostCall } from '../api/utils';
 import { useHistory } from 'react-router-dom';
 
-import GoogleMapReact from 'google-map-react';
-
 const useStyles = makeStyles((theme) => ({
 	root: {
 		maxWidth: 345,
@@ -32,24 +30,6 @@ const useStyles = makeStyles((theme) => ({
 const Groups = () => {
 	const history = useHistory();
 	const classes = useStyles();
-	const [state, setState] = useState({
-		MyGroups: [
-			{
-				id: 1,
-				group_title: 'TJ',
-			},
-		],
-	});
-
-	const callAPI = () => {
-		fetch(`${process.env.REACT_APP_API_ENDPOINT}/groups/`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data !== undefined) {
-					setState(data);
-				}
-			});
-	};
 
 	const [groups, setGroups] = useState<Carpool.Group[]>([
 		{
