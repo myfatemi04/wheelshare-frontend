@@ -16,6 +16,7 @@ import Main from './components/Main';
 import './App.css';
 import Authenticator from './components/Authenticator';
 import AuthenticationWrapper from './components/AuthenticationWrapper';
+import Logout from './components/Logout';
 
 function App() {
 	return (
@@ -33,6 +34,7 @@ function App() {
 					<Route component={Pool} path="/pools/:id" />
 					<Route component={Groups} path="/groups" />
 					<Route component={Profile} path="/profile" />
+					<Route component={Logout} path="/logout" />
 					<Route component={Home} path="/" />
 				</Switch>
 			</BrowserRouter>
