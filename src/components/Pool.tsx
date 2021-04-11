@@ -48,6 +48,7 @@ export default function Pool({
 }) {
 	const { user } = useContext(AuthenticationContext);
 	const [address, setAddress] = useState('');
+	const [comment, setComment] = useState('');
 	const handleChange = (address: string) => {
 		setAddress(address);
 	};
@@ -75,13 +76,13 @@ export default function Pool({
 			}
 
 			setCommentStatus('pending');
-
-			makeAPIPostCall('/comment', {
+			makeAPIPostCall(`/pools/${pool._id}/comment`, {
 				body: commentTextareaRef.current!.value,
 			})
 				.then(() => {
 					setCommentStatus(null);
 					commentTextareaRef.current!.value = '';
+					triggerUpdate();
 				})
 				.catch(() => {
 					setCommentStatus('errored');
