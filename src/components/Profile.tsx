@@ -20,13 +20,17 @@ const useStyles = makeStyles({
 
 const Profile = () => {
 	const { user } = useContext(AuthenticationContext);
-	// const [groups, setGroups] = useState<Carpool.Group[]>([]);
+	const [groups, setGroups] = useState<Carpool.Group[]>([]);
 	const [pools, setPools] = useState<Carpool.Pool[]>([]);
 	const classes = useStyles();
 
 	useEffect(() => {
 		makeAPIGetCall('/users/@me/pools').then((res) => {
 			if (res.data.data) setPools(res.data.data);
+		});
+
+		makeAPIGetCall('/users/@me/groups').then((res) => {
+			if (res.data.data) setGroups(res.data.data);
 		});
 	}, []);
 
@@ -47,9 +51,9 @@ const Profile = () => {
 			</h1>
 			<div className="container">
 				<h2>
-					<u>{user.username}'s Pools</u>
+					<u>My Pools (private)</u>
 				</h2>
-				<div className="">
+				<div>
 					{pools.map((pool) => {
 						return (
 							<Card
@@ -93,6 +97,24 @@ const Profile = () => {
 						);
 					})}
 				</div>
+
+				<h2>
+					<u>My Groups (private)</u>
+					<div>
+						{groups.map((group) => {
+							return (
+								<Card
+									key={group._id}
+									style={{ padding: '0.5rem', margin: '0.5rem' }}
+								>
+									<h1>
+										<a href={'/groups/' + group._id}>{group.name}</a>
+									</h1>
+								</Card>
+							);
+						})}
+					</div>
+				</h2>
 			</div>
 		</div>
 	);

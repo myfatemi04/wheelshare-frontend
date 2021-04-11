@@ -27,11 +27,11 @@ function App() {
 					<Route component={Authenticator} path="/auth/:provider/callback" />
 					<Route component={CreatePool} path="/create_pool" />
 					<Route component={CreateGroup} path="/create_group" />
-					<Route component={Groups} path="/groups" />
 					<Route component={MyGroups} path="/mygroups" />
 					<Route component={UpdatePool} path="/update_pool" />
 					<Route component={Group} path="/groups/:id" />
 					<Route component={Pool} path="/pools/:id" />
+					<Route component={Groups} path="/groups" />
 					<Route component={Profile} path="/profile" />
 					<Route component={Home} path="/" />
 				</Switch>
