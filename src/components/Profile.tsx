@@ -19,60 +19,9 @@ const useStyles = makeStyles({
 });
 
 const Profile = () => {
-	const { user, isLoggedIn } = useContext(AuthenticationContext);
-	const [groups, setGroups] = useState<Carpool.Group[]>([]);
-	const [pools, setPools] = useState<Carpool.Pool[]>([
-		/*
-		{
-			id: 1,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-		{
-			id: 2,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-		{
-			id: 3,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-		{
-			id: 4,
-			pool_title: 'TJ Carpool',
-			pool_text: 'Carpool from TJ track to homes',
-			start_time: '4/10/2021 3:00 PM',
-			end_time: '4/10/2021 4:00 PM',
-			capacity: 2,
-			participants: [],
-			comments: [
-				'What is the covid vaccination status of all the participants?',
-			],
-		},
-	*/
-	]);
+	const { user } = useContext(AuthenticationContext);
+	// const [groups, setGroups] = useState<Carpool.Group[]>([]);
+	const [pools, setPools] = useState<Carpool.Pool[]>([]);
 	const classes = useStyles();
 
 	useEffect(() => {

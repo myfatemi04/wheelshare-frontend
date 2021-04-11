@@ -43,23 +43,30 @@ export default function Group() {
 		makeAPIGetCall('/group', { id }).then((res) => setGroup(res.data.data));
 	}, [id]);
 
+	if (!group) {
+		return <h1 style={{ textAlign: 'center' }}>Loading</h1>;
+	}
+
 	return (
-		<div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-			<Typography variant="h1">Group</Typography>
-			<h1
-				className="d-flex justify-content-center p-4"
-				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
-			>
+		<div
+			style={{
+				width: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+				padding: '1rem',
+			}}
+		>
+			<Typography variant="h1" align="center">
+				Group {group.id}
+			</Typography>
+
+			<Typography variant="h3" align="center">
 				Pools
-			</h1>
-			<a
-				className="btn btn-large btn-success"
-				href="/create_pool"
-				style={{ fontFamily: 'Courier New' }}
-			>
+			</Typography>
+			<a className="btn btn-large btn-success" href="/create_pool">
 				Create Pool
 			</a>
-			<div className="container" style={{ fontFamily: 'Courier New' }}>
+			<div className="container">
 				<br></br>
 				{pools.map((pool, index) => {
 					let background;

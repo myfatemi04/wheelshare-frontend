@@ -86,7 +86,7 @@ export default function Pool() {
 				}
 			});
 		}
-	}, [user]);
+	}, [user, id, pool]);
 
 	useEffect(() => {
 		fetch(`${process.env.REACT_APP_API_ENDPOINT}/pool/${id}`)

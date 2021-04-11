@@ -37,7 +37,7 @@ export default function Authenticator() {
 			.catch(() => {
 				setStatus('errored');
 			});
-	}, [code, provider]);
+	}, [code, provider, refreshAuthState]);
 
 	switch (status) {
 		case 'authenticated':
