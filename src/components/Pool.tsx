@@ -200,7 +200,7 @@ export default function Pool({
 						</Button>
 					)}
 					<hr />
-					<PoolMap pool={pool._id} />
+					<PoolMap pool={pool} />
 					<hr />
 					<Textarea
 						cols={80}

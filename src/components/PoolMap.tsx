@@ -1,30 +1,39 @@
 import GoogleMapReact from 'google-map-react';
+import { useCallback } from 'react';
 import { makeAPIGetCall } from '../api/utils';
 
 const position = { lat: 38.817, lng: -77.1679 };
 
-export default function PoolMap(pool: any) {
-	const renderMarkers = (map: any, maps: any) => {
-		let markers: any[] = [];
-		makeAPIGetCall(`/addresses/pool/${pool.pool}`).then((res) => {
-			if (res.data.data) {
-				res.data.data.forEach((element: any) => {
-					let marker = new maps.Marker({
-						position: {
-							lat: parseFloat(element.lat),
-							lng: parseFloat(element.lng),
-						},
-						map,
-						title: 'Hello World!',
-					});
-					markers.push(marker);
-				});
-			}
-		});
+export type AddressMarker = {
+	user: string;
+	pool: string;
+	location: string;
+	lat: string;
+	lng: string;
+};
 
-		console.log(markers);
-		return markers;
-	};
+export default function PoolMap({ pool }: { pool: Carpool.Pool }) {
+	const renderMarkers = useCallback(
+		(map: any, maps: any) => {
+			let markers: any[] = [];
+			makeAPIGetCall(`/addresses/pool/${pool._id}`).then((res) => {
+				if (res.data.data) {
+					res.data.data.forEach((element: AddressMarker) => {
+						let marker = new maps.Marker({
+							position: {
+								lat: parseFloat(element.lat),
+								lng: parseFloat(element.lng),
+							},
+							map,
+							title: 'Anonymous Address',
+						});
+						markers.push(marker);
+					});
+				}
+			});
+		},
+		[pool._id]
+	);
 
 	return (
 		<div style={{ height: '50vh', width: '100%' }}>
@@ -36,7 +45,7 @@ export default function PoolMap(pool: any) {
 				defaultZoom={11}
 				yesIWantToUseGoogleMapApiInternals
 				onGoogleApiLoaded={({ map, maps }: any) => renderMarkers(map, maps)}
-			></GoogleMapReact>
+			/>
 		</div>
 	);
 }
