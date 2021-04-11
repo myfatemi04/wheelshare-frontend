@@ -14,5 +14,3 @@ export async function searchForPlaces(query: string) {
 
 	return json;
 }
-
-console.log(searchForPlaces);
