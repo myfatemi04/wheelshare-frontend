@@ -35,7 +35,7 @@ export function graphql(query: string, variables?: any) {
 			})
 			.catch((error) => {
 				if (error.response.status === 401) {
-					localStorage.removeItem('session_id');
+					localStorage.removeItem('session_token');
 					window.location.pathname = '/';
 				} else {
 					reject(new APIError('/api/users/@me', error.response.data.error));
@@ -53,7 +53,7 @@ export function makeAPIPostCall(url: string, data?: any) {
 			.then((successfulResponse) => resolve(successfulResponse))
 			.catch((error) => {
 				if (error.response?.status === 401) {
-					localStorage.removeItem('session_id');
+					localStorage.removeItem('session_token');
 					window.location.pathname = '/';
 				} else {
 					reject(new APIError(url, error.response?.data?.error));
@@ -75,7 +75,7 @@ export function makeAPIGetCall(
 			.then((successfulResponse) => resolve(successfulResponse))
 			.catch((error) => {
 				if (error.response?.status === 401) {
-					localStorage.removeItem('session_id');
+					localStorage.removeItem('session_token');
 					window.location.pathname = '/';
 				} else {
 					reject(error);
@@ -93,7 +93,7 @@ export function makeAPIDeleteCall(url: string) {
 			.then((successfulResponse) => resolve(successfulResponse))
 			.catch((error) => {
 				if (error.response?.status === 401) {
-					localStorage.removeItem('session_id');
+					localStorage.removeItem('session_token');
 				} else {
 					reject(new APIError(url, error.response.data.error));
 				}
