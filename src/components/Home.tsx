@@ -3,6 +3,11 @@ import { useContext } from 'react';
 import { ION_AUTHORIZATION_ENDPOINT } from '../api/api';
 import AuthenticationContext from './AuthenticationContext';
 
+import ChatIcon from '@material-ui/icons/Chat';
+import LockIcon from '@material-ui/icons/Lock';
+import LocalTaxi from '@material-ui/icons/LocalTaxi';
+import RedeemIcon from '@material-ui/icons/Redeem';
+
 export default function Home() {
 	const { user, isLoggedIn } = useContext(AuthenticationContext);
 
@@ -87,73 +92,65 @@ export default function Home() {
 
 							<div className="row exp-grids py-3 d-inline-flex justify-content-center">
 								<div className="col-lg-5 col-md-7 bg-white text-dark m-2 p-4">
-									<img src="images/posts.jpg" alt=" " className="img-fluid" />
 									<div className="exp wthree">
-										<h5>Browse Posts</h5>
+										<h5>
+											<LockIcon style={{ marginRight: '1em' }} />
+											Privacy and Security
+										</h5>
 										<div className="clearfix"></div>
 										<p>
-											Easily browse through NLP generated recommended posts in
-											your feed. These posts match your previous interests and
-											recent trending political and social subjects.
+											All carpools are private to a community. Nobody can view a
+											route before being approved by an admin to the group.
 										</p>
 									</div>
 								</div>
 								<div className="col-lg-5 col-md-7 bg-white text-dark m-2 p-4">
-									<img src="images/events.jpg" alt=" " className="img-fluid" />
+									{/* <img src="images/events.jpg" alt=" " className="img-fluid" /> */}
 									<div className="exp wthree">
-										<h5>Browse Events</h5>
-										<div className="clearfix"></div>
-
+										<h5>
+											<LocalTaxi style={{ marginRight: '1em' }} />
+											Optimized Routes
+										</h5>
+										<div className="clearfix" />
 										<p>
-											Browse local community political events that match your
-											political interests in order to best advocate your
-											concerns and have your voice heard.
+											We provide maps for every carpool that enable riders and
+											drivers to choose the optimal carpools for their routes.
 										</p>
 									</div>
 								</div>
 								<div className="col-lg-5 col-md-7 bg-white text-dark m-2 p-4">
-									<br />
-									<br />
-									<br />
-									<img src="images/post.jpg" alt=" " className="img-fluid" />
+									{/* <img src="images/post.jpg" alt=" " className="img-fluid" /> */}
 									<div className="exp wthree">
-										<br />
-										<br />
-										<br />
-
-										<h5>Discussion Thread</h5>
-										<div className="clearfix"></div>
-
+										<h5>
+											<ChatIcon style={{ marginRight: '1em' }} />
+											Communication
+										</h5>
+										<div className="clearfix" />
 										<p>
-											View someone's post and leave a like or comment to further
-											discuss the thread or show your support. Each like or
-											comment will make your feed give more posts or events that
-											are similar.
+											Easily communicate with others in the pool without needing
+											to set up an external group chat. For example, you could
+											coordinate based on who has been vaccinated and who
+											hasn't, and ensure that you are following all COVID safety
+											protocols.
 										</p>
 									</div>
 								</div>
 								<div className="col-lg-5 col-md-7 bg-white text-dark m-2 p-4">
-									<br />
-									<br />
-									<br />
-									<img
+									{/* <img
 										src="images/createpost.jpg"
-										alt=" "
+										alt=""
 										className="img-fluid"
-									/>
+									/> */}
 									<div className="exp wthree">
-										<br />
-										<br />
-										<br />
-
-										<h5>Create Posts</h5>
-										<div className="clearfix"></div>
-
+										<h5>
+											<RedeemIcon style={{ marginRight: '1em' }} />
+											Rewards
+										</h5>
+										<div className="clearfix" />
 										<p>
-											Create your own post anonymously for free and easily. Your
-											post will be seen by many others as well as politicians
-											that can possibly advocate and recognize your interests
-											for your given enough support.
+											Every driver is given points based on how many passenger
+											miles they have. These points can accumulate and be shown
+											as badges on the driver's profile.
 										</p>
 									</div>
 								</div>
