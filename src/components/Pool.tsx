@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Comment from './Comment';
 import { makeAPIGetCall, makeAPIPostCall } from '../api/utils';
 import AuthenticationContext from './AuthenticationContext';
+import PoolMap from './PoolMap';
 
 // eslint-disable-next-line
 const SAMPLE_POOL = {
@@ -125,6 +126,8 @@ export default function Pool() {
 								: 'Register'}
 						</Button>
 					)}
+					<hr />
+					<PoolMap />
 					<hr />
 					<Textarea
 						cols={80}
