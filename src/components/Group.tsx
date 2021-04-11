@@ -74,7 +74,7 @@ export default function Group() {
 			}}
 		>
 			<Typography variant="h1" align="center">
-				Group {group.id}
+				{group.name}
 			</Typography>
 
 			<Typography variant="h3" align="center">

@@ -1,4 +1,3 @@
-import { FormEventHandler } from 'react';
 import { makeAPIPostCall } from '../api/utils';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(1),
 	},
 }));
+
 const CreatePool = () => {
 	const [title, setTitle] = useState('No Title');
 	const [capacity, setCapacity] = useState(0);
@@ -27,25 +27,18 @@ const CreatePool = () => {
 	const [type, setType] = useState('offer');
 	const [description, setDescription] = useState('');
 	const classes = useStyles();
+	const [group, setGroup] = useState('');
 
 	const onClick = () => {
-		console.log({
-			title: title,
-			description: description,
-			start_time: start,
-			end_time: end,
-			capacity,
-			direction,
-			type,
-		});
 		makeAPIPostCall('/pool', {
-			title: title,
-			description: description,
+			title,
+			description,
 			start_time: start,
 			end_time: end,
 			capacity,
 			direction,
 			type,
+			group_id: group,
 		});
 	};
 	useEffect(() => {}, []);
@@ -155,7 +148,17 @@ const CreatePool = () => {
 									placeholder="Enter text here..."
 								/>
 							</div>
-
+							<div className="form-group">
+								<label className="" htmlFor="pool_start">
+									Group:
+								</label>
+								<input
+									type="text"
+									className="form-control"
+									placeholder=""
+									onChange={(event) => setGroup(event.target.value)}
+								></input>
+							</div>
 							<Button
 								variant="contained"
 								color="primary"
