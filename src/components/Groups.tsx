@@ -1,8 +1,34 @@
+import Button from '@material-ui/core/Button';
 import React, { useState, useEffect } from 'react';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Box from '@material-ui/core/Box';
 
+const useStyles = makeStyles((theme) => ({
+	root: {
+		maxWidth: 345,
+		justifyContent: 'center',
+	},
+	media: {
+		height: 140,
+	},
+	button: {
+		margin: theme.spacing(1),
+		background: '#40E0D0',
+		'&:hover': {
+			background: '#FFFFFF',
+		},
+	},
+}));
 const Groups = () => {
+	const classes = useStyles();
 	const [state, setState] = useState({
-		Groups: [
+		MyGroups: [
 			{
 				id: 1,
 				group_title: 'TJ',
@@ -24,39 +50,73 @@ const Groups = () => {
 		callAPI();
 	}, []);
 	return (
-		<div className="bg-dark" style={{ minHeight: '100vh' }}>
+		<div
+			className=""
+			style={{ minHeight: '100vh', backgroundColor: '#F1EAE8' }}
+		>
 			<h1
 				className="d-flex justify-content-center p-4"
-				style={{ backgroundColor: '#F1EAE8', fontFamily: 'Impact' }}
+				style={{ backgroundColor: '#F1EAE8' }}
 			>
 				Groups
 			</h1>
-			<a
-				className="btn btn-large btn-success"
-				href="/create_group"
-				style={{ fontFamily: 'Courier New' }}
-			>
-				Create Group
-			</a>
+			<Box textAlign="center">
+				<Button
+					variant="contained"
+					className={classes.button}
+					startIcon={<CloudUploadIcon />}
+					href="/create_group"
+				>
+					Create Group
+				</Button>
+			</Box>
 			<div className="container" style={{ fontFamily: 'Courier New' }}>
 				<br></br>
-				{state.Groups.map((group, index) => {
+				{state.MyGroups.map((group, index) => {
+					let background;
+					if (index % 2 === 0) {
+						background = '#F1EAE8';
+					} else {
+						background = '#FFFFFF';
+					}
 					return (
-						<div
-							className="card card-body text-left"
-							style={{
-								backgroundColor: index % 2 === 0 ? '#F1EAE8' : '#FFFFFF',
-							}}
+						<Card
+							className={classes.root + 'd-inline-flex'}
+							style={{ margin: '0.5rem' }}
 						>
-							<form action={'/requestgroup/' + group.id} method="POST">
-								<p className="card-title">{group.group_title}</p>
-								<input
-									type="submit"
-									value="Request to Join"
-									className="btn btn-success d-flex"
-								/>
-							</form>
-						</div>
+							<CardActionArea href={'/group/' + group.id}>
+								<CardContent>
+									<Typography gutterBottom variant="h5" component="h2">
+										{group.group_title}
+									</Typography>
+									<Typography
+										variant="body2"
+										color="textSecondary"
+										component="p"
+									></Typography>
+								</CardContent>
+							</CardActionArea>
+
+							<CardActions>
+								<Button
+									size="small"
+									color="primary"
+									onClick={() => {
+										let link: string = 'localhost:3000/group/' + group.id;
+										navigator.clipboard.writeText(link);
+									}}
+								>
+									Share
+								</Button>
+								<Button
+									href={'/group/' + group.id}
+									size="small"
+									color="primary"
+								>
+									Learn More
+								</Button>
+							</CardActions>
+						</Card>
 					);
 				})}
 			</div>
