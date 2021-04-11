@@ -6,6 +6,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useEffect, useState } from 'react';
 import { searchForPlaces } from '../api/google';
 import { makeAPIPostCall } from '../api/utils';
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		maxWidth: 345,
