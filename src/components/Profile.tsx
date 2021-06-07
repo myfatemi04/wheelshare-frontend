@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useContext, useEffect, useState } from 'react';
 import { makeAPIGetCall } from '../api/utils';
-import AuthenticationContext from './AuthenticationContext';
+import AuthenticationContext from './Authentication/AuthenticationContext';
 
 const useStyles = makeStyles({
 	root: {

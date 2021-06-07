@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import { useContext } from 'react';
 import { ION_AUTHORIZATION_ENDPOINT } from '../api/api';
-import AuthenticationContext from './AuthenticationContext';
+import AuthenticationContext from './Authentication/AuthenticationContext';
 
 import ChatIcon from '@material-ui/icons/Chat';
 import LockIcon from '@material-ui/icons/Lock';

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Redirect, useLocation, useParams } from 'react-router-dom';
-import { makeAPIPostCall } from '../api/utils';
+import { makeAPIPostCall } from '../../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 
 export default function Authenticator() {
@@ -8,9 +8,8 @@ export default function Authenticator() {
 	const query = new URLSearchParams(useLocation().search);
 	const code = query.get('code');
 	const { refreshAuthState } = useContext(AuthenticationContext);
-	const [status, setStatus] = useState<'pending' | 'errored' | 'authenticated'>(
-		'pending'
-	);
+	const [status, setStatus] =
+		useState<'pending' | 'errored' | 'authenticated'>('pending');
 
 	useEffect(() => {
 		makeAPIPostCall('/create_session', { code, provider })

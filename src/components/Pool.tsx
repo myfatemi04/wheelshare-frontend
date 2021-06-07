@@ -5,7 +5,7 @@ import Textarea from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import Comment from './Comment';
 import { makeAPIPostCall } from '../api/utils';
-import AuthenticationContext from './AuthenticationContext';
+import AuthenticationContext from './Authentication/AuthenticationContext';
 import PoolMap from './PoolMap';
 
 import PlacesAutocomplete, {
@@ -57,9 +57,8 @@ export default function Pool({
 		setAddress(address);
 	};
 	const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
-	const [commentStatus, setCommentStatus] = useState<
-		null | 'pending' | 'errored'
-	>(null);
+	const [commentStatus, setCommentStatus] =
+		useState<null | 'pending' | 'errored'>(null);
 
 	const onComment = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
 		(e) => {

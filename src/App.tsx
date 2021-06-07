@@ -1,21 +1,18 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Nav from './components/Nav';
-
-import Group from './components/Group';
-import Profile from './components/Profile';
-import CreateGroup from './components/CreateGroup';
-import Groups from './components/Groups';
-import MyGroups from './components/MyGroups';
-import UpdatePool from './components/UpdatePool';
-import Home from './components/Home';
-import Main from './components/Main';
-//import 'bootstrap/dist/css/bootstrap.min.css';
-//import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
-import Authenticator from './components/Authenticator';
-import AuthenticationWrapper from './components/AuthenticationWrapper';
+import AuthenticationWrapper from './components/Authentication/AuthenticationWrapper';
+import Authenticator from './components/Authentication/Authenticator';
+import CreateGroup from './components/CreateGroup';
+import Group from './components/Group';
+import Groups from './components/Groups';
+import Home from './components/Home';
 import Logout from './components/Logout';
+import Main from './components/Main';
+import MyGroups from './components/MyGroups';
+import Nav from './components/Nav';
 import PoolPage from './components/PoolPage';
+import Profile from './components/Profile';
+import UpdatePool from './components/UpdatePool';
 
 function App() {
 	return (
