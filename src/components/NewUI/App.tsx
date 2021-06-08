@@ -1,4 +1,5 @@
 import Event from './Event';
+import UIPrimaryTitle from './UIPrimaryTitle';
 
 export default function App() {
 	return (
@@ -7,20 +8,13 @@ export default function App() {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				maxWidth: '50rem',
+				width: '30rem',
+				maxWidth: '30rem',
 				marginLeft: 'auto',
 				marginRight: 'auto',
 			}}
 		>
-			<h1
-				style={{
-					fontSize: '4rem',
-					marginTop: '0.25em',
-					marginBottom: '0.25em',
-				}}
-			>
-				WheelShare
-			</h1>
+			<UIPrimaryTitle>WheelShare</UIPrimaryTitle>
 			<Event
 				title="TJ Track Regional Meet"
 				group="TJHSST Track and Field"
