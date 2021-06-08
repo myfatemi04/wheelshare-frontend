@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 const green = '#60f760';
 const lightgrey = '#e0e0e0';
@@ -16,6 +17,8 @@ export default function Event({
 }) {
 	const [needRideThere, setNeedRideThere] = useState(false);
 	const [needRideBack, setNeedRideBack] = useState(false);
+	const [rideThereLocation, setRideThereLocation] = useState('');
+	const [rideBackLocation, setRideBackLocation] = useState('');
 
 	return (
 		<div
@@ -118,17 +121,67 @@ export default function Event({
 			</div>
 			{needRideThere && (
 				<>
-					<input
-						type="text"
-						style={{
-							marginTop: '0.5em',
-							padding: '0.5em',
-							fontSize: '1.25rem',
-							borderRadius: '0.5em',
-							border: '0px',
-						}}
-						placeholder="Where would you be picked up?"
-					/>
+					<PlacesAutocomplete
+						onChange={(address) => setRideThereLocation(address)}
+						value={rideThereLocation}
+					>
+						{({
+							getInputProps,
+							getSuggestionItemProps,
+							suggestions,
+							loading,
+						}) => (
+							<div
+								style={{
+									width: '100%',
+									display: 'flex',
+									flexDirection: 'column',
+								}}
+							>
+								<input
+									{...getInputProps({
+										style: {
+											marginTop: '0.5em',
+											padding: '0.5em',
+											fontSize: '1.25rem',
+											borderRadius: '0.5em',
+											border: '0px',
+											zIndex: 1,
+										},
+										placeholder: 'Where would you be picked up?',
+									})}
+								/>
+								{loading
+									? 'Loading'
+									: suggestions.length > 0 && (
+											<div
+												style={{
+													marginTop: '-1em',
+													paddingTop: '2em',
+													paddingBottom: '1em',
+													paddingLeft: '1em',
+													paddingRight: '1em',
+													borderBottomLeftRadius: '0.5em',
+													borderBottomRightRadius: '0.5em',
+													backgroundColor: 'white',
+												}}
+											>
+												{suggestions.map((suggestion) => (
+													<div
+														{...getSuggestionItemProps(suggestion)}
+														style={{
+															cursor: 'pointer',
+														}}
+														key={suggestion.placeId}
+													>
+														{suggestion.description}
+													</div>
+												))}
+											</div>
+									  )}
+							</div>
+						)}
+					</PlacesAutocomplete>
 					<input
 						type="time"
 						style={{
@@ -144,17 +197,67 @@ export default function Event({
 			)}
 			{needRideBack && (
 				<>
-					<input
-						type="text"
-						style={{
-							marginTop: '0.5em',
-							padding: '0.5em',
-							fontSize: '1.25rem',
-							borderRadius: '0.5em',
-							border: '0px',
-						}}
-						placeholder="Where would you be dropped off?"
-					/>
+					<PlacesAutocomplete
+						onChange={(address) => setRideBackLocation(address)}
+						value={rideBackLocation}
+					>
+						{({
+							getInputProps,
+							getSuggestionItemProps,
+							suggestions,
+							loading,
+						}) => (
+							<div
+								style={{
+									width: '100%',
+									display: 'flex',
+									flexDirection: 'column',
+								}}
+							>
+								<input
+									{...getInputProps({
+										style: {
+											marginTop: '0.5em',
+											padding: '0.5em',
+											fontSize: '1.25rem',
+											borderRadius: '0.5em',
+											border: '0px',
+											zIndex: 1,
+										},
+										placeholder: 'Where would you be dropped off?',
+									})}
+								/>
+								{loading
+									? 'Loading'
+									: suggestions.length > 0 && (
+											<div
+												style={{
+													marginTop: '-1em',
+													paddingTop: '2em',
+													paddingBottom: '1em',
+													paddingLeft: '1em',
+													paddingRight: '1em',
+													borderBottomLeftRadius: '0.5em',
+													borderBottomRightRadius: '0.5em',
+													backgroundColor: 'white',
+												}}
+											>
+												{suggestions.map((suggestion) => (
+													<div
+														{...getSuggestionItemProps(suggestion)}
+														style={{
+															cursor: 'pointer',
+														}}
+														key={suggestion.placeId}
+													>
+														{suggestion.description}
+													</div>
+												))}
+											</div>
+									  )}
+							</div>
+						)}
+					</PlacesAutocomplete>
 					<input
 						type="time"
 						style={{
