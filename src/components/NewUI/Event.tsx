@@ -21,6 +21,7 @@ export default function Event({
 	const [needRideBack, setNeedRideBack] = useState(false);
 	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState('');
 	const [rideBackDropoffPlaceID, setRideBackDropoffPlaceID] = useState('');
+	const [confirmed, setConfirmed] = useState(false);
 
 	useEffect(() => {
 		console.log({ rideTherePickupPlaceID, rideBackDropoffPlaceID });
@@ -131,9 +132,10 @@ export default function Event({
 					</span>
 					<UIPlacesAutocomplete
 						placeholder="Pickup location"
-						onSelected={(address, placeID) =>
-							setRideTherePickupPlaceID(placeID)
-						}
+						onSelected={(address, placeID) => {
+							setRideTherePickupPlaceID(placeID);
+							setConfirmed(false);
+						}}
 					/>
 					<UITimeInput />
 				</>
@@ -152,13 +154,35 @@ export default function Event({
 					</span>
 					<UIPlacesAutocomplete
 						placeholder="Dropoff location"
-						onSelected={(address, placeID) =>
-							setRideBackDropoffPlaceID(placeID)
-						}
+						onSelected={(address, placeID) => {
+							setRideBackDropoffPlaceID(placeID);
+							setConfirmed(false);
+						}}
 					/>
 					<UITimeInput />
 				</>
 			)}
+			{(needRideThere || needRideBack) &&
+				(rideTherePickupPlaceID || rideBackDropoffPlaceID) && (
+					<div
+						style={{
+							backgroundColor: confirmed ? green : lightgrey,
+							color: confirmed ? 'white' : 'black',
+							padding: '1rem',
+							borderRadius: '0.5em',
+							textTransform: 'uppercase',
+							fontWeight: 500,
+							marginTop: '0.5em',
+							cursor: 'pointer',
+							userSelect: 'none',
+						}}
+						onClick={() => {
+							setConfirmed((confirmed) => !confirmed);
+						}}
+					>
+						{confirmed ? 'Confirmed' : 'Confirm'}
+					</div>
+				)}
 		</div>
 	);
 }

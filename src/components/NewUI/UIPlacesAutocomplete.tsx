@@ -50,7 +50,12 @@ export default function UIPlacesAutocomplete({
 	const suggestionsRef = useRef<readonly Suggestion[]>([]);
 	return (
 		<PlacesAutocomplete
-			onChange={setLocation}
+			onChange={(location) => {
+				setLocation(location);
+				if (onSelected) {
+					onSelected(null!, null!);
+				}
+			}}
 			onSelect={(address, placeID) => {
 				setLocation(address);
 				if (onSelected) {
