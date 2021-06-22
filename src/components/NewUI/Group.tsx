@@ -7,7 +7,7 @@ export type IGroup = {
 
 export default function Group({ events, name }: IGroup) {
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column' }}>
+		<div style={{ textAlign: 'center' }}>
 			<h1>{name}</h1>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				{events.map((event) => (
