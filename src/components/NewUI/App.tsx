@@ -1,4 +1,5 @@
 import Event from './Event';
+import Group from './Group';
 import UIPrimaryTitle from './UIPrimaryTitle';
 
 export default function App() {
@@ -15,11 +16,16 @@ export default function App() {
 			}}
 		>
 			<UIPrimaryTitle>WheelShare</UIPrimaryTitle>
-			<Event
-				title="TJ Track Regional Meet"
-				group="TJHSST Track and Field"
-				location="Ashburn, Virginia"
-				time="11:00 AM to 2:45 PM"
+			<Group
+				events={[
+					{
+						time: '11:00 AM to 2:45 PM',
+						title: 'TJ Track Regional Meet',
+						group: 'TJHSST Track and Field',
+						location: 'Ashburn, Virginia',
+					},
+				]}
+				name="TJHSST 2022"
 			/>
 			<Event
 				title="End of Year Party"

@@ -6,17 +6,14 @@ import UITimeInput from './UITimeInput';
 const green = '#60f760';
 const lightgrey = '#e0e0e0';
 
-export default function Event({
-	title,
-	group,
-	location,
-	time,
-}: {
+export type IEvent = {
 	title: string;
 	group: string;
 	location: string;
 	time: string;
-}) {
+};
+
+export default function Event({ title, group, location, time }: IEvent) {
 	const [needRideThere, setNeedRideThere] = useState(false);
 	const [needRideBack, setNeedRideBack] = useState(false);
 	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState('');
