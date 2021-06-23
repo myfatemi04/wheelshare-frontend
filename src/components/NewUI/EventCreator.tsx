@@ -30,6 +30,7 @@ export default function EventCreator() {
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
+			<h1 style={{ textAlign: 'center' }}>Create Event</h1>
 			Name
 			<UITextInput value={name} onChangeText={setName} />
 			<br />
