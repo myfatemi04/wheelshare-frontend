@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
@@ -9,26 +9,57 @@ const green = '#60f760';
 const lightgrey = '#e0e0e0';
 
 export type IEvent = {
-	title: string;
+	name: string;
 	group: string;
-	location: string;
-	time: string;
+	address: string;
+	startTime: string;
+	endTime: string;
 };
 
-export default function Event({ title, group, location, time }: IEvent) {
+function formatStartAndEndTime(
+	startDatetimeString: string,
+	endDatetimeString: string
+) {
+	const startDatetime = new Date(startDatetimeString);
+	const endDatetime = new Date(endDatetimeString);
+
+	if (isNaN(startDatetime.valueOf())) {
+		console.error('Invalid datetime:', startDatetimeString);
+		return '(invalid)';
+	}
+	if (isNaN(endDatetime.valueOf())) {
+		console.error('Invalid datetime:', startDatetimeString);
+		return '(invalid)';
+	}
+
+	const startDateString = startDatetime.toLocaleDateString();
+	const endDateString = endDatetime.toLocaleDateString();
+
+	if (startDateString === endDateString) {
+		const startTimeString = startDatetime.toLocaleTimeString();
+		const endTimeString = endDatetime.toLocaleTimeString();
+		return `${startDateString}, ${startTimeString} - ${endTimeString}`;
+	} else {
+		return `${startDatetime.toLocaleString()} - ${endDatetime.toLocaleString()}`;
+	}
+}
+
+export default function Event({
+	name,
+	group,
+	address,
+	startTime,
+	endTime,
+}: IEvent) {
 	const [needRideThere, setNeedRideThere] = useState(false);
 	const [needRideBack, setNeedRideBack] = useState(false);
 	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState('');
 	const [rideBackDropoffPlaceID, setRideBackDropoffPlaceID] = useState('');
 	const [confirmed, setConfirmed] = useState(false);
 
-	useEffect(() => {
-		console.log({ rideTherePickupPlaceID, rideBackDropoffPlaceID });
-	}, [rideTherePickupPlaceID, rideBackDropoffPlaceID]);
-
 	return (
 		<UISecondaryBox>
-			<UISecondaryHeader>{title}</UISecondaryHeader>
+			<UISecondaryHeader>{name}</UISecondaryHeader>
 			<span
 				style={{
 					color: '#303030',
@@ -47,8 +78,8 @@ export default function Event({ title, group, location, time }: IEvent) {
 						color: '#303030',
 					}}
 				>
-					<b>Time: </b>
-					{time}
+					<b>When: </b>
+					{formatStartAndEndTime(startTime, endTime)}
 				</span>
 				<br />
 				<span
@@ -56,8 +87,8 @@ export default function Event({ title, group, location, time }: IEvent) {
 						color: '#303030',
 					}}
 				>
-					<b>Location: </b>
-					{location}
+					<b>Where: </b>
+					{address}
 				</span>
 			</div>
 			<div
