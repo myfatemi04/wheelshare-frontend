@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IEvent } from './Event';
-import EventCreator from './EventCreator';
+import EventCreatorLink from './EventCreatorLink';
 import EventStream from './EventStream';
+import GroupSettingsLink from './GroupSettingsLink';
 
 export type IGroup = {
 	id: number;
@@ -44,6 +45,8 @@ export default function Group() {
 
 	const { name } = group;
 
+	console.log({ events });
+
 	return (
 		<div
 			style={{
@@ -54,7 +57,8 @@ export default function Group() {
 			}}
 		>
 			<h1>{name}</h1>
-			<EventCreator group={group} />
+			<GroupSettingsLink group={group} />
+			<EventCreatorLink group={group} />
 			<EventStream events={events} />
 		</div>
 	);
