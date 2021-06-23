@@ -4,7 +4,17 @@ import UISecondaryBox from './UISecondaryBox';
 function GroupListItem({ group }: { group: IGroup }) {
 	return (
 		<UISecondaryBox>
-			<h2 style={{ textAlign: 'center' }}>{group.name}</h2>
+			<h2
+				style={{
+					textAlign: 'center',
+					cursor: 'pointer',
+				}}
+				onClick={() => {
+					window.location.href = `/groups/${group.id}`;
+				}}
+			>
+				{group.name}
+			</h2>
 		</UISecondaryBox>
 	);
 }

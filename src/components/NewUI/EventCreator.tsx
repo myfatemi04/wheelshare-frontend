@@ -1,41 +1,40 @@
 import { useCallback, useState } from 'react';
+import { post } from './api';
+import { IGroup } from './Group';
 import UIButton from './UIButton';
 import UIDatetimeInput from './UIDatetimeInput';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
 import UITextInput from './UITextInput';
 
-export default function EventCreator() {
+export default function EventCreator({ group }: { group: IGroup }) {
 	const [name, setName] = useState('');
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [endTime, setEndTime] = useState<Date | null>(null);
 	const [placeId, setPlaceId] = useState<string | null>(null);
-	const [groupId, setGroupId] = useState('');
 
 	const createEvent = useCallback(() => {
-		fetch('http://localhost:5000/api/events', {
-			method: 'post',
-			body: JSON.stringify({
-				name,
-				startTime,
-				endTime,
-				groupId,
-				placeId,
-			}),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-	}, [name, startTime, endTime, groupId, placeId]);
+		post('/events', {
+			name,
+			startTime,
+			endTime,
+			groupId: group.id,
+			placeId,
+		})
+			.then((response) => response.json())
+			.then(({ id }) => {
+				window.location.href = `/groups/${id}`;
+			});
+	}, [name, startTime, endTime, group.id, placeId]);
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
-			<h1 style={{ textAlign: 'center' }}>Create Event</h1>
+			<h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+				Create Event
+			</h1>
+			<h3 style={{ textAlign: 'center', marginTop: '0.5rem' }}>{group.name}</h3>
 			Name
 			<UITextInput value={name} onChangeText={setName} />
-			<br />
-			Group
-			<UITextInput value={groupId} onChangeText={setGroupId} />
 			<br />
 			Start time
 			<UIDatetimeInput onChangedDate={setStartTime} />

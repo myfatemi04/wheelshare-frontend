@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { post } from './api';
 import UIButton from './UIButton';
 import UISecondaryBox from './UISecondaryBox';
 import UITextInput from './UITextInput';
@@ -6,14 +7,8 @@ import UITextInput from './UITextInput';
 export default function GroupCreator() {
 	const [name, setName] = useState('');
 	const createGroup = useCallback(() => {
-		fetch('http://localhost:5000/api/groups', {
-			method: 'post',
-			body: JSON.stringify({
-				name,
-			}),
-			headers: {
-				'Content-Type': 'application/json',
-			},
+		post('/groups', {
+			name,
 		});
 	}, [name]);
 
