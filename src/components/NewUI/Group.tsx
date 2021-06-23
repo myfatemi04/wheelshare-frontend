@@ -1,6 +1,9 @@
-import Event, { IEvent } from './Event';
+import { IEvent } from './Event';
+import EventCreator from './EventCreator';
+import EventStream from './EventStream';
 
 export type IGroup = {
+	id: number;
 	events: IEvent[];
 	name: string;
 };
@@ -8,12 +11,9 @@ export type IGroup = {
 export default function Group({ events, name }: IGroup) {
 	return (
 		<div style={{ textAlign: 'center', width: '100%' }}>
+			<EventCreator />
 			<h1>{name}</h1>
-			<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-				{events.map((event) => (
-					<Event {...event} key={event.title} />
-				))}
-			</div>
+			<EventStream events={events} />
 		</div>
 	);
 	//
