@@ -16,7 +16,13 @@ export default function UIDatetimeInput({
 		<input
 			style={baseStyle}
 			type="datetime-local"
-			onChange={(e) => onChangedDate(e.target.valueAsDate)}
+			onChange={(e) => {
+				const number = e.target.valueAsNumber;
+				if (!isNaN(number)) {
+					const date = new Date(number);
+					onChangedDate(date);
+				}
+			}}
 		/>
 	);
 }

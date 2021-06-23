@@ -20,12 +20,13 @@ export default function EventCreator() {
 				startTime,
 				endTime,
 				groupId,
+				placeId,
 			}),
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
-	}, [name, startTime, endTime, groupId]);
+	}, [name, startTime, endTime, groupId, placeId]);
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>

@@ -67,7 +67,6 @@ export default function UIPlacesAutocomplete({
 			{({ getInputProps, getSuggestionItemProps, suggestions, loading }) => {
 				if (!loading) {
 					suggestionsRef.current = suggestions;
-					console.log(suggestions);
 				}
 				return (
 					<div
