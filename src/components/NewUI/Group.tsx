@@ -5,6 +5,7 @@ import { IEvent } from './Event';
 import EventCreatorLink from './EventCreatorLink';
 import EventStream from './EventStream';
 import GroupSettingsLink from './GroupSettingsLink';
+import UILink from './UILink';
 
 export type IGroup = {
 	id: number;
@@ -57,8 +58,13 @@ export default function Group() {
 			}}
 		>
 			<h1>{name}</h1>
+			<UILink href="/">Home</UILink>
+			<br />
+			<br />
 			<GroupSettingsLink group={group} />
+			<br />
 			<EventCreatorLink group={group} />
+			<br />
 			<EventStream events={events} />
 		</div>
 	);

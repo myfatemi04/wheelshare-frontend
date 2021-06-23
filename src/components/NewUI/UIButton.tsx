@@ -25,6 +25,7 @@ export default function UIButton({
 		}
 		return { ...baseStyle, ...style };
 	}, [style]);
+
 	return (
 		<div style={computedStyle} onClick={onClick}>
 			{children}

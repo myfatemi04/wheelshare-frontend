@@ -53,13 +53,17 @@ export default function GroupSettingsLink({ group }: { group: IGroup }) {
 				style={{
 					cursor: 'pointer',
 					userSelect: 'none',
-					marginBottom: '1rem',
 				}}
 				onClick={toggle}
 			>
 				Settings
 			</div>
-			{open && <GroupSettings group={group} />}
+			{open && (
+				<>
+					<br />
+					<GroupSettings group={group} />
+				</>
+			)}
 		</div>
 	);
 }

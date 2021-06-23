@@ -14,13 +14,17 @@ export default function EventCreatorLink({ group }: { group: IGroup }) {
 				style={{
 					cursor: 'pointer',
 					userSelect: 'none',
-					marginBottom: '1rem',
 				}}
 				onClick={toggle}
 			>
 				Create Event
 			</div>
-			{open && <EventCreator group={group} />}
+			{open && (
+				<>
+					<br />
+					<EventCreator group={group} />
+				</>
+			)}
 		</div>
 	);
 }
