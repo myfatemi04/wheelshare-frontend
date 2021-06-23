@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
+import UISecondaryBox from './UISecondaryBox';
 import UISecondaryHeader from './UISecondaryHeader';
 import UITimeInput from './UITimeInput';
 
@@ -25,16 +27,7 @@ export default function Event({ title, group, location, time }: IEvent) {
 	}, [rideTherePickupPlaceID, rideBackDropoffPlaceID]);
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				backgroundColor: '#f9f9f9',
-				borderRadius: '0.5rem',
-				padding: '1rem',
-				marginBottom: '1em',
-			}}
-		>
+		<UISecondaryBox>
 			<UISecondaryHeader>{title}</UISecondaryHeader>
 			<span
 				style={{
@@ -76,44 +69,32 @@ export default function Event({ title, group, location, time }: IEvent) {
 					marginTop: '1rem',
 				}}
 			>
-				<div
+				<UIButton
 					style={{
 						backgroundColor: needRideThere ? green : lightgrey,
 						color: needRideThere ? 'white' : 'black',
 						transition: 'color 0.2s, background-color 0.2s',
-						padding: '1rem',
-						borderRadius: '0.5em',
-						textTransform: 'uppercase',
-						fontWeight: 500,
 						marginRight: '0.5em',
-						cursor: 'pointer',
-						userSelect: 'none',
 					}}
 					onClick={() => {
 						setNeedRideThere((needRideThere) => !needRideThere);
 					}}
 				>
 					I need a ride there
-				</div>
-				<div
+				</UIButton>
+				<UIButton
 					style={{
 						backgroundColor: needRideBack ? green : lightgrey,
 						color: needRideBack ? 'white' : 'black',
 						transition: 'color 0.2s, background-color 0.2s',
-						padding: '1rem',
-						borderRadius: '0.5em',
-						textTransform: 'uppercase',
-						fontWeight: 500,
 						marginLeft: '0.5em',
-						cursor: 'pointer',
-						userSelect: 'none',
 					}}
 					onClick={() => {
 						setNeedRideBack((needRideBack) => !needRideBack);
 					}}
 				>
 					I need a ride back
-				</div>
+				</UIButton>
 			</div>
 			{needRideThere && (
 				<>
@@ -161,25 +142,18 @@ export default function Event({ title, group, location, time }: IEvent) {
 			)}
 			{(needRideThere || needRideBack) &&
 				(rideTherePickupPlaceID || rideBackDropoffPlaceID) && (
-					<div
+					<UIButton
 						style={{
 							backgroundColor: confirmed ? green : lightgrey,
 							color: confirmed ? 'white' : 'black',
-							padding: '1rem',
-							borderRadius: '0.5em',
-							textTransform: 'uppercase',
-							fontWeight: 500,
-							marginTop: '0.5em',
-							cursor: 'pointer',
-							userSelect: 'none',
 						}}
 						onClick={() => {
 							setConfirmed((confirmed) => !confirmed);
 						}}
 					>
 						{confirmed ? 'Confirmed' : 'Confirm'}
-					</div>
+					</UIButton>
 				)}
-		</div>
+		</UISecondaryBox>
 	);
 }

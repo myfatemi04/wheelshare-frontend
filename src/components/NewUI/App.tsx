@@ -1,3 +1,4 @@
+import EventCreator from './EventCreator';
 import Group from './Group';
 import UIPrimaryTitle from './UIPrimaryTitle';
 
@@ -15,6 +16,7 @@ export default function App() {
 			}}
 		>
 			<UIPrimaryTitle>WheelShare</UIPrimaryTitle>
+			<EventCreator />
 			<Group
 				events={[
 					{
