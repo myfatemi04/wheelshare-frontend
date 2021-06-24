@@ -1,5 +1,10 @@
 import { CSSProperties } from '@material-ui/styles';
-import { MouseEventHandler, useCallback, useState } from 'react';
+import {
+	MouseEventHandler,
+	ReactEventHandler,
+	useCallback,
+	useState,
+} from 'react';
 
 export type AvailabilityKind = 'going' | 'interested' | 'not-interested';
 
@@ -54,7 +59,8 @@ function Option({
 	);
 }
 
-export default function Availability({
+// eslint-disable-next-line
+function Availability__old({
 	selected,
 	onSelected: onSelectedInner,
 }: {
@@ -104,5 +110,42 @@ export default function Availability({
 				/>
 			)}
 		</div>
+	);
+}
+
+export default function Availability({
+	selected,
+	onSelected: onSelectedInner,
+}: {
+	selected: AvailabilityKind;
+	onSelected: (kind: AvailabilityKind) => void;
+}) {
+	const onSelected: ReactEventHandler<HTMLSelectElement> = useCallback(
+		(event) => {
+			onSelectedInner(
+				// @ts-ignore
+				event.target.value
+			);
+			event.preventDefault();
+		},
+		[onSelectedInner]
+	);
+	return (
+		<select
+			value={selected}
+			onChange={onSelected}
+			style={{
+				fontFamily: 'Inter',
+				fontSize: '1rem',
+				border: '0px solid black',
+				borderRadius: '0.5rem',
+				padding: '0.5rem',
+				marginTop: '1rem',
+			}}
+		>
+			<option value="going">Going</option>
+			<option value="interested">Interested</option>
+			<option value="not-interested">Not interested</option>
+		</select>
 	);
 }

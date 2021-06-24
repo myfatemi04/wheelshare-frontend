@@ -46,8 +46,6 @@ export default function Group() {
 
 	const { name } = group;
 
-	console.log({ events });
-
 	return (
 		<div
 			style={{
