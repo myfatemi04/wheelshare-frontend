@@ -9,15 +9,18 @@ const baseStyle = {
 
 export default function UITextInput({
 	value,
+	disabled = false,
 	onChangeText,
 }: {
 	value: string;
+	disabled?: boolean;
 	onChangeText: (text: string) => void;
 }) {
 	return (
 		<input
 			style={baseStyle}
 			value={value}
+			disabled={disabled}
 			onChange={(e) => onChangeText(e.target.value)}
 		/>
 	);

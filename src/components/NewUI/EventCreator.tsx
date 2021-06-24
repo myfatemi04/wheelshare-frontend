@@ -49,13 +49,13 @@ export default function EventCreator({ group }: { group: IGroup }) {
 			</h1>
 			<h3 style={{ textAlign: 'center', marginTop: '0.5rem' }}>{group.name}</h3>
 			Name
-			<UITextInput value={name} onChangeText={setName} />
+			<UITextInput value={name} onChangeText={setName} disabled={creating} />
 			<br />
 			Start time
-			<UIDatetimeInput onChangedDate={setStartTime} />
+			<UIDatetimeInput onChangedDate={setStartTime} disabled={creating} />
 			<br />
 			End time
-			<UIDatetimeInput onChangedDate={setEndTime} />
+			<UIDatetimeInput onChangedDate={setEndTime} disabled={creating} />
 			<br />
 			Location
 			<UIPlacesAutocomplete
@@ -71,7 +71,7 @@ export default function EventCreator({ group }: { group: IGroup }) {
 					{creating ? 'Creating event' : 'Create event'}
 				</UIButton>
 			) : (
-				<span>
+				<span style={{ marginTop: '1rem' }}>
 					Created <b>{name}</b>.
 				</span>
 			)}

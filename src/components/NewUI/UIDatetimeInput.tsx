@@ -9,13 +9,16 @@ const baseStyle = {
 
 export default function UIDatetimeInput({
 	onChangedDate,
+	disabled = false,
 }: {
 	onChangedDate: (date: Date | null) => void;
+	disabled?: boolean;
 }) {
 	return (
 		<input
 			style={baseStyle}
 			type="datetime-local"
+			disabled={disabled}
 			onChange={(e) => {
 				const number = e.target.valueAsNumber;
 				if (!isNaN(number)) {

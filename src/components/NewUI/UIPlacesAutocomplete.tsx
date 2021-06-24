@@ -22,6 +22,7 @@ function SuggestionsList({
 				borderBottomRightRadius: '0.5em',
 				backgroundColor: 'white',
 				maxWidth: '100%',
+				textAlign: 'left',
 			}}
 		>
 			{suggestions.map((suggestion) => (
@@ -42,9 +43,11 @@ function SuggestionsList({
 export default function UIPlacesAutocomplete({
 	onSelected,
 	placeholder = 'Enter a location',
+	disabled = false,
 }: {
 	onSelected?: (address: string, placeID: string) => void;
 	placeholder?: string;
+	disabled?: boolean;
 }) {
 	const [location, setLocation] = useState('');
 	const suggestionsRef = useRef<readonly Suggestion[]>([]);
@@ -89,6 +92,7 @@ export default function UIPlacesAutocomplete({
 								},
 								placeholder,
 							})}
+							disabled={disabled}
 						/>
 						{suggestionsRef.current.length > 0 && (
 							<SuggestionsList
