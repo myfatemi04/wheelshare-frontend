@@ -7,25 +7,40 @@ import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
 import UITextInput from './UITextInput';
 
+const noop = () => {};
+
 export default function EventCreator({ group }: { group: IGroup }) {
 	const [name, setName] = useState('');
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [endTime, setEndTime] = useState<Date | null>(null);
 	const [placeId, setPlaceId] = useState<string | null>(null);
+	const [creating, setCreating] = useState(false);
+	const [createdEventId, setCreatedEventId] = useState(-1);
+
+	const buttonEnabled =
+		name.length > 0 &&
+		startTime != null &&
+		endTime != null &&
+		placeId != null &&
+		!creating;
 
 	const createEvent = useCallback(() => {
-		post('/events', {
-			name,
-			startTime,
-			endTime,
-			groupId: group.id,
-			placeId,
-		})
-			.then((response) => response.json())
-			.then(({ id }) => {
-				window.location.href = `/groups/${id}`;
-			});
-	}, [name, startTime, endTime, group.id, placeId]);
+		if (!creating) {
+			setCreating(true);
+			post('/events', {
+				name,
+				startTime,
+				endTime,
+				groupId: group.id,
+				placeId,
+			})
+				.then((response) => response.json())
+				.then(({ id }) => {
+					setCreatedEventId(id);
+				})
+				.finally(() => setCreating(false));
+		}
+	}, [creating, name, startTime, endTime, group.id, placeId]);
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
@@ -48,7 +63,18 @@ export default function EventCreator({ group }: { group: IGroup }) {
 					setPlaceId(placeId);
 				}}
 			/>
-			<UIButton onClick={createEvent}>Create Event</UIButton>
+			{createdEventId === -1 ? (
+				<UIButton
+					onClick={buttonEnabled ? createEvent : noop}
+					style={!buttonEnabled ? { color: 'grey' } : {}}
+				>
+					{creating ? 'Creating event' : 'Create event'}
+				</UIButton>
+			) : (
+				<span>
+					Created <b>{name}</b>.
+				</span>
+			)}
 		</UISecondaryBox>
 	);
 }

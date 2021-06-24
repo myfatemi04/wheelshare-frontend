@@ -10,23 +10,37 @@ export default function GroupCreator() {
 	const [creationSuccessful, setCreationSuccessful] =
 		useState<boolean | null>(null);
 	const [createdGroupId, setCreatedGroupId] = useState(0);
+	const [creating, setCreating] = useState(false);
 	const createGroup = useCallback(() => {
-		post('/groups', {
-			name,
-		})
-			.then((res) => res.json())
-			.then(({ id }) => {
-				setCreationSuccessful(true);
-				setCreatedGroupId(id);
-			});
-	}, [name]);
+		if (!creating) {
+			setCreating(true);
+			post('/groups', {
+				name,
+			})
+				.then((res) => res.json())
+				.then(({ id }) => {
+					setCreationSuccessful(true);
+					setCreatedGroupId(id);
+				})
+				.finally(() => {
+					setCreating(false);
+				});
+		}
+	}, [creating, name]);
+
+	const buttonEnabled = name.length > 0 && !creating;
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
 			<h1 style={{ textAlign: 'center' }}>Create Group</h1>
 			Name
 			<UITextInput onChangeText={setName} value={name} />
-			<UIButton onClick={createGroup}>Create group</UIButton>
+			<UIButton
+				onClick={createGroup}
+				style={!buttonEnabled ? { color: 'grey' } : {}}
+			>
+				{creating ? 'Creating group' : 'Create group'}
+			</UIButton>
 			{creationSuccessful !== null &&
 				(creationSuccessful ? (
 					<span>

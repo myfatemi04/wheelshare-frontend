@@ -11,7 +11,7 @@ const lightgrey = '#e0e0e0';
 export type IEvent = {
 	name: string;
 	group: string;
-	address: string;
+	formattedAddress: string;
 	startTime: string;
 	endTime: string;
 };
@@ -47,7 +47,7 @@ function formatStartAndEndTime(
 export default function Event({
 	name,
 	group,
-	address,
+	formattedAddress,
 	startTime,
 	endTime,
 }: IEvent) {
@@ -71,6 +71,7 @@ export default function Event({
 			<div
 				style={{
 					marginTop: '0.5rem',
+					textAlign: 'left',
 				}}
 			>
 				<span
@@ -82,13 +83,14 @@ export default function Event({
 					{formatStartAndEndTime(startTime, endTime)}
 				</span>
 				<br />
+				<br />
 				<span
 					style={{
 						color: '#303030',
 					}}
 				>
 					<b>Where: </b>
-					{address}
+					{formattedAddress}
 				</span>
 			</div>
 			<div

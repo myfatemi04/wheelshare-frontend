@@ -20,7 +20,7 @@ function GroupJoiner() {
 	const buttonEnabled = code.length > 0 && !joining;
 
 	return (
-		<UISecondaryBox style={{ width: '100%' }}>
+		<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
 			<h1>Join Group</h1>
 			Code
 			<UITextInput value={code} onChangeText={setCode} />
