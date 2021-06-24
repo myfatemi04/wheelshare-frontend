@@ -65,7 +65,13 @@ export default function Group() {
 			<br />
 			<EventCreatorLink group={group} />
 			<br />
-			<EventStream events={events} />
+			{events && events.length > 0 ? (
+				<EventStream events={events} />
+			) : (
+				<span>
+					There are no events yet. Click 'create event' above to add one!
+				</span>
+			)}
 		</div>
 	);
 }
