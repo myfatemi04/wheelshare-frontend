@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Availability, { AvailabilityKind } from './Availability';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
@@ -44,6 +45,57 @@ function formatStartAndEndTime(
 	}
 }
 
+function GroupName({ name }: { name: string }) {
+	return (
+		<span
+			style={{
+				color: '#303030',
+				textAlign: 'center',
+			}}
+		>
+			{name}
+		</span>
+	);
+}
+
+function Details({
+	startTime,
+	endTime,
+	formattedAddress,
+}: {
+	startTime: string;
+	endTime: string;
+	formattedAddress: string;
+}) {
+	return (
+		<div
+			style={{
+				marginTop: '0.5rem',
+				textAlign: 'left',
+			}}
+		>
+			<span
+				style={{
+					color: '#303030',
+				}}
+			>
+				<b>When: </b>
+				{formatStartAndEndTime(startTime, endTime)}
+			</span>
+			<br />
+			<br />
+			<span
+				style={{
+					color: '#303030',
+				}}
+			>
+				<b>Where: </b>
+				{formattedAddress}
+			</span>
+		</div>
+	);
+}
+
 export default function Event({
 	name,
 	group,
@@ -56,43 +108,15 @@ export default function Event({
 	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState('');
 	const [rideBackDropoffPlaceID, setRideBackDropoffPlaceID] = useState('');
 	const [confirmed, setConfirmed] = useState(false);
+	const [availability, setAvailability] =
+		useState<AvailabilityKind>('not-interested');
 
 	return (
 		<UISecondaryBox>
 			<UISecondaryHeader>{name}</UISecondaryHeader>
-			<span
-				style={{
-					color: '#303030',
-					textAlign: 'center',
-				}}
-			>
-				{group}
-			</span>
-			<div
-				style={{
-					marginTop: '0.5rem',
-					textAlign: 'left',
-				}}
-			>
-				<span
-					style={{
-						color: '#303030',
-					}}
-				>
-					<b>When: </b>
-					{formatStartAndEndTime(startTime, endTime)}
-				</span>
-				<br />
-				<br />
-				<span
-					style={{
-						color: '#303030',
-					}}
-				>
-					<b>Where: </b>
-					{formattedAddress}
-				</span>
-			</div>
+			<GroupName name={group} />
+			<Details {...{ startTime, endTime, formattedAddress }} />
+			<Availability selected={availability} onSelected={setAvailability} />
 			<div
 				style={{
 					display: 'flex',
