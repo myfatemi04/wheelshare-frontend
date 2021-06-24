@@ -1,22 +1,17 @@
 import { CSSProperties } from '@material-ui/styles';
 import { MouseEventHandler, useCallback, useState } from 'react';
 
-export type AvailabilityKind =
-	| 'going/can-bring-someone'
-	| 'going/cannot-bring-someone'
-	| 'interested'
-	| 'not-interested';
+export type AvailabilityKind = 'going' | 'interested' | 'not-interested';
 
 const availabilityNames: Record<AvailabilityKind, string> = {
-	'going/can-bring-someone': 'Going; Can bring someone',
-	'going/cannot-bring-someone': "Going; Can't bring someone",
+	going: 'Going',
 	interested: 'Interested',
 	'not-interested': 'Not interested',
 };
 
 const optionStyle: CSSProperties = {
 	height: '3rem',
-	backgroundColor: 'white',
+	backgroundColor: '#e0e0e0',
 	display: 'flex',
 	flexDirection: 'row',
 	justifyContent: 'center',
@@ -26,6 +21,7 @@ const optionStyle: CSSProperties = {
 	userSelect: 'none',
 	position: 'relative',
 	fontWeight: 'normal',
+	textTransform: 'uppercase',
 };
 
 const selectedOptionStyle = {
@@ -79,7 +75,6 @@ export default function Availability({
 				display: 'flex',
 				flexDirection: 'column',
 				borderRadius: '0.5rem',
-				border: '1px solid lightgrey',
 				overflow: 'hidden',
 				marginTop: '1rem',
 				marginBottom: '1rem',
@@ -89,16 +84,7 @@ export default function Availability({
 		>
 			{focused ? (
 				<>
-					<Option
-						bind="going/can-bring-someone"
-						current={selected}
-						onSelected={onSelected}
-					/>
-					<Option
-						bind="going/cannot-bring-someone"
-						current={selected}
-						onSelected={onSelected}
-					/>
+					<Option bind="going" current={selected} onSelected={onSelected} />
 					<Option
 						bind="interested"
 						current={selected}
