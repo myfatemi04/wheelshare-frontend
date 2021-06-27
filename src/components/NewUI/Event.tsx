@@ -181,16 +181,67 @@ function Carpools({ event }: { event: IEvent }) {
 	);
 }
 
+export type IPerson = {
+	id: number;
+	name: string;
+	extraDistance: number;
+};
+
+const dummyPeopleData: IPerson[] = [
+	{
+		id: 0,
+		name: 'Rushil Umaretiya',
+		extraDistance: 10,
+	},
+	{
+		id: 1,
+		name: 'Nitin Kanchinadam',
+		extraDistance: 12,
+	},
+];
+function People({ event }: { event: IEvent }) {
+	const PADDING = '1rem';
+	const [people, setPeople] = useState(dummyPeopleData);
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<h3 style={{ marginBlockEnd: '0' }}>People</h3>
+			{people.map(({ name, extraDistance, id }) => (
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						position: 'relative',
+						padding: '1rem',
+						borderRadius: '0.5rem',
+						border: '1px solid #e0e0e0',
+						marginTop: '0.5rem',
+						marginBottom: '0.5rem',
+					}}
+				>
+					<b>{name}</b>: +{extraDistance} miles
+					<div
+						style={{
+							borderRadius: '0.5em',
+							cursor: 'pointer',
+							padding: '0.5em',
+							position: 'absolute',
+							right: PADDING,
+							userSelect: 'none',
+							backgroundColor: '#e0e0e0',
+						}}
+					>
+						Invite to carpool
+					</div>
+				</div>
+			))}
+		</div>
+	);
+}
+
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
-	const [haveRideThere, setHaveRideThere] = useState(false);
-	const [haveRideBack, setHaveRideBack] = useState(false);
-	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState<string>(
-		null!
-	);
-	const [rideBackDropoffPlaceID, setRideBackDropoffPlaceID] = useState<string>(
-		null!
-	);
+	const [haveRide, setHaveRide] = useState(false);
+	const [locationPlaceId, setLocationPlaceId] = useState<string>(null!);
 	const [interested, setInterested] = useState(false);
 
 	return (
@@ -211,76 +262,41 @@ export default function Event({ event }: { event: IEvent }) {
 			{interested && (
 				<>
 					<UIPlacesAutocomplete
-						placeholder="Pickup location"
+						placeholder="Pickup and dropoff location"
 						onSelected={(_address, placeID) => {
-							setRideTherePickupPlaceID(placeID);
+							setLocationPlaceId(placeID);
 						}}
 						style={
-							rideTherePickupPlaceID != null
-								? { border: '2px solid ' + green }
-								: {}
+							locationPlaceId != null ? { border: '2px solid ' + green } : {}
 						}
 					/>
-					<UIPlacesAutocomplete
-						placeholder="Dropoff location"
-						onSelected={(_address, placeID) => {
-							setRideBackDropoffPlaceID(placeID);
-						}}
-						style={
-							rideBackDropoffPlaceID != null
-								? { border: '2px solid ' + green }
-								: {}
-						}
-					/>
-
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							cursor: 'pointer',
-							userSelect: 'none',
-						}}
-						onClick={() => {
-							setHaveRideThere((h) => !h);
-						}}
-					>
-						<input
-							type="checkbox"
+					{false && (
+						<div
 							style={{
-								borderRadius: '0.5em',
-								width: '2em',
-								height: '2em',
-								margin: '1em',
+								display: 'flex',
+								alignItems: 'center',
+								cursor: 'pointer',
+								userSelect: 'none',
 							}}
-							checked={haveRideThere}
-						/>
-						I don't have a ride there yet
-					</div>
-
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							cursor: 'pointer',
-							userSelect: 'none',
-						}}
-						onClick={() => setHaveRideBack((h) => !h)}
-					>
-						<input
-							type="checkbox"
-							style={{
-								borderRadius: '1em',
-								width: '2em',
-								height: '2em',
-								margin: '1em',
-								outline: 'none',
+							onClick={() => {
+								setHaveRide((h) => !h);
 							}}
-							checked={haveRideBack}
-						/>
-						I don't have a ride back yet
-					</div>
-
+						>
+							<input
+								type="checkbox"
+								style={{
+									borderRadius: '0.5em',
+									width: '2em',
+									height: '2em',
+									margin: '1em',
+								}}
+								checked={haveRide}
+							/>
+							I don't have any way to get there yet
+						</div>
+					)}
 					<Carpools event={event} />
+					<People event={event} />
 				</>
 			)}
 		</UISecondaryBox>
