@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
@@ -186,57 +187,90 @@ function Carpools({ event }: { event: IEvent }) {
 export type IPerson = {
 	id: number;
 	name: string;
-	extraDistance: number;
+	latitude: number;
+	longitude: number;
 };
 
 const dummyPeopleData: IPerson[] = [
 	{
 		id: 0,
 		name: 'Rushil Umaretiya',
-		extraDistance: 10,
+		latitude: 11.1,
+		longitude: 10.09,
 	},
 	{
 		id: 1,
 		name: 'Nitin Kanchinadam',
-		extraDistance: 12,
+		latitude: 11.09,
+		longitude: 10.12,
 	},
 ];
 function People({ event }: { event: IEvent }) {
 	const PADDING = '1rem';
 	// eslint-disable-next-line
 	const [people, setPeople] = useState(dummyPeopleData);
+	const myLatitude = 10;
+	const myLongitude = 10;
+	const locationLatitude = 12;
+	const locationLongitude = 12;
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>People</h3>
-			{people.map(({ name, extraDistance, id }) => (
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						position: 'relative',
-						padding: '1rem',
-						borderRadius: '0.5rem',
-						border: '1px solid #e0e0e0',
-						marginTop: '0.5rem',
-						marginBottom: '0.5rem',
-					}}
-				>
-					<b>{name}</b>: +{extraDistance} miles
+			{people.map(({ name, latitude, longitude, id }) => {
+				const meToThem = latlongdist(
+					latitude,
+					longitude,
+					myLatitude,
+					myLongitude,
+					R_miles
+				);
+				const themToLocation = latlongdist(
+					latitude,
+					longitude,
+					locationLatitude,
+					locationLongitude,
+					R_miles
+				);
+				const totalWithThem = meToThem + themToLocation;
+				const totalWithoutThem = latlongdist(
+					myLatitude,
+					myLongitude,
+					locationLatitude,
+					locationLongitude,
+					R_miles
+				);
+				const extraDistance = totalWithThem - totalWithoutThem;
+
+				return (
 					<div
 						style={{
-							borderRadius: '0.5em',
-							cursor: 'pointer',
-							padding: '0.5em',
-							position: 'absolute',
-							right: PADDING,
-							userSelect: 'none',
-							backgroundColor: '#e0e0e0',
+							display: 'flex',
+							alignItems: 'center',
+							position: 'relative',
+							padding: '1rem',
+							borderRadius: '0.5rem',
+							border: '1px solid #e0e0e0',
+							marginTop: '0.5rem',
+							marginBottom: '0.5rem',
 						}}
 					>
-						Invite to carpool
+						<b>{name}</b>: +{extraDistance.toFixed(1)} miles
+						<div
+							style={{
+								borderRadius: '0.5em',
+								cursor: 'pointer',
+								padding: '0.5em',
+								position: 'absolute',
+								right: PADDING,
+								userSelect: 'none',
+								backgroundColor: '#e0e0e0',
+							}}
+						>
+							Invite to carpool
+						</div>
 					</div>
-				</div>
-			))}
+				);
+			})}
 		</div>
 	);
 }
