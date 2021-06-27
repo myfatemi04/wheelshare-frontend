@@ -16,9 +16,10 @@ export default function UILink({
 	style?: CSSProperties;
 	children: ReactNode;
 }) {
-	const computedStyle = useMemo(() => {
-		return !style ? baseStyle : { ...baseStyle, ...style };
-	}, [style]);
+	const computedStyle = useMemo(
+		() => (!style ? baseStyle : { ...baseStyle, ...style }),
+		[style]
+	);
 
 	return (
 		<Link to={href} style={computedStyle}>

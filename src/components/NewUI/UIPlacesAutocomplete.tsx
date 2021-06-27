@@ -1,7 +1,20 @@
-import { useRef, useState } from 'react';
+import { CSSProperties, useRef, useState } from 'react';
 import PlacesAutocomplete, { Suggestion } from 'react-places-autocomplete';
 
 type Opts = Parameters<PlacesAutocomplete['props']['children']>['0'];
+
+const style: CSSProperties = {
+	marginTop: '-1em',
+	paddingTop: '2em',
+	paddingBottom: '1em',
+	paddingLeft: '1em',
+	paddingRight: '1em',
+	borderBottomLeftRadius: '0.5em',
+	borderBottomRightRadius: '0.5em',
+	backgroundColor: 'white',
+	maxWidth: '100%',
+	textAlign: 'left',
+};
 
 function SuggestionsList({
 	suggestions,
@@ -11,20 +24,7 @@ function SuggestionsList({
 	getSuggestionItemProps: Opts['getSuggestionItemProps'];
 }) {
 	return (
-		<div
-			style={{
-				marginTop: '-1em',
-				paddingTop: '2em',
-				paddingBottom: '1em',
-				paddingLeft: '1em',
-				paddingRight: '1em',
-				borderBottomLeftRadius: '0.5em',
-				borderBottomRightRadius: '0.5em',
-				backgroundColor: 'white',
-				maxWidth: '100%',
-				textAlign: 'left',
-			}}
-		>
+		<div style={style}>
 			{suggestions.map((suggestion) => (
 				<div
 					{...getSuggestionItemProps(suggestion)}

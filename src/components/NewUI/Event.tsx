@@ -116,7 +116,11 @@ export default function Event({
 			<Details {...{ startTime, endTime, formattedAddress }} />
 			<UIButton
 				onClick={() => setInterested((i) => !i)}
-				style={{ backgroundColor: '#e0e0e0' }}
+				style={{
+					backgroundColor: interested ? green : lightgrey,
+					color: interested ? 'white' : 'black',
+					transition: 'color 0.2s, background-color 0.2s',
+				}}
 			>
 				{interested ? 'Interested' : 'Not interested'}
 			</UIButton>

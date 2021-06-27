@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 const baseStyle = {
 	marginTop: '0.5em',
 	padding: '0.5em',
@@ -16,12 +18,16 @@ export default function UITextInput({
 	disabled?: boolean;
 	onChangeText: (text: string) => void;
 }) {
+	const onChange = useCallback(
+		(e) => onChangeText(e.target.value),
+		[onChangeText]
+	);
 	return (
 		<input
 			style={baseStyle}
 			value={value}
 			disabled={disabled}
-			onChange={(e) => onChangeText(e.target.value)}
+			onChange={onChange}
 		/>
 	);
 }

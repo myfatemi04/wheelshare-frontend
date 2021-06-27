@@ -15,9 +15,10 @@ export default function UIPressable({
 	style?: CSSProperties;
 	children: ReactNode;
 }) {
-	const computedStyle = useMemo(() => {
-		return !style ? baseStyle : { ...baseStyle, ...style };
-	}, [style]);
+	const computedStyle = useMemo(
+		() => (!style ? baseStyle : { ...baseStyle, ...style }),
+		[style]
+	);
 
 	return (
 		<div onClick={onClick} style={computedStyle}>
