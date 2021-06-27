@@ -1,12 +1,9 @@
-import { useCallback, useState } from 'react';
 import EventCreator from './EventCreator';
 import { IGroup } from './Group';
+import useToggle from './useToggle';
 
 export default function EventCreatorLink({ group }: { group: IGroup }) {
-	const [open, setOpen] = useState(false);
-	const toggle = useCallback(() => {
-		setOpen((open) => !open);
-	}, []);
+	const [open, toggle] = useToggle(false);
 
 	return (
 		<div>

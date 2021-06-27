@@ -3,6 +3,7 @@ import UIButton from './UIButton';
 import UIPressable from './UIPressable';
 import UISecondaryBox from './UISecondaryBox';
 import UITextInput from './UITextInput';
+import useToggle from './useToggle';
 
 function GroupJoiner() {
 	const [code, setCode] = useState('');
@@ -32,10 +33,7 @@ function GroupJoiner() {
 }
 
 export default function GroupJoinerLink() {
-	const [open, setOpen] = useState(false);
-	const toggle = useCallback(() => {
-		setOpen((open) => !open);
-	}, []);
+	const [open, toggle] = useToggle(false);
 
 	return (
 		<>

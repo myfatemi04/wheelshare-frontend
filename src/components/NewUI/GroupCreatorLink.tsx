@@ -1,11 +1,8 @@
-import { useCallback, useState } from 'react';
 import GroupCreator from './GroupCreator';
+import useToggle from './useToggle';
 
 export default function GroupCreatorLink() {
-	const [open, setOpen] = useState(false);
-	const toggle = useCallback(() => {
-		setOpen((open) => !open);
-	}, []);
+	const [open, toggle] = useToggle(false);
 
 	return (
 		<div style={{ width: '100%', textAlign: 'center' }}>

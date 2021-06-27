@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
 import UISecondaryHeader from './UISecondaryHeader';
 import useThrottle from './useThrottle';
+import useToggle from './useToggle';
 
 const green = '#60f760';
 const lightgrey = '#e0e0e0';
@@ -242,15 +243,10 @@ function People({ event }: { event: IEvent }) {
 
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
-	const [haveRide, setHaveRide] = useState(false);
+	const [haveRide, toggleHaveRide] = useToggle(false);
 	const [locationPlaceId, setLocationPlaceId] = useState<string>(null!);
-	const [interested, toggleInterested] = useState(false);
-	const toggleInterestedThrottled = useThrottle(
-		useCallback(() => {
-			toggleInterested((i) => !i);
-		}, []),
-		500
-	);
+	const [interested, toggleInterested] = useToggle(false);
+	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
 
 	return (
 		<UISecondaryBox>
@@ -286,9 +282,7 @@ export default function Event({ event }: { event: IEvent }) {
 								cursor: 'pointer',
 								userSelect: 'none',
 							}}
-							onClick={() => {
-								setHaveRide((h) => !h);
-							}}
+							onClick={toggleHaveRide}
 						>
 							<input
 								type="checkbox"

@@ -3,6 +3,7 @@ import { IGroup } from './Group';
 import UILink from './UILink';
 import UIPressable from './UIPressable';
 import UISecondaryBox from './UISecondaryBox';
+import useToggle from './useToggle';
 
 function GroupSettings({ group }: { group: IGroup }) {
 	const [deletionSuccessful, setDeletionSuccessful] =
@@ -42,10 +43,7 @@ function GroupSettings({ group }: { group: IGroup }) {
 }
 
 export default function GroupSettingsLink({ group }: { group: IGroup }) {
-	const [open, setOpen] = useState(false);
-	const toggle = useCallback(() => {
-		setOpen((open) => !open);
-	}, []);
+	const [open, toggle] = useToggle(false);
 
 	return (
 		<div>

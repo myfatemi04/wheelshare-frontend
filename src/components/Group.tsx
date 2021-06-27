@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeAPIGetCall } from '../api/utils';
 import CreatePool from './CreatePool';
+import useToggle from './NewUI/useToggle';
 import Pool from './Pool';
 
 // eslint-disable-next-line
@@ -40,7 +41,7 @@ export default function Group() {
 	const [error, setError] = useState(false);
 	const [group, setGroup] = useState<Carpool.Group>();
 	const [pools, setPools] = useState<Carpool.Pool[]>([]);
-	const [createPoolVisible, setCreatePoolVisible] = useState(false);
+	const [createPoolVisible, toggleCreatePoolVisible] = useToggle(false);
 
 	const fetchPools = useCallback(() => {
 		makeAPIGetCall(`/groups/${id}/pools`).then((res) => {
@@ -86,10 +87,7 @@ export default function Group() {
 			</Typography>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<div>
-					<Button
-						onClick={() => setCreatePoolVisible((v) => !v)}
-						variant="contained"
-					>
+					<Button onClick={toggleCreatePoolVisible} variant="contained">
 						{createPoolVisible ? 'Cancel' : 'Create Pool'}
 					</Button>
 					{createPoolVisible && <CreatePool groupID={group._id} />}
