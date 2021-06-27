@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Availability, { AvailabilityKind } from './Availability';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
@@ -108,16 +107,20 @@ export default function Event({
 	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState('');
 	const [rideBackDropoffPlaceID, setRideBackDropoffPlaceID] = useState('');
 	const [confirmed, setConfirmed] = useState(false);
-	const [availability, setAvailability] =
-		useState<AvailabilityKind>('not-interested');
+	const [interested, setInterested] = useState(false);
 
 	return (
 		<UISecondaryBox>
 			<UISecondaryHeader>{name}</UISecondaryHeader>
 			<GroupName name={group} />
 			<Details {...{ startTime, endTime, formattedAddress }} />
-			<Availability selected={availability} onSelected={setAvailability} />
-			{availability === 'interested' && (
+			<UIButton
+				onClick={() => setInterested((i) => !i)}
+				style={{ backgroundColor: '#e0e0e0' }}
+			>
+				{interested ? 'Interested' : 'Not interested'}
+			</UIButton>
+			{interested && (
 				<>
 					<div
 						style={{
