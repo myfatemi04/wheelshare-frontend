@@ -8,6 +8,7 @@ const green = '#60f760';
 const lightgrey = '#e0e0e0';
 
 export type IEvent = {
+	id: number;
 	name: string;
 	group: string;
 	formattedAddress: string;
@@ -94,13 +95,94 @@ function Details({
 	);
 }
 
-export default function Event({
-	name,
-	group,
-	formattedAddress,
-	startTime,
-	endTime,
-}: IEvent) {
+export type ICarpool = {
+	driver: {
+		id: number;
+		name: string;
+	};
+	startTime: string;
+	endTime: string;
+	extraDistance: number;
+};
+
+function CarpoolRow({ carpool }: { carpool: ICarpool }) {
+	const PADDING = '1rem';
+	return (
+		<div
+			style={{
+				display: 'flex',
+				alignItems: 'center',
+				position: 'relative',
+				padding: PADDING,
+				borderRadius: '0.5rem',
+				border: '1px solid #e0e0e0',
+				marginTop: '0.5rem',
+				marginBottom: '0.5rem',
+			}}
+		>
+			<div>
+				<span style={{ fontWeight: 500 }}>{carpool.driver.name}</span>
+				<br />
+				Time:{' '}
+				<b>
+					{carpool.startTime} - {carpool.endTime}
+				</b>
+				<br />
+				Offset from route: <b>{carpool.extraDistance} miles</b>
+			</div>
+			<div
+				style={{
+					borderRadius: '0.5em',
+					cursor: 'pointer',
+					padding: '0.5em',
+					position: 'absolute',
+					right: PADDING,
+					userSelect: 'none',
+					backgroundColor: '#e0e0e0',
+				}}
+			>
+				Request to join
+			</div>
+		</div>
+	);
+}
+
+const dummyCarpoolData: ICarpool[] = [
+	{
+		driver: {
+			id: 0,
+			name: 'Michael Fatemi',
+		},
+		startTime: '10:00',
+		endTime: '10:10',
+		extraDistance: 6.9,
+	},
+	{
+		driver: {
+			id: 1,
+			name: 'Joshua Hsueh',
+		},
+		startTime: '10:05',
+		endTime: '10:10',
+		extraDistance: 420,
+	},
+];
+function Carpools({ event }: { event: IEvent }) {
+	// eslint-disable-next-line
+	const [carpools, _setCarpools] = useState(dummyCarpoolData);
+
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<h3 style={{ marginBlockEnd: '0' }}>Carpools</h3>
+			{carpools.map((carpool) => (
+				<CarpoolRow carpool={carpool} key={carpool.driver.id} />
+			))}
+		</div>
+	);
+}
+
+export default function Event({ event }: { event: IEvent }) {
+	const { name, group, formattedAddress, startTime, endTime } = event;
 	const [haveRideThere, setHaveRideThere] = useState(false);
 	const [haveRideBack, setHaveRideBack] = useState(false);
 	const [rideTherePickupPlaceID, setRideTherePickupPlaceID] = useState<string>(
@@ -130,7 +212,7 @@ export default function Event({
 				<>
 					<UIPlacesAutocomplete
 						placeholder="Pickup location"
-						onSelected={(address, placeID) => {
+						onSelected={(_address, placeID) => {
 							setRideTherePickupPlaceID(placeID);
 						}}
 						style={
@@ -141,7 +223,7 @@ export default function Event({
 					/>
 					<UIPlacesAutocomplete
 						placeholder="Dropoff location"
-						onSelected={(address, placeID) => {
+						onSelected={(_address, placeID) => {
 							setRideBackDropoffPlaceID(placeID);
 						}}
 						style={
@@ -154,38 +236,51 @@ export default function Event({
 					<div
 						style={{
 							display: 'flex',
-							flexDirection: 'row',
-							width: '100%',
-							justifyContent: 'center',
+							alignItems: 'center',
+							cursor: 'pointer',
+							userSelect: 'none',
+						}}
+						onClick={() => {
+							setHaveRideThere((h) => !h);
 						}}
 					>
-						<UIButton
+						<input
+							type="checkbox"
 							style={{
-								backgroundColor: haveRideThere ? green : lightgrey,
-								color: haveRideThere ? 'white' : 'black',
-								transition: 'color 0.2s, background-color 0.2s',
-								marginRight: '0.5em',
+								borderRadius: '0.5em',
+								width: '2em',
+								height: '2em',
+								margin: '1em',
 							}}
-							onClick={() => {
-								setHaveRideThere((haveRideThere) => !haveRideThere);
-							}}
-						>
-							I have a ride there
-						</UIButton>
-						<UIButton
-							style={{
-								backgroundColor: haveRideBack ? green : lightgrey,
-								color: haveRideBack ? 'white' : 'black',
-								transition: 'color 0.2s, background-color 0.2s',
-								marginLeft: '0.5em',
-							}}
-							onClick={() => {
-								setHaveRideBack((haveRideBack) => !haveRideBack);
-							}}
-						>
-							I have a ride back
-						</UIButton>
+							checked={haveRideThere}
+						/>
+						I don't have a ride there yet
 					</div>
+
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							cursor: 'pointer',
+							userSelect: 'none',
+						}}
+						onClick={() => setHaveRideBack((h) => !h)}
+					>
+						<input
+							type="checkbox"
+							style={{
+								borderRadius: '1em',
+								width: '2em',
+								height: '2em',
+								margin: '1em',
+								outline: 'none',
+							}}
+							checked={haveRideBack}
+						/>
+						I don't have a ride back yet
+					</div>
+
+					<Carpools event={event} />
 				</>
 			)}
 		</UISecondaryBox>
