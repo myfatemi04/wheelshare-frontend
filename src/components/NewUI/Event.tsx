@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
 import UISecondaryHeader from './UISecondaryHeader';
+import useThrottle from './useThrottle';
 
 const green = '#60f760';
 const lightgrey = '#e0e0e0';
@@ -201,6 +202,7 @@ const dummyPeopleData: IPerson[] = [
 ];
 function People({ event }: { event: IEvent }) {
 	const PADDING = '1rem';
+	// eslint-disable-next-line
 	const [people, setPeople] = useState(dummyPeopleData);
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -242,7 +244,13 @@ export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
 	const [haveRide, setHaveRide] = useState(false);
 	const [locationPlaceId, setLocationPlaceId] = useState<string>(null!);
-	const [interested, setInterested] = useState(false);
+	const [interested, toggleInterested] = useState(false);
+	const toggleInterestedThrottled = useThrottle(
+		useCallback(() => {
+			toggleInterested((i) => !i);
+		}, []),
+		500
+	);
 
 	return (
 		<UISecondaryBox>
@@ -250,7 +258,7 @@ export default function Event({ event }: { event: IEvent }) {
 			<GroupName name={group} />
 			<Details {...{ startTime, endTime, formattedAddress }} />
 			<UIButton
-				onClick={() => setInterested((i) => !i)}
+				onClick={toggleInterestedThrottled}
 				style={{
 					backgroundColor: interested ? green : lightgrey,
 					color: interested ? 'white' : 'black',
