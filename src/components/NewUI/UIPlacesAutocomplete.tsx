@@ -44,10 +44,12 @@ export default function UIPlacesAutocomplete({
 	onSelected,
 	placeholder = 'Enter a location',
 	disabled = false,
+	style,
 }: {
 	onSelected?: (address: string, placeID: string) => void;
 	placeholder?: string;
 	disabled?: boolean;
+	style?: CSSProperties;
 }) {
 	const [location, setLocation] = useState('');
 	const suggestionsRef = useRef<readonly Suggestion[]>([]);
@@ -89,6 +91,7 @@ export default function UIPlacesAutocomplete({
 									borderRadius: '0.5em',
 									border: '0px',
 									zIndex: 1,
+									...(style ?? {}),
 								},
 								placeholder,
 							})}
