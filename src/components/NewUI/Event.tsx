@@ -4,6 +4,7 @@ import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
 import UISecondaryHeader from './UISecondaryHeader';
+import usePlace from './usePlace';
 import useThrottle from './useThrottle';
 import useToggle from './useToggle';
 
@@ -205,41 +206,46 @@ const dummyPeopleData: IPerson[] = [
 		longitude: 10.12,
 	},
 ];
-function People({ event }: { event: IEvent }) {
+function People({ event, placeId }: { event: IEvent; placeId: string }) {
 	const PADDING = '1rem';
 	// eslint-disable-next-line
 	const [people, setPeople] = useState(dummyPeopleData);
+	const placeDetails = usePlace(placeId);
 	const myLatitude = 10;
 	const myLongitude = 10;
-	const locationLatitude = 12;
-	const locationLongitude = 12;
+
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>People</h3>
 			{people.map(({ name, latitude, longitude, id }) => {
-				const meToThem = latlongdist(
-					latitude,
-					longitude,
-					myLatitude,
-					myLongitude,
-					R_miles
-				);
-				const themToLocation = latlongdist(
-					latitude,
-					longitude,
-					locationLatitude,
-					locationLongitude,
-					R_miles
-				);
-				const totalWithThem = meToThem + themToLocation;
-				const totalWithoutThem = latlongdist(
-					myLatitude,
-					myLongitude,
-					locationLatitude,
-					locationLongitude,
-					R_miles
-				);
-				const extraDistance = totalWithThem - totalWithoutThem;
+				let extraDistance = null;
+				if (placeDetails != null) {
+					const locationLatitude = placeDetails.latitude;
+					const locationLongitude = placeDetails.longitude;
+					const meToThem = latlongdist(
+						latitude,
+						longitude,
+						myLatitude,
+						myLongitude,
+						R_miles
+					);
+					const themToLocation = latlongdist(
+						latitude,
+						longitude,
+						locationLatitude,
+						locationLongitude,
+						R_miles
+					);
+					const totalWithThem = meToThem + themToLocation;
+					const totalWithoutThem = latlongdist(
+						myLatitude,
+						myLongitude,
+						locationLatitude,
+						locationLongitude,
+						R_miles
+					);
+					extraDistance = totalWithThem - totalWithoutThem;
+				}
 
 				return (
 					<div
@@ -254,7 +260,8 @@ function People({ event }: { event: IEvent }) {
 							marginBottom: '0.5rem',
 						}}
 					>
-						<b>{name}</b>: +{extraDistance.toFixed(1)} miles
+						<b>{name}</b>
+						{extraDistance ? `: +${extraDistance.toFixed(1)} miles` : ''}
 						<div
 							style={{
 								borderRadius: '0.5em',
@@ -278,7 +285,7 @@ function People({ event }: { event: IEvent }) {
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
 	const [haveRide, toggleHaveRide] = useToggle(false);
-	const [locationPlaceId, setLocationPlaceId] = useState<string>(null!);
+	const [placeId, setPlaceId] = useState<string>(null!);
 	const [interested, toggleInterested] = useToggle(false);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
 
@@ -302,11 +309,9 @@ export default function Event({ event }: { event: IEvent }) {
 					<UIPlacesAutocomplete
 						placeholder="Pickup and dropoff location"
 						onSelected={(_address, placeID) => {
-							setLocationPlaceId(placeID);
+							setPlaceId(placeID);
 						}}
-						style={
-							locationPlaceId != null ? { border: '2px solid ' + green } : {}
-						}
+						style={placeId != null ? { border: '2px solid ' + green } : {}}
 					/>
 					{false && (
 						<div
@@ -332,7 +337,7 @@ export default function Event({ event }: { event: IEvent }) {
 						</div>
 					)}
 					<Carpools event={event} />
-					<People event={event} />
+					<People event={event} placeId={placeId} />
 				</>
 			)}
 		</UISecondaryBox>

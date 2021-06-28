@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 
-function throttle<F extends (...args: any) => any, T>(
+type Void = (...args: any) => void;
+
+export function throttle<T>(
 	this: T,
-	callback: F,
+	callback: Void,
 	limit: number,
 	thisArg?: T
-): F {
+): (...args: Parameters<typeof callback>) => void {
 	let waiting = false;
 	let pendingArgs: null | any[] = null;
 	const scope = thisArg ?? this;

@@ -1,16 +1,19 @@
-export const GOOGLE_MAPS_API_KEY = 'AIzaSyDUnWIrt-H4RuP2YFLpVPz4oAjBhpOOoyI';
+export type PlaceDetails = {
+	formattedAddress: string;
+	latitude: number;
+	longitude: number;
+};
 
-export async function searchForPlaces(query: string) {
-	const url = new URL(
-		'https://maps.googleapis.com/maps/api/place/findplacefromtext/json'
-	);
-	url.searchParams.set('key', GOOGLE_MAPS_API_KEY);
-	url.searchParams.set('input', query);
-	url.searchParams.set('inputtype', 'textquery');
-	url.searchParams.set('fields', 'place_id,name,formatted_address');
-	console.log(url.toString());
-	let res = await fetch(url.toString(), { mode: 'no-cors' });
-	let json = await res.text();
+export async function getPlaceDetails(
+	placeId: string
+): Promise<PlaceDetails | null> {
+	if (placeId == null) {
+		console.warn('placeId was null');
+		return null;
+	}
+
+	const result = await fetch('http://localhost:5000/api/place/' + placeId);
+	const json = await result.json();
 
 	return json;
 }
