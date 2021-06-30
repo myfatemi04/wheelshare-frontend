@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { green, lightgrey } from './colors';
 import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
@@ -8,9 +9,6 @@ import usePlace from './usePlace';
 import useThrottle from './useThrottle';
 import useToggle from './useToggle';
 
-const green = '#60f760';
-const lightgrey = '#e0e0e0';
-
 export type IEvent = {
 	id: number;
 	name: string;
@@ -18,6 +16,8 @@ export type IEvent = {
 	formattedAddress: string;
 	startTime: string;
 	endTime: string;
+	latitude: number;
+	longitude: number;
 };
 
 function formatStartAndEndTime(
@@ -211,8 +211,8 @@ function People({ event, placeId }: { event: IEvent; placeId: string }) {
 	// eslint-disable-next-line
 	const [people, setPeople] = useState(dummyPeopleData);
 	const placeDetails = usePlace(placeId);
-	const myLatitude = 10;
-	const myLongitude = 10;
+	const locationLongitude = event.latitude;
+	const locationLatitude = event.longitude;
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -220,28 +220,28 @@ function People({ event, placeId }: { event: IEvent; placeId: string }) {
 			{people.map(({ name, latitude, longitude, id }) => {
 				let extraDistance = null;
 				if (placeDetails != null) {
-					const locationLatitude = placeDetails.latitude;
-					const locationLongitude = placeDetails.longitude;
+					const myLatitude = placeDetails.latitude;
+					const myLongitude = placeDetails.longitude;
 					const meToThem = latlongdist(
 						latitude,
 						longitude,
-						myLatitude,
-						myLongitude,
+						locationLongitude,
+						locationLatitude,
 						R_miles
 					);
 					const themToLocation = latlongdist(
 						latitude,
 						longitude,
-						locationLatitude,
-						locationLongitude,
+						myLatitude,
+						myLongitude,
 						R_miles
 					);
 					const totalWithThem = meToThem + themToLocation;
 					const totalWithoutThem = latlongdist(
+						locationLongitude,
+						locationLatitude,
 						myLatitude,
 						myLongitude,
-						locationLatitude,
-						locationLongitude,
 						R_miles
 					);
 					extraDistance = totalWithThem - totalWithoutThem;
