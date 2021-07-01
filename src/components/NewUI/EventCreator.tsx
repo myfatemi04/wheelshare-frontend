@@ -57,10 +57,18 @@ function DaysOfWeekSelector({
 							cursor: 'pointer',
 							backgroundColor: active
 								? disabled
-									? green + '77'
+									? // lighter version of green
+									  'rgba(96, 247, 96, 0.5)'
 									: green
+								: disabled
+								? // lighter version of lightgrey
+								  'rgba(224, 224, 224, 0.5)'
 								: lightgrey,
-							color: active ? 'white' : 'black',
+							color: active
+								? 'white'
+								: disabled
+								? 'rgba(0, 0, 0, 0.5)'
+								: 'black',
 							userSelect: 'none',
 							width: '2em',
 							height: '2em',
@@ -70,10 +78,14 @@ function DaysOfWeekSelector({
 							alignItems: 'center',
 							justifyContent: 'center',
 						}}
-						onClick={() =>
-							// @ts-ignore
-							toggleDayOfWeek(idx + 1)
-						}
+						onClick={() => {
+							if (!disabled) {
+								toggleDayOfWeek(
+									// @ts-ignore
+									idx + 1
+								);
+							}
+						}}
 						key={name}
 					>
 						{name.charAt(0)}
@@ -179,7 +191,11 @@ export default function EventCreator({ group }: { group: IGroup }) {
 			{recurring && (
 				<>
 					Days of week
-					<DaysOfWeekSelector daysOfWeek={daysOfWeek} update={setDaysOfWeek} />
+					<DaysOfWeekSelector
+						daysOfWeek={daysOfWeek}
+						update={setDaysOfWeek}
+						disabled={creating}
+					/>
 					Date of last occurence
 					<UIDateInput onChangedDate={setEndDate} />
 				</>
