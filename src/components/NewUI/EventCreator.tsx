@@ -197,7 +197,7 @@ export default function EventCreator({ group }: { group: IGroup }) {
 						disabled={creating}
 					/>
 					Date of last occurence
-					<UIDateInput onChangedDate={setEndDate} />
+					<UIDateInput onChangedDate={setEndDate} disabled={creating} />
 				</>
 			)}
 			{createdEventId === -1 ? (
