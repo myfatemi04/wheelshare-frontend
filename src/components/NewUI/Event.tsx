@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { post } from './api';
 import { green, lightgrey } from './colors';
 import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
@@ -206,7 +207,7 @@ const dummyPeopleData: IPerson[] = [
 		longitude: 10.12,
 	},
 ];
-function People({ event, placeId }: { event: IEvent; placeId: string }) {
+function People({ event, placeId }: { event: IEvent; placeId: string | null }) {
 	const PADDING = '1rem';
 	// eslint-disable-next-line
 	const [people, setPeople] = useState(dummyPeopleData);
@@ -285,9 +286,47 @@ function People({ event, placeId }: { event: IEvent; placeId: string }) {
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
 	const [haveRide, toggleHaveRide] = useToggle(false);
-	const [placeId, setPlaceId] = useState<string>(null!);
+	const [placeId, setPlaceId] = useState<string | null>(null);
 	const [interested, toggleInterested] = useToggle(false);
+	const [updating, setUpdating] = useState(false);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
+	const existingSignup = useRef({
+		interested: false,
+		placeId: null as string | null,
+		eventId: null as number | null,
+	});
+
+	useEffect(() => {
+		const prev = existingSignup.current;
+		if (prev.interested === false && interested === false) {
+			return;
+		}
+
+		if (
+			(prev.interested === true && interested === false) ||
+			(interested === true && prev.placeId !== null && placeId === null)
+		) {
+			fetch(`http://localhost:5000/api/events/${event.id}/signup`, {
+				method: 'delete',
+			}).finally(() => setUpdating(false));
+			prev.interested = false;
+			return;
+		}
+
+		if (
+			interested === true &&
+			(prev.placeId !== placeId || prev.eventId !== event.id)
+		) {
+			prev.placeId = placeId;
+			prev.eventId = event.id;
+			prev.interested = true;
+
+			post(`/events/${event.id}/signup`, {
+				placeId,
+			}).finally(() => setUpdating(false));
+			return;
+		}
+	}, [event.id, interested, placeId, updating]);
 
 	return (
 		<UISecondaryBox>
