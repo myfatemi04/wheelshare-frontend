@@ -108,12 +108,16 @@ export default function EventCreator({ group }: { group: IGroup }) {
 	const [daysOfWeek, setDaysOfWeek] = useState(0);
 	const [endDate, setEndDate] = useState<Date | null>(null);
 
+	const durationIsNegative =
+		endTime && startTime && endTime.getTime() < startTime.getTime();
+
 	const buttonEnabled =
 		name.length > 0 &&
 		startTime != null &&
 		endTime != null &&
 		placeId != null &&
 		(!recurring || daysOfWeek || endDate !== null) &&
+		!durationIsNegative &&
 		!creating;
 
 	const createEvent = useCallback(() => {
@@ -199,6 +203,11 @@ export default function EventCreator({ group }: { group: IGroup }) {
 					Date of last occurence
 					<UIDateInput onChangedDate={setEndDate} disabled={creating} />
 				</>
+			)}
+			{durationIsNegative && (
+				<span style={{ marginTop: '1rem' }}>
+					The start time can't be after the end time.
+				</span>
 			)}
 			{createdEventId === -1 ? (
 				<UIButton
