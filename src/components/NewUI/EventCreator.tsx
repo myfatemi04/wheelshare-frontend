@@ -4,6 +4,7 @@ import { toggleBit } from './bits';
 import { green, lightgrey } from './colors';
 import { IGroup } from './Group';
 import UIButton from './UIButton';
+import UIDateInput from './UIDateInput';
 import UIDatetimeInput from './UIDatetimeInput';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
 import UISecondaryBox from './UISecondaryBox';
@@ -86,12 +87,14 @@ export default function EventCreator({ group }: { group: IGroup }) {
 
 	const [recurring, toggleRecurring] = useToggle(false);
 	const [daysOfWeek, setDaysOfWeek] = useState(0);
+	const [endDate, setEndDate] = useState<Date | null>(null);
 
 	const buttonEnabled =
 		name.length > 0 &&
 		startTime != null &&
 		endTime != null &&
 		placeId != null &&
+		(!recurring || daysOfWeek || endDate !== null) &&
 		!creating;
 
 	const createEvent = useCallback(() => {
@@ -139,12 +142,18 @@ export default function EventCreator({ group }: { group: IGroup }) {
 					backgroundColor: recurring ? green : lightgrey,
 					color: recurring ? 'white' : 'black',
 					transition: 'color 0.2s, background-color 0.2s',
+					marginBottom: '1.5rem',
 				}}
 			>
 				Recurring event
 			</UIButton>
 			{recurring && (
-				<DaysOfWeekSelector daysOfWeek={daysOfWeek} update={setDaysOfWeek} />
+				<>
+					Days of week
+					<DaysOfWeekSelector daysOfWeek={daysOfWeek} update={setDaysOfWeek} />
+					Date of last occurence
+					<UIDateInput onChangedDate={setEndDate} />
+				</>
 			)}
 			{createdEventId === -1 ? (
 				<UIButton
