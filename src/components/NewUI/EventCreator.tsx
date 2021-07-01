@@ -106,6 +106,9 @@ export default function EventCreator({ group }: { group: IGroup }) {
 				endTime,
 				groupId: group.id,
 				placeId,
+				recurring,
+				daysOfWeek,
+				endDate,
 			})
 				.then((response) => response.json())
 				.then(({ id }) => {
@@ -113,7 +116,17 @@ export default function EventCreator({ group }: { group: IGroup }) {
 				})
 				.finally(() => setCreating(false));
 		}
-	}, [creating, name, startTime, endTime, group.id, placeId]);
+	}, [
+		creating,
+		name,
+		startTime,
+		endTime,
+		group.id,
+		placeId,
+		recurring,
+		daysOfWeek,
+		endDate,
+	]);
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
