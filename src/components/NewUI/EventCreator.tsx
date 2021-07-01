@@ -26,9 +26,11 @@ const DAY_NAMES = [
 function DaysOfWeekSelector({
 	daysOfWeek,
 	update,
+	disabled = false,
 }: {
 	daysOfWeek: number;
 	update: Dispatch<SetStateAction<number>>;
+	disabled?: boolean;
 }) {
 	const toggleDayOfWeek = useCallback(
 		function (idx: 1 | 2 | 3 | 4 | 5 | 6 | 7) {
@@ -53,7 +55,11 @@ function DaysOfWeekSelector({
 						style={{
 							borderRadius: '100%',
 							cursor: 'pointer',
-							backgroundColor: active ? green : lightgrey,
+							backgroundColor: active
+								? disabled
+									? green + '77'
+									: green
+								: lightgrey,
 							color: active ? 'white' : 'black',
 							userSelect: 'none',
 							width: '2em',
@@ -68,6 +74,7 @@ function DaysOfWeekSelector({
 							// @ts-ignore
 							toggleDayOfWeek(idx + 1)
 						}
+						key={name}
 					>
 						{name.charAt(0)}
 					</div>
@@ -99,16 +106,26 @@ export default function EventCreator({ group }: { group: IGroup }) {
 
 	const createEvent = useCallback(() => {
 		if (!creating) {
+			if (startTime === null) {
+				console.warn(
+					'Tried to create an event where the start time was unspecified.'
+				);
+				return;
+			}
+
+			const duration =
+				endTime !== null ? (endTime.getTime() - startTime.getTime()) / 60 : 0;
+
 			setCreating(true);
+
 			post('/events', {
 				name,
 				startTime,
-				endTime,
+				duration,
+				endDate,
 				groupId: group.id,
 				placeId,
-				recurring,
 				daysOfWeek,
-				endDate,
 			})
 				.then((response) => response.json())
 				.then(({ id }) => {
@@ -123,7 +140,6 @@ export default function EventCreator({ group }: { group: IGroup }) {
 		endTime,
 		group.id,
 		placeId,
-		recurring,
 		daysOfWeek,
 		endDate,
 	]);
