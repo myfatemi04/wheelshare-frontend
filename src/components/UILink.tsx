@@ -21,6 +21,14 @@ export default function UILink({
 		[style]
 	);
 
+	if (href.startsWith('http://') || href.startsWith('https://')) {
+		return (
+			<a href={href} style={computedStyle}>
+				{children}
+			</a>
+		);
+	}
+
 	return (
 		<Link to={href} style={computedStyle}>
 			{children}
