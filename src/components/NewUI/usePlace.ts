@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getPlaceDetails, PlaceDetails } from '../../api/google';
 import useThrottle from './useThrottle';
 
-export default function usePlace(placeId: string) {
+export default function usePlace(placeId: string | null) {
 	const [placeDetails, setPlaceDetails] = useState<PlaceDetails | null>(null);
 
 	const updatePlaceDetails = useCallback(() => {

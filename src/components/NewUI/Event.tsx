@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { post } from './api';
+import { green, lightgrey } from './colors';
 import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
@@ -8,9 +10,6 @@ import usePlace from './usePlace';
 import useThrottle from './useThrottle';
 import useToggle from './useToggle';
 
-const green = '#60f760';
-const lightgrey = '#e0e0e0';
-
 export type IEvent = {
 	id: number;
 	name: string;
@@ -18,6 +17,8 @@ export type IEvent = {
 	formattedAddress: string;
 	startTime: string;
 	endTime: string;
+	latitude: number;
+	longitude: number;
 };
 
 function formatStartAndEndTime(
@@ -206,13 +207,13 @@ const dummyPeopleData: IPerson[] = [
 		longitude: 10.12,
 	},
 ];
-function People({ event, placeId }: { event: IEvent; placeId: string }) {
+function People({ event, placeId }: { event: IEvent; placeId: string | null }) {
 	const PADDING = '1rem';
 	// eslint-disable-next-line
 	const [people, setPeople] = useState(dummyPeopleData);
 	const placeDetails = usePlace(placeId);
-	const myLatitude = 10;
-	const myLongitude = 10;
+	const locationLongitude = event.latitude;
+	const locationLatitude = event.longitude;
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -220,28 +221,28 @@ function People({ event, placeId }: { event: IEvent; placeId: string }) {
 			{people.map(({ name, latitude, longitude, id }) => {
 				let extraDistance = null;
 				if (placeDetails != null) {
-					const locationLatitude = placeDetails.latitude;
-					const locationLongitude = placeDetails.longitude;
+					const myLatitude = placeDetails.latitude;
+					const myLongitude = placeDetails.longitude;
 					const meToThem = latlongdist(
 						latitude,
 						longitude,
-						myLatitude,
-						myLongitude,
+						locationLongitude,
+						locationLatitude,
 						R_miles
 					);
 					const themToLocation = latlongdist(
 						latitude,
 						longitude,
-						locationLatitude,
-						locationLongitude,
+						myLatitude,
+						myLongitude,
 						R_miles
 					);
 					const totalWithThem = meToThem + themToLocation;
 					const totalWithoutThem = latlongdist(
+						locationLongitude,
+						locationLatitude,
 						myLatitude,
 						myLongitude,
-						locationLatitude,
-						locationLongitude,
 						R_miles
 					);
 					extraDistance = totalWithThem - totalWithoutThem;
@@ -285,9 +286,47 @@ function People({ event, placeId }: { event: IEvent; placeId: string }) {
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
 	const [haveRide, toggleHaveRide] = useToggle(false);
-	const [placeId, setPlaceId] = useState<string>(null!);
+	const [placeId, setPlaceId] = useState<string | null>(null);
 	const [interested, toggleInterested] = useToggle(false);
+	const [updating, setUpdating] = useState(false);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
+	const existingSignup = useRef({
+		interested: false,
+		placeId: null as string | null,
+		eventId: null as number | null,
+	});
+
+	useEffect(() => {
+		const prev = existingSignup.current;
+		if (prev.interested === false && interested === false) {
+			return;
+		}
+
+		if (
+			(prev.interested === true && interested === false) ||
+			(interested === true && prev.placeId !== null && placeId === null)
+		) {
+			fetch(`http://localhost:5000/api/events/${event.id}/signup`, {
+				method: 'delete',
+			}).finally(() => setUpdating(false));
+			prev.interested = false;
+			return;
+		}
+
+		if (
+			interested === true &&
+			(prev.placeId !== placeId || prev.eventId !== event.id)
+		) {
+			prev.placeId = placeId;
+			prev.eventId = event.id;
+			prev.interested = true;
+
+			post(`/events/${event.id}/signup`, {
+				placeId,
+			}).finally(() => setUpdating(false));
+			return;
+		}
+	}, [event.id, interested, placeId, updating]);
 
 	return (
 		<UISecondaryBox>
