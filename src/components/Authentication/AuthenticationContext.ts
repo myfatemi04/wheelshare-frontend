@@ -1,8 +1,14 @@
 import { createContext } from 'react';
 
+export type User = {
+	name: string;
+	id: number;
+	email?: string;
+};
+
 export type AuthState = {
 	isLoggedIn: boolean | null;
-	user: Carpool.User | null;
+	user: User | null;
 
 	/**
 	 * Function that can be used to trigger an auth state refresh.

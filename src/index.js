@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import AuthenticationWrapper from './components/Authentication/AuthenticationWrapper';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<AuthenticationWrapper>
+			<App />
+		</AuthenticationWrapper>
 	</React.StrictMode>,
 	document.getElementById('root')
 );

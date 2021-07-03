@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { post } from './api';
+import { createEvent } from './api';
 import { toggleBit } from './bits';
 import { green, lightgrey } from './colors';
 import { IGroup } from './Group';
@@ -120,11 +120,18 @@ export default function EventCreator({ group }: { group: IGroup }) {
 		!durationIsNegative &&
 		!creating;
 
-	const createEvent = useCallback(() => {
+	const onClickedCreateEvent = useCallback(() => {
 		if (!creating) {
 			if (startTime === null) {
 				console.warn(
 					'Tried to create an event where the start time was unspecified.'
+				);
+				return;
+			}
+
+			if (placeId === null) {
+				console.warn(
+					'Tried tro create an event where the placeId was unspecified.'
 				);
 				return;
 			}
@@ -134,7 +141,7 @@ export default function EventCreator({ group }: { group: IGroup }) {
 
 			setCreating(true);
 
-			post('/events', {
+			createEvent({
 				name,
 				startTime,
 				duration,
@@ -143,7 +150,6 @@ export default function EventCreator({ group }: { group: IGroup }) {
 				placeId,
 				daysOfWeek,
 			})
-				.then((response) => response.json())
 				.then(({ id }) => {
 					setCreatedEventId(id);
 				})
@@ -211,7 +217,7 @@ export default function EventCreator({ group }: { group: IGroup }) {
 			)}
 			{createdEventId === -1 ? (
 				<UIButton
-					onClick={buttonEnabled ? createEvent : noop}
+					onClick={buttonEnabled ? onClickedCreateEvent : noop}
 					style={!buttonEnabled ? { color: 'grey' } : {}}
 				>
 					{creating ? 'Creating event' : 'Create event'}

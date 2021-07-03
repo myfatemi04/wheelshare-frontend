@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { post, removeEventSignup } from './api';
+import { addEventSignup, removeEventSignup } from './api';
 import { green, lightgrey } from './colors';
 import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
@@ -313,15 +313,14 @@ export default function Event({ event }: { event: IEvent }) {
 
 		if (
 			interested === true &&
-			(prev.placeId !== placeId || prev.eventId !== event.id)
+			(prev.placeId !== placeId || prev.eventId !== event.id) &&
+			placeId !== null
 		) {
 			prev.placeId = placeId;
 			prev.eventId = event.id;
 			prev.interested = true;
 
-			post(`/events/${event.id}/signup`, {
-				placeId,
-			}).finally(() => setUpdating(false));
+			addEventSignup(event.id, placeId!).finally(() => setUpdating(false));
 			return;
 		}
 	}, [event.id, interested, placeId, updating]);

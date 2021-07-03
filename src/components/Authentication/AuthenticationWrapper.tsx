@@ -16,16 +16,21 @@ export default function AuthenticationWrapper({
 	});
 
 	const refreshAuthState = useCallback(() => {
-		if (sessionToken) {
-			getMe().then((user) => {
-				if (user) {
-					setAuthState({ isLoggedIn: true, user, refreshAuthState });
-				} else {
-					setAuthState({ isLoggedIn: false, user: null, refreshAuthState });
-				}
-			});
-		} else {
+		const loggedOut = () =>
 			setAuthState({ isLoggedIn: false, user: null, refreshAuthState });
+
+		if (sessionToken) {
+			getMe()
+				.then((user) => {
+					if (user) {
+						setAuthState({ isLoggedIn: true, user, refreshAuthState });
+					} else {
+						loggedOut();
+					}
+				})
+				.catch(loggedOut);
+		} else {
+			loggedOut();
 		}
 	}, [sessionToken]);
 

@@ -10,22 +10,31 @@ export default function Authenticator() {
 	const { refreshAuthState } = useContext(AuthenticationContext);
 	const [status, setStatus] =
 		useState<'pending' | 'errored' | 'authenticated'>('pending');
+	const [token, setToken] = useState<string | null>(null);
 
 	useEffect(() => {
 		createSession(code!)
 			.then((data) => {
 				if (data.status === 'success') {
+					console.log('Success! Token:', data.token);
+					setToken(data.token);
 					localStorage.setItem('session_token', data.token);
-					refreshAuthState && refreshAuthState();
 					setStatus('authenticated');
 				} else {
+					console.log('Authentication failure.');
+					setToken(null);
+					localStorage.removeItem('session_token');
 					setStatus('errored');
 				}
 			})
 			.catch(() => {
 				setStatus('errored');
 			});
-	}, [code, provider, refreshAuthState]);
+	}, [code, provider]);
+
+	useEffect(() => {
+		refreshAuthState && refreshAuthState();
+	}, [token, refreshAuthState]);
 
 	switch (status) {
 		case 'authenticated':

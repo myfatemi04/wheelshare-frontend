@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { post } from './api';
+import { createGroup } from './api';
 import UIButton from './UIButton';
 import UILink from './UILink';
 import UISecondaryBox from './UISecondaryBox';
@@ -11,13 +11,10 @@ export default function GroupCreator() {
 		useState<boolean | null>(null);
 	const [createdGroupId, setCreatedGroupId] = useState(0);
 	const [creating, setCreating] = useState(false);
-	const createGroup = useCallback(() => {
+	const onClickedCreateGroup = useCallback(() => {
 		if (!creating) {
 			setCreating(true);
-			post('/groups', {
-				name,
-			})
-				.then((res) => res.json())
+			createGroup(name)
 				.then(({ id }) => {
 					setCreationSuccessful(true);
 					setCreatedGroupId(id);
@@ -36,7 +33,7 @@ export default function GroupCreator() {
 			Name
 			<UITextInput onChangeText={setName} value={name} />
 			<UIButton
-				onClick={createGroup}
+				onClick={onClickedCreateGroup}
 				style={!buttonEnabled ? { color: 'grey' } : {}}
 			>
 				{creating ? 'Creating group' : 'Create group'}
