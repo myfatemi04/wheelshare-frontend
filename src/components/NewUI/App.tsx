@@ -7,7 +7,7 @@ const Group = lazy(() => import('./Group'));
 export default function App() {
 	return (
 		<>
-			<a href="https://ion.tjhsst.edu/oauth/authorize?response_type=code&client_id=ojfWWAyRyfTpNB4tNUKjcYTVytpi7moNt21M857O">Login Link for Testing Oauth</a>
+			<a href="">Login Link for Testing Oauth</a>
 			<div style={{ padding: '1rem' }}>
 				<BrowserRouter>
 					<Switch>
