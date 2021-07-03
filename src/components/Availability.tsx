@@ -1,4 +1,4 @@
-import { CSSProperties } from '@material-ui/styles';
+import { CSSProperties } from 'react';
 import {
 	MouseEventHandler,
 	ReactEventHandler,
