@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { Redirect, useLocation, useParams } from 'react-router-dom';
-import { makeAPIPostCall } from '../../api/utils';
 import AuthenticationContext from './AuthenticationContext';
 
 export default function Authenticator() {
@@ -12,10 +11,17 @@ export default function Authenticator() {
 		useState<'pending' | 'errored' | 'authenticated'>('pending');
 
 	useEffect(() => {
-		makeAPIPostCall('/create_session', { code, provider })
-			.then((response) => {
-				if (response.data.status === 'success') {
-					localStorage.setItem('session_token', response.data.token);
+		fetch('http://localhost:5000/create_session', {
+			method: 'post',
+			body: JSON.stringify({ code }),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.status === 'success') {
+					localStorage.setItem('session_token', data.token);
 					refreshAuthState && refreshAuthState();
 					setStatus('authenticated');
 				} else {

@@ -1,101 +1,75 @@
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { makeAPIGetCall } from '../api/utils';
-import CreatePool from './CreatePool';
-import useToggle from './NewUI/useToggle';
-import Pool from './Pool';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
+import { IEvent } from './Event';
+import EventCreatorLink from './EventCreatorLink';
+import EventStream from './EventStream';
+import GroupSettingsLink from './GroupSettingsLink';
+import UILink from './UILink';
 
-// eslint-disable-next-line
-const SAMPLE_POOLS: Carpool.Pool[] = [
-	{
-		_id: '1234',
-		title: 'TJ Carpool',
-		description: 'Carpool from TJ track to homes',
-		start_time: '4/10/2021 3:00 PM',
-		end_time: '4/10/2021 4:00 PM',
-		capacity: 2,
-		participant_ids: [],
-		comments: [
-			{
-				author_id: 'joshua_hsueh',
-				body: 'What is the covid vaccination status of all the participants?',
-				id: 'comment_0',
-			},
-		],
-		driver_id: 'michael',
-		create_time: '0',
-		update_time: '0',
-		group_id: 'test_group',
-		status: 'pending',
-		direction: 'dropoff',
-		author_id: 'michael',
-		type: 'offer',
-	},
-];
+export type IGroup = {
+	id: number;
+	events: IEvent[];
+	name: string;
+};
 
 export default function Group() {
-	// eslint-disable-next-line
 	const { id } = useParams<{ id: string }>();
-	const [error, setError] = useState(false);
-	const [group, setGroup] = useState<Carpool.Group>();
-	const [pools, setPools] = useState<Carpool.Pool[]>([]);
-	const [createPoolVisible, toggleCreatePoolVisible] = useToggle(false);
-
-	const fetchPools = useCallback(() => {
-		makeAPIGetCall(`/groups/${id}/pools`).then((res) => {
-			setPools(res.data.data);
-		});
-	}, [id]);
-
-	useEffect(() => fetchPools(), [fetchPools]);
+	const [loading, setLoading] = useState(true);
+	const [group, setGroup] = useState<IGroup | null>(null);
+	const [events, setEvents] = useState<IEvent[]>([]);
 
 	useEffect(() => {
-		makeAPIGetCall(`/groups/${id}`).then((res) => {
-			if ('error' in res.data) {
-				setError(true);
-			} else {
-				setGroup(res.data.data);
-			}
-		});
+		setLoading(true);
+		fetch('http://localhost:5000/api/groups/' + id)
+			.then((response) => response.json())
+			.then(setGroup)
+			.finally(() => setLoading(false));
+
+		fetch('http://localhost:5000/api/groups/' + id + '/events')
+			.then((response) => response.json())
+			.then(setEvents);
 	}, [id]);
 
-	if (error) {
-		return <h1 style={{ textAlign: 'center' }}>Group Not Found</h1>;
+	if (!group && !loading) {
+		return (
+			<div style={{ textAlign: 'center' }}>
+				<h1>Group Not Found</h1>
+				<Link to="/">Home</Link>
+			</div>
+		);
 	}
 
 	if (!group) {
-		return <h1 style={{ textAlign: 'center' }}>Loading</h1>;
+		return null;
 	}
+
+	const { name } = group;
 
 	return (
 		<div
 			style={{
-				width: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-				padding: '1rem',
+				textAlign: 'center',
+				maxWidth: '30rem',
+				marginLeft: 'auto',
+				marginRight: 'auto',
 			}}
 		>
-			<Typography variant="h1" align="center">
-				{group.name}
-			</Typography>
-
-			<Typography variant="h3" align="center">
-				Pools
-			</Typography>
-			<div style={{ display: 'flex', flexDirection: 'column' }}>
-				<div>
-					<Button onClick={toggleCreatePoolVisible} variant="contained">
-						{createPoolVisible ? 'Cancel' : 'Create Pool'}
-					</Button>
-					{createPoolVisible && <CreatePool groupID={group._id} />}
-				</div>
-				{pools.map((pool, index) => (
-					<Pool pool={pool} triggerUpdate={fetchPools} key={index} />
-				))}
-			</div>
+			<h1>{name}</h1>
+			<UILink href="/">Home</UILink>
+			<br />
+			<br />
+			<GroupSettingsLink group={group} />
+			<br />
+			<EventCreatorLink group={group} />
+			<br />
+			{events && events.length > 0 ? (
+				<EventStream events={events} />
+			) : (
+				<span>
+					There are no events yet. Click 'create event' above to add one!
+				</span>
+			)}
 		</div>
 	);
 }
