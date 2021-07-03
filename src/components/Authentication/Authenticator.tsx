@@ -40,14 +40,26 @@ export default function Authenticator() {
 		refresh();
 	}, [token, refresh]);
 
+	let children: JSX.Element;
+
 	if (pending) {
-		return <h1>Signing In</h1>;
+		children = <h1>Signing In</h1>;
+	} else if (token) {
+		children = <Redirect to="/" />;
+	} else {
+		// If we aren't pending anymore, but don't have a token, we must have errored
+		children = <h1>Sign In Error</h1>;
 	}
 
-	if (token) {
-		return <Redirect to="/" />;
-	}
-
-	// If we aren't pending anymore, but don't have a token, we must have errored
-	return <h1>Sign In Error</h1>;
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+			}}
+		>
+			{children}
+		</div>
+	);
 }
