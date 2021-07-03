@@ -14,10 +14,10 @@ const ION_AUTHORIZATION_ENDPOINT = dev
 	: 'https://ion.tjhsst.edu/oauth/authorize?response_type=code&client_id=rNa6n9YSg8ftINdyVPpUsaMuxNbHLo9dh1OsOktR&scope=read&redirect_uri=https%3A%2F%2Fwheelshare.space%2Fauth%2Fion%2Fcallback';
 
 export default function App() {
-	const { isLoggedIn, user } = useContext(AuthenticationContext);
+	const { user } = useContext(AuthenticationContext);
 	return (
 		<div style={{ padding: '1rem' }}>
-			{isLoggedIn ? (
+			{user ? (
 				<div
 					style={{
 						display: 'flex',
@@ -28,7 +28,7 @@ export default function App() {
 						alignItems: 'center',
 					}}
 				>
-					{user!.name}{' '}
+					{user.name}{' '}
 					<UIButton style={{ marginTop: 0 }} onClick={logout}>
 						Log out
 					</UIButton>

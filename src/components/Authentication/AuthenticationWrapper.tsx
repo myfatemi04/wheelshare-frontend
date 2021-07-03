@@ -1,45 +1,30 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getMe } from '../api';
-import AuthenticationContext, { AuthState } from './AuthenticationContext';
+import AuthenticationContext, { User } from './AuthenticationContext';
 
 export default function AuthenticationWrapper({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const sessionToken = localStorage.getItem('session_token');
 	// Prevent race conditions
-	const [authState, setAuthState] = useState<AuthState>({
-		isLoggedIn: null,
-		user: null,
-		refreshAuthState: null,
-	});
+	const [user, setUser] = useState<User | null>(null);
 
-	const refreshAuthState = useCallback(() => {
-		const loggedOut = () =>
-			setAuthState({ isLoggedIn: false, user: null, refreshAuthState });
+	const refresh = useCallback(() => {
+		const none = () => setUser(null);
+		const sessionToken = localStorage.getItem('session_token');
 
 		if (sessionToken) {
-			getMe()
-				.then((user) => {
-					if (user) {
-						setAuthState({ isLoggedIn: true, user, refreshAuthState });
-					} else {
-						loggedOut();
-					}
-				})
-				.catch(loggedOut);
+			getMe().then(setUser).catch(none);
 		} else {
-			loggedOut();
+			none();
 		}
-	}, [sessionToken]);
+	}, []);
 
-	useEffect(() => {
-		refreshAuthState();
-	}, [refreshAuthState]);
+	useEffect(refresh, [refresh]);
 
 	return (
-		<AuthenticationContext.Provider value={authState}>
+		<AuthenticationContext.Provider value={{ user, refresh }}>
 			{children}
 		</AuthenticationContext.Provider>
 	);

@@ -6,20 +6,19 @@ export type User = {
 	email?: string;
 };
 
-export type AuthState = {
-	isLoggedIn: boolean | null;
+export type AuthenticationContextProps = {
 	user: User | null;
 
 	/**
 	 * Function that can be used to trigger an auth state refresh.
 	 */
-	refreshAuthState: (() => void) | null;
+	refresh: () => void;
 };
 
-const AuthenticationContext = createContext<AuthState>({
-	isLoggedIn: false,
+const AuthenticationContext = createContext<AuthenticationContextProps>({
 	user: null,
-	refreshAuthState: null,
+	refresh: () =>
+		console.warn('calling refresh on default AuthenticationContext'),
 });
 
 export default AuthenticationContext;
