@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getEvents } from './api';
 import { IEvent } from './Event';
 import EventStream from './EventStream';
 
@@ -6,9 +7,7 @@ export default function Events() {
 	const [events, setEvents] = useState<IEvent[]>([]);
 
 	useEffect(() => {
-		fetch('http://localhost:5000/api/events')
-			.then((res) => res.json())
-			.then(setEvents);
+		getEvents().then(setEvents);
 	}, []);
 
 	return (

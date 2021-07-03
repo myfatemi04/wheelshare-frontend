@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { deleteGroup } from './api';
 import { IGroup } from './Group';
 import UILink from './UILink';
 import UIPressable from './UIPressable';
@@ -9,9 +10,8 @@ function GroupSettings({ group }: { group: IGroup }) {
 	const [deletionSuccessful, setDeletionSuccessful] =
 		useState<boolean | null>(null);
 
-	const deleteGroup = useCallback(() => {
-		fetch('http://localhost:5000/api/groups/' + group.id, { method: 'delete' })
-			.then((res) => res.json())
+	const onClickedDelete = useCallback(() => {
+		deleteGroup(group.id)
 			.then(({ status }) => {
 				setDeletionSuccessful(status === 'success');
 			})
@@ -24,7 +24,7 @@ function GroupSettings({ group }: { group: IGroup }) {
 		<UISecondaryBox>
 			<h1>Settings</h1>
 			{deletionSuccessful !== true && (
-				<UIPressable onClick={deleteGroup}>Delete Group</UIPressable>
+				<UIPressable onClick={onClickedDelete}>Delete Group</UIPressable>
 			)}
 			{deletionSuccessful !== null &&
 				(deletionSuccessful ? (

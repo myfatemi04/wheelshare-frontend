@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getMe } from '../../api/api';
+import { getMe } from '../api';
 import AuthenticationContext, { AuthState } from './AuthenticationContext';
 
 export default function AuthenticationWrapper({

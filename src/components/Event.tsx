@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { post } from './api';
+import { post, removeEventSignup } from './api';
 import { green, lightgrey } from './colors';
 import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
@@ -306,9 +306,7 @@ export default function Event({ event }: { event: IEvent }) {
 			(prev.interested === true && interested === false) ||
 			(interested === true && prev.placeId !== null && placeId === null)
 		) {
-			fetch(`http://localhost:5000/api/events/${event.id}/signup`, {
-				method: 'delete',
-			}).finally(() => setUpdating(false));
+			removeEventSignup(event.id).finally(() => setUpdating(false));
 			prev.interested = false;
 			return;
 		}

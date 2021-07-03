@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getGroups } from './api';
 import { IGroup } from './Group';
 import GroupCreatorLink from './GroupCreatorLink';
 import GroupJoinerLink from './GroupJoinerLink';
@@ -8,9 +9,7 @@ export default function Groups() {
 	const [groups, setGroups] = useState<IGroup[]>([]);
 
 	useEffect(() => {
-		fetch('http://localhost:5000/api/groups')
-			.then((res) => res.json())
-			.then(setGroups);
+		getGroups().then(setGroups);
 	}, []);
 
 	return (

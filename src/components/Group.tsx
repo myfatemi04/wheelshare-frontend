@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
+import { getGroup, getGroupEvents } from './api';
 import { IEvent } from './Event';
 import EventCreatorLink from './EventCreatorLink';
 import EventStream from './EventStream';
@@ -21,14 +22,11 @@ export default function Group() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch('http://localhost:5000/api/groups/' + id)
-			.then((response) => response.json())
+		getGroup(+id)
 			.then(setGroup)
 			.finally(() => setLoading(false));
 
-		fetch('http://localhost:5000/api/groups/' + id + '/events')
-			.then((response) => response.json())
-			.then(setEvents);
+		getGroupEvents(+id).then(setEvents);
 	}, [id]);
 
 	if (!group && !loading) {
