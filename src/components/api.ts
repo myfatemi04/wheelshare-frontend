@@ -1,3 +1,5 @@
+import { IEventSignup } from './Event';
+
 async function post(path: string, data: any) {
 	const res = await fetch('http://localhost:5000/api' + path, {
 		method: 'post',
@@ -47,8 +49,14 @@ export async function getPlaceDetails(
 	return await get('/place/' + placeId);
 }
 
+export async function getEventSignups(
+	eventId: number
+): Promise<IEventSignup[]> {
+	return await get(`/events/${eventId}/signups`);
+}
+
 export async function addEventSignup(eventId: number, placeId: string) {
-	post(`/events/${eventId}/signup`, {
+	return await post(`/events/${eventId}/signup`, {
 		placeId,
 	});
 }

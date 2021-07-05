@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { addEventSignup, removeEventSignup } from './api';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { addEventSignup, getEventSignups, removeEventSignup } from './api';
 import { green, lightgrey } from './colors';
+import { useMe } from './hooks';
 import latlongdist, { R_miles } from './latlongdist';
 import UIButton from './UIButton';
 import UIPlacesAutocomplete from './UIPlacesAutocomplete';
@@ -186,39 +187,39 @@ function Carpools({ event }: { event: IEvent }) {
 	);
 }
 
-export type IPerson = {
-	id: number;
-	name: string;
+export type IEventSignup = {
+	user: {
+		id: number;
+		name: number;
+	};
+	placeId: string;
+	formattedAddress: string;
 	latitude: number;
 	longitude: number;
 };
 
-const dummyPeopleData: IPerson[] = [
-	{
-		id: 0,
-		name: 'Rushil Umaretiya',
-		latitude: 11.1,
-		longitude: 10.09,
-	},
-	{
-		id: 1,
-		name: 'Nitin Kanchinadam',
-		latitude: 11.09,
-		longitude: 10.12,
-	},
-];
-function People({ event, placeId }: { event: IEvent; placeId: string | null }) {
+function Signups({
+	event,
+	signups,
+	myPlaceId,
+}: {
+	event: IEvent;
+	signups: IEventSignup[];
+	myPlaceId: string | null;
+}) {
 	const PADDING = '1rem';
-	// eslint-disable-next-line
-	const [people, setPeople] = useState(dummyPeopleData);
-	const placeDetails = usePlace(placeId);
+	const placeDetails = usePlace(myPlaceId);
 	const locationLongitude = event.latitude;
 	const locationLatitude = event.longitude;
+	const me = useMe();
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>People</h3>
-			{people.map(({ name, latitude, longitude, id }) => {
+			{signups.map(({ latitude, longitude, user }) => {
+				if (user.id === me?.id) {
+					return null;
+				}
 				let extraDistance = null;
 				if (placeDetails != null) {
 					const myLatitude = placeDetails.latitude;
@@ -260,8 +261,9 @@ function People({ event, placeId }: { event: IEvent; placeId: string | null }) {
 							marginTop: '0.5rem',
 							marginBottom: '0.5rem',
 						}}
+						key={user.id}
 					>
-						<b>{name}</b>
+						<b>{user.name}</b>
 						{extraDistance ? `: +${extraDistance.toFixed(1)} miles` : ''}
 						<div
 							style={{
@@ -287,43 +289,67 @@ export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
 	const [haveRide, toggleHaveRide] = useToggle(false);
 	const [placeId, setPlaceId] = useState<string | null>(null);
-	const [interested, toggleInterested] = useToggle(false);
+	const [interested, setInterested] = useState(false);
 	const [updating, setUpdating] = useState(false);
+	const [signups, setSignups] = useState<IEventSignup[]>([]);
+	const toggleInterested = useCallback(() => setInterested((i) => !i), []);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
 	const existingSignup = useRef({
 		interested: false,
 		placeId: null as string | null,
 		eventId: null as number | null,
 	});
+	const me = useMe();
 
 	useEffect(() => {
+		const removeSignup = () => {
+			if (prev.interested) {
+				removeEventSignup(event.id)
+					.then(() => {
+						prev.interested = false;
+					})
+					.finally(() => setUpdating(false));
+			}
+		};
+
+		const addSignup = () => {
+			if (!prev.interested) {
+				addEventSignup(event.id, placeId!)
+					.then(() => {
+						prev.placeId = placeId;
+						prev.eventId = event.id;
+						prev.interested = true;
+					})
+					.finally(() => setUpdating(false));
+			}
+		};
+
 		const prev = existingSignup.current;
-		if (prev.interested === false && interested === false) {
-			return;
-		}
 
-		if (
-			(prev.interested === true && interested === false) ||
-			(interested === true && prev.placeId !== null && placeId === null)
-		) {
-			removeEventSignup(event.id).finally(() => setUpdating(false));
-			prev.interested = false;
-			return;
-		}
-
-		if (
-			interested === true &&
-			(prev.placeId !== placeId || prev.eventId !== event.id) &&
-			placeId !== null
-		) {
-			prev.placeId = placeId;
-			prev.eventId = event.id;
-			prev.interested = true;
-
-			addEventSignup(event.id, placeId!).finally(() => setUpdating(false));
-			return;
+		if (!interested) {
+			removeSignup();
+		} else if (placeId == null) {
+			removeSignup();
+		} else {
+			addSignup();
 		}
 	}, [event.id, interested, placeId, updating]);
+
+	useEffect(() => {
+		getEventSignups(event.id)
+			.then((signups) => {
+				setSignups(signups);
+				for (let signup of signups) {
+					if (signup.user.id === me?.id) {
+						setInterested(true);
+						existingSignup.current.eventId = event.id;
+						existingSignup.current.placeId = signup.placeId;
+						existingSignup.current.interested = true;
+					}
+				}
+			})
+			.catch(console.error);
+	}, [event.id, me?.id]);
 
 	return (
 		<UISecondaryBox>
@@ -373,7 +399,7 @@ export default function Event({ event }: { event: IEvent }) {
 						</div>
 					)}
 					<Carpools event={event} />
-					<People event={event} placeId={placeId} />
+					<Signups event={event} myPlaceId={placeId} signups={signups} />
 				</>
 			)}
 		</UISecondaryBox>
