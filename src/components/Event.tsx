@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { addEventSignup, getEventSignups, removeEventSignup } from './api';
+import {
+	addOrUpdateEventSignup,
+	getEventSignups,
+	removeEventSignup,
+} from './api';
 import { green, lightgrey } from './colors';
 import { useMe } from './hooks';
 import latlongdist, { R_miles } from './latlongdist';
@@ -312,9 +316,9 @@ export default function Event({ event }: { event: IEvent }) {
 			}
 		};
 
-		const addSignup = () => {
+		const addOrUpdateSignup = () => {
 			if (!prev.interested) {
-				addEventSignup(event.id, placeId!)
+				addOrUpdateEventSignup(event.id, placeId)
 					.then(() => {
 						prev.placeId = placeId;
 						prev.eventId = event.id;
@@ -328,10 +332,8 @@ export default function Event({ event }: { event: IEvent }) {
 
 		if (!interested) {
 			removeSignup();
-		} else if (placeId == null) {
-			removeSignup();
 		} else {
-			addSignup();
+			addOrUpdateSignup();
 		}
 	}, [event.id, interested, placeId, updating]);
 

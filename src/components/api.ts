@@ -55,7 +55,10 @@ export async function getEventSignups(
 	return await get(`/events/${eventId}/signups`);
 }
 
-export async function addEventSignup(eventId: number, placeId: string) {
+export async function addOrUpdateEventSignup(
+	eventId: number,
+	placeId: string | null
+) {
 	return await post(`/events/${eventId}/signup`, {
 		placeId,
 	});
