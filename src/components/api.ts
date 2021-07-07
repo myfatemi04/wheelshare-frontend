@@ -1,4 +1,5 @@
 import { IEventSignup } from './Event';
+import { GroupPreview } from './GroupJoinerLink';
 
 async function post(path: string, data: any) {
 	const res = await fetch('http://localhost:5000/api' + path, {
@@ -150,4 +151,15 @@ export async function denyInvite(carpoolId: number, userId: number) {
 
 export async function getMe() {
 	return await get('/users/@me');
+}
+
+export async function resolveCode(code: string): Promise<GroupPreview> {
+	return await get('/resolve_code/' + code);
+}
+
+export async function joinGroup(id: number, code: string) {
+	const result = await post('/groups/' + id + '/join', { code });
+	return {
+		status: result.status,
+	};
 }
