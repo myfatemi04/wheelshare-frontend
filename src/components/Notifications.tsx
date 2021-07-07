@@ -1,4 +1,3 @@
-import { userInfo } from 'node:os';
 import Notification from './Notification';
 
 export type INotification = {

@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
-import { getGroups, getNotifications } from './api';
+import { useEffect, useState } from 'react';
+import { getGroups } from './api';
 import { IGroup } from './Group';
-import { INotification } from './Notifications';
 import GroupCreatorLink from './GroupCreatorLink';
 import GroupJoinerLink from './GroupJoinerLink';
 import GroupList from './GroupList';
-import Notifications from './Notifications';
+import Notifications, { INotification } from './Notifications';
 
-const dummyNotificationData: INotification[] = ([] = [
+const dummyNotificationData: INotification[] = [
 	{
 		user: {
 			id: 0,
@@ -32,10 +31,11 @@ const dummyNotificationData: INotification[] = ([] = [
 		isRequest: false,
 		sentTime: new Date(),
 	},
-]);
+];
 
 export default function Groups() {
 	const [groups, setGroups] = useState<IGroup[]>([]);
+	// eslint-disable-next-line
 	const [notifications, setNotifications] = useState(dummyNotificationData);
 	useEffect(() => {
 		getGroups().then(setGroups);
