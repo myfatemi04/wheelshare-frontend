@@ -1,54 +1,18 @@
 import { useState, useEffect } from 'react';
 import { getGroups, getNotifications } from './api';
 import { IGroup } from './Group';
-import { INotification } from './Notifications';
 import GroupCreatorLink from './GroupCreatorLink';
 import GroupJoinerLink from './GroupJoinerLink';
 import GroupList from './GroupList';
-import Notifications from './Notifications';
-
-const dummyNotificationData: INotification[] = ([] = [
-	{
-		user: {
-			id: 0,
-			name: 'Michael Fatemi',
-		},
-		carpool: {
-			id: 0,
-			name: 'Cross Country',
-		},
-		isRequest: true,
-		sentTime: new Date(),
-	},
-	{
-		user: {
-			id: 1,
-			name: 'Joshua Hsueh',
-		},
-		carpool: {
-			id: 0,
-			name: 'TJ Lax',
-		},
-		isRequest: false,
-		sentTime: new Date(),
-	},
-]);
 
 export default function Groups() {
 	const [groups, setGroups] = useState<IGroup[]>([]);
-	const [notifications, setNotifications] = useState(dummyNotificationData);
 	useEffect(() => {
 		getGroups().then(setGroups);
-		//getNotifications().then(setNotifications);
 	}, []);
 
 	return (
 		<>
-			{notifications.length > 0 ? (
-				<Notifications notifications={notifications} />
-			) : (
-				<span>No notifications </span>
-			)}
 			<h1>Groups</h1>
 			<GroupJoinerLink />
 			<br />
