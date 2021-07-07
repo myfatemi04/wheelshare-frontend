@@ -3,13 +3,14 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import AuthenticationContext from './Authentication/AuthenticationContext';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
-import { INotification } from './Notifications';
 import Notifications from './Notifications';
+import { getReceivedInvitationsAndRequests } from './api';
+import { IInvitation } from './types';
 
 const Authenticator = lazy(() => import('./Authentication/Authenticator'));
 const Group = lazy(() => import('./Group'));
 
-const dummyNotificationData: INotification[] = ([] = [
+const dummyNotificationData: IInvitation[] = [
 	{
 		user: {
 			id: 0,
@@ -20,7 +21,7 @@ const dummyNotificationData: INotification[] = ([] = [
 			name: 'Cross Country',
 		},
 		isRequest: true,
-		sentTime: new Date(),
+		sentTime: new Date().toISOString(),
 	},
 	{
 		user: {
@@ -32,22 +33,23 @@ const dummyNotificationData: INotification[] = ([] = [
 			name: 'TJ Lax',
 		},
 		isRequest: false,
-		sentTime: new Date(),
+		sentTime: new Date().toISOString(),
 	},
-]);
+];
 
 export default function App() {
 	const { user } = useContext(AuthenticationContext);
+	// eslint-disable-next-line
 	const [notifications, setNotifications] = useState(dummyNotificationData);
 	useEffect(() => {
-		//getNotifications().then(setNotifications);
+		getReceivedInvitationsAndRequests().then(setNotifications);
 	}, []);
 	return (
 		<div style={{ padding: '1rem' }}>
 			{notifications.length > 0 ? (
 				<Notifications notifications={notifications} />
 			) : (
-				<span>No notifications </span>
+				<span>No notifications</span>
 			)}
 			<BrowserRouter>
 				<Switch>

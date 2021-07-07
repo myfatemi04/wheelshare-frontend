@@ -1,5 +1,6 @@
 import { IEventSignup } from './Event';
 import { GroupPreview } from './GroupJoinerLink';
+import { IInvitation } from './types';
 
 async function post(path: string, data: any) {
 	const res = await fetch('http://localhost:5000/api' + path, {
@@ -162,4 +163,18 @@ export async function joinGroup(id: number, code: string) {
 	return {
 		status: result.status,
 	};
+}
+
+export async function generateCode(groupId: number) {
+	return await post('/groups/' + groupId + '/generate_code', {});
+}
+
+export async function resetCode(groupId: number) {
+	return await post('/groups/' + groupId + '/reset_code', {});
+}
+
+export async function getReceivedInvitationsAndRequests() {
+	return (await get(
+		'/users/@me/received_requests_and_invites'
+	)) as IInvitation[];
 }

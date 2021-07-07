@@ -9,17 +9,6 @@ export type IUser = {
 };
 
 /**
- * Model Invitation
- */
-
-export type IInvitation = {
-	userId: number;
-	carpoolId: number;
-	isRequest: boolean;
-	sentTime: Date;
-};
-
-/**
  * Model Carpool
  */
 
@@ -74,4 +63,17 @@ export type IEventSignup = {
 	formattedAddress: string | null;
 	latitude: number | null;
 	longitude: number | null;
+};
+
+export type IInvitation = {
+	user: {
+		id: number;
+		name: string;
+	};
+	carpool: {
+		id: number;
+		name: string;
+	};
+	sentTime: string;
+	isRequest: boolean;
 };

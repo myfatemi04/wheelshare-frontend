@@ -1,22 +1,10 @@
 import Notification from './Notification';
-
-export type INotification = {
-	user: {
-		id: number;
-		name: string;
-	};
-	carpool: {
-		id: number;
-		name: string;
-	};
-	isRequest: boolean;
-	sentTime: Date;
-};
+import { IInvitation } from './types';
 
 export default function Notifications({
 	notifications,
 }: {
-	notifications: INotification[];
+	notifications: IInvitation[];
 }) {
 	return (
 		<div className="notifications">

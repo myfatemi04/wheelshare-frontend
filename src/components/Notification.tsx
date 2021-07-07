@@ -1,12 +1,12 @@
-import { INotification } from './Notifications';
 import { useCallback } from 'react';
 import { acceptInvite, acceptRequest, denyInvite, denyRequest } from './api';
+import { IInvitation } from './types';
 import UIButton from './UIButton';
 
 export default function Notification({
 	notification,
 }: {
-	notification: INotification;
+	notification: IInvitation;
 }) {
 	const carpoolId = notification.carpool.id;
 
@@ -26,6 +26,8 @@ export default function Notification({
 		denyInvite(carpoolId, notification.user.id);
 	}, [carpoolId, notification.user.id]);
 
+	const sentTime = new Date(notification.sentTime);
+
 	return (
 		<div className="notification">
 			{notification.user.name}
@@ -34,15 +36,7 @@ export default function Notification({
 			) : (
 				<span> invited you to join </span>
 			)}
-			{notification.carpool.name +
-				' ' +
-				(notification.sentTime.getMonth() + 1) +
-				'/' +
-				notification.sentTime.getDate() +
-				'/' +
-				notification.sentTime.getFullYear() +
-				' ' +
-				notification.sentTime.toLocaleTimeString()}
+			{notification.carpool.name + sentTime.toLocaleString()}
 			{notification.isRequest ? (
 				<div className="notification-buttons" style={{ display: 'flex' }}>
 					<UIButton onClick={acceptReq}>Accept</UIButton>
