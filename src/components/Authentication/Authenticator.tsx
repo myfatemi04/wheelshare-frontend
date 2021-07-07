@@ -12,6 +12,13 @@ function useCodeAndError() {
 	return [code, error];
 }
 
+function inferRedirectUrl() {
+	// Strip query parameters
+	const { protocol, host, pathname } = window.location;
+	const redirectUrl = `${protocol}//${host}${pathname}`;
+	return redirectUrl;
+}
+
 export default function Authenticator() {
 	const { provider } = useParams<{ provider: string }>();
 	const [code, error] = useCodeAndError();
@@ -31,7 +38,7 @@ export default function Authenticator() {
 	useEffect(() => {
 		if (code) {
 			setPending(true);
-			createSession(code)
+			createSession(code, inferRedirectUrl())
 				.then(({ token }) => {
 					setToken(token ?? null);
 				})

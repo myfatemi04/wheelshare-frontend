@@ -29,7 +29,10 @@ export type ICarpool = {
 	description: string;
 	eventId: number | null;
 	event?: IEvent;
-	members: IUser[];
+	members: {
+		id: number;
+		name: string;
+	}[];
 	invitations: IInvitation[];
 };
 

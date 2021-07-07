@@ -1,7 +1,7 @@
-import { ICarpool, IUser } from './types';
+import { ICarpool } from './types';
 import UISecondaryBox from './UISecondaryBox';
 
-function MemberList({ members }: { members: IUser[] }) {
+function MemberList({ members }: { members: ICarpool['members'] }) {
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			{members.length > 0
