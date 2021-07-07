@@ -22,7 +22,7 @@ export default function Notification({
 
 	const rejectInv = useCallback(() => {
 		denyInvite(notification.user.id);
-	}, []);
+	}, [notification.user.id]);
 
 	return (
 		<div className="notification">

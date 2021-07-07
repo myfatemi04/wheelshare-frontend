@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getGroups, getNotifications } from './api';
+import { useEffect, useState } from 'react';
+import { getGroups } from './api';
 import { IGroup } from './Group';
 import GroupCreatorLink from './GroupCreatorLink';
 import GroupJoinerLink from './GroupJoinerLink';
@@ -7,6 +7,7 @@ import GroupList from './GroupList';
 
 export default function Groups() {
 	const [groups, setGroups] = useState<IGroup[]>([]);
+	// eslint-disable-next-line
 	useEffect(() => {
 		getGroups().then(setGroups);
 	}, []);
