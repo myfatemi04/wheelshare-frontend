@@ -132,20 +132,20 @@ export async function getNotifications() {
 	return await get('/users/@me/received_requests_and_invites');
 }
 
-export async function acceptRequest(userId: number) {
-	return await post('/carpools/:id/accept_request', { userId });
+export async function acceptRequest(carpoolId: number, userId: number) {
+	return await post(`/carpools/${carpoolId}/accept_request`, { userId });
 }
 
-export async function acceptInvite(userId: number) {
-	return await post('/carpools/:id/accept_invite', { userId });
+export async function acceptInvite(carpoolId: number, userId: number) {
+	return await post(`/carpools/${carpoolId}/accept_invite`, { userId });
 }
 
-export async function denyRequest(userId: number) {
-	return await post('/carpools/:id/deny_request', { userId });
+export async function denyRequest(carpoolId: number, userId: number) {
+	return await post(`/carpools/${carpoolId}/deny_request`, { userId });
 }
 
-export async function denyInvite(userId: number) {
-	return await post('/carpools/:id/deny_invite', { userId });
+export async function denyInvite(carpoolId: number, userId: number) {
+	return await post(`/carpools/${carpoolId}/deny_invite`, { userId });
 }
 
 export async function getMe() {

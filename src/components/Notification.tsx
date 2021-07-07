@@ -8,21 +8,23 @@ export default function Notification({
 }: {
 	notification: INotification;
 }) {
+	const carpoolId = notification.carpool.id;
+
 	const acceptReq = useCallback(() => {
-		acceptRequest(notification.user.id);
-	}, [notification.user.id]);
+		acceptRequest(carpoolId, notification.user.id);
+	}, [carpoolId, notification.user.id]);
 
 	const rejectReq = useCallback(() => {
-		denyRequest(notification.user.id);
-	}, [notification.user.id]);
+		denyRequest(carpoolId, notification.user.id);
+	}, [carpoolId, notification.user.id]);
 
 	const acceptInv = useCallback(() => {
-		acceptInvite(notification.user.id);
-	}, [notification.user.id]);
+		acceptInvite(carpoolId, notification.user.id);
+	}, [carpoolId, notification.user.id]);
 
 	const rejectInv = useCallback(() => {
-		denyInvite(notification.user.id);
-	}, [notification.user.id]);
+		denyInvite(carpoolId, notification.user.id);
+	}, [carpoolId, notification.user.id]);
 
 	return (
 		<div className="notification">
