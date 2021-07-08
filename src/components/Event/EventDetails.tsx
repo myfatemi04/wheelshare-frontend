@@ -1,4 +1,6 @@
 import formatStartAndEndTime from '../dates';
+import EventIcon from '@material-ui/icons/Event';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 export default function Details({
 	startTime,
@@ -13,27 +15,31 @@ export default function Details({
 		<div
 			style={{
 				marginTop: '0.5rem',
+				marginBottom: '0.5rem',
 				textAlign: 'left',
 			}}
 		>
-			<span
+			<div
 				style={{
 					color: '#303030',
+					display: 'flex',
+					alignItems: 'center',
 				}}
 			>
-				<b>When: </b>
+				<EventIcon style={{ marginRight: '1rem' }} />
 				{formatStartAndEndTime(startTime, endTime)}
-			</span>
+			</div>
 			<br />
-			<br />
-			<span
+			<div
 				style={{
 					color: '#303030',
+					display: 'flex',
+					alignItems: 'center',
 				}}
 			>
-				<b>Where: </b>
+				<LocationOnIcon style={{ marginRight: '1rem' }} />
 				{formattedAddress}
-			</span>
+			</div>
 		</div>
 	);
 }
