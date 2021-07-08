@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getCarpool } from './api';
 import { ICarpool } from './types';
 import UISecondaryBox from './UISecondaryBox';
 
@@ -13,13 +16,24 @@ function MemberList({ members }: { members: ICarpool['members'] }) {
 	);
 }
 
-export default function Carpool({ carpool }: { carpool: ICarpool }) {
+export default function Carpool() {
+	const id = +useParams<{ id: string }>().id;
+	const [carpool, setCarpool] = useState<ICarpool | null>(null);
+
+	useEffect(() => {
+		getCarpool(id).then(setCarpool);
+	}, [id]);
+
 	return (
 		<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
-			<h2 style={{ textAlign: 'center' }}>{carpool.name}</h2>
-			{carpool.description}
-			<h3>Members</h3>
-			<MemberList members={carpool.members} />
+			{carpool && (
+				<>
+					<h2 style={{ textAlign: 'center' }}>{carpool.name}</h2>
+					{carpool.description}
+					<h3>Members</h3>
+					<MemberList members={carpool.members} />
+				</>
+			)}
 		</UISecondaryBox>
 	);
 }

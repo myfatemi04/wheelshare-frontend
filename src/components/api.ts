@@ -178,3 +178,7 @@ export async function getReceivedInvitationsAndRequests() {
 		'/users/@me/received_requests_and_invites'
 	)) as IInvitation[];
 }
+
+export async function getCarpool(id: number) {
+	return await get('/carpools/' + id);
+}
