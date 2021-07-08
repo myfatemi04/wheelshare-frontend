@@ -9,7 +9,9 @@ function createAuthorizationEndpoint(redirectUrl: string) {
 	return url.toString();
 }
 
-const redirectUrl = `${window.location.protocol}://${window.location.host}/auth/ion/callback`;
+// window.location.protocol is http: or https:
+// window.location.host is localhost:3000 or wheelshare-frontend.vercel.app
+const redirectUrl = `${window.location.protocol}//${window.location.host}/auth/ion/callback`;
 const authorizationEndpoint = createAuthorizationEndpoint(redirectUrl);
 
 export default authorizationEndpoint;
