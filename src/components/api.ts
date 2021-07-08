@@ -1,4 +1,4 @@
-import { IEventSignup } from './Event';
+import { IEventSignup } from './Event/Event';
 import { GroupPreview } from './GroupJoinerLink';
 import { IInvitation } from './types';
 

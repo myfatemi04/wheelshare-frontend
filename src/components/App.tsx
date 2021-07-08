@@ -2,7 +2,7 @@ import { CSSProperties, lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getReceivedInvitationsAndRequests } from './api';
 import { useMe } from './hooks';
-import Notifications from './Notifications';
+import Notifications from './Notifications/Notifications';
 import { IInvitation } from './types';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';

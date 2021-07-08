@@ -1,5 +1,5 @@
 import Notification from './Notification';
-import { IInvitation } from './types';
+import { IInvitation } from '../types';
 
 export default function Notifications({
 	notifications,

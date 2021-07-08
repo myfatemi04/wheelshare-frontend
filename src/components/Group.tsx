@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { getGroup, getGroupEvents } from './api';
-import { IEvent } from './Event';
-import EventCreatorLink from './EventCreatorLink';
+import { IEvent } from './Event/Event';
+import EventCreatorLink from './EventCreator/EventCreatorLink';
 import EventStream from './EventStream';
-import GroupSettingsLink from './GroupSettingsLink';
-import UILink from './UILink';
+import GroupSettingsLink from './GroupSettings/GroupSettingsLink';
+import UILink from './UI/UILink';
 
 export type IGroup = {
 	id: number;

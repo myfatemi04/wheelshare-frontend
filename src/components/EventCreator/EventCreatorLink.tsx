@@ -1,6 +1,6 @@
 import EventCreator from './EventCreator';
-import { IGroup } from './Group';
-import useToggle from './useToggle';
+import { IGroup } from '../Group';
+import useToggle from '../useToggle';
 
 export default function EventCreatorLink({ group }: { group: IGroup }) {
 	const [open, toggle] = useToggle(false);

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { joinGroup, resolveCode } from './api';
-import UIButton from './UIButton';
-import UIPressable from './UIPressable';
-import UISecondaryBox from './UISecondaryBox';
-import UITextInput from './UITextInput';
+import UIButton from './UI/UIButton';
+import UIPressable from './UI/UIPressable';
+import UISecondaryBox from './UI/UISecondaryBox';
+import UITextInput from './UI/UITextInput';
 import useToggle from './useToggle';
 
 export type GroupPreview = {

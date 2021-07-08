@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { acceptInvite, acceptRequest, denyInvite, denyRequest } from './api';
-import { IInvitation } from './types';
-import UIButton from './UIButton';
+import { acceptInvite, acceptRequest, denyInvite, denyRequest } from '../api';
+import { IInvitation } from '../types';
+import UIButton from '../UI/UIButton';
 
 export default function Notification({
 	notification,

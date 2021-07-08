@@ -1,4 +1,4 @@
-import Event, { IEvent } from './Event';
+import Event, { IEvent } from './Event/Event';
 
 export default function EventStream({ events }: { events: IEvent[] }) {
 	return (

@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
-import { createGroup } from './api';
-import UIButton from './UIButton';
-import UILink from './UILink';
-import UISecondaryBox from './UISecondaryBox';
-import UITextInput from './UITextInput';
+import { createGroup } from '../api';
+import UIButton from '../UI/UIButton';
+import UILink from '../UI/UILink';
+import UISecondaryBox from '../UI/UISecondaryBox';
+import UITextInput from '../UI/UITextInput';
 
 export default function GroupCreator() {
 	const [name, setName] = useState('');

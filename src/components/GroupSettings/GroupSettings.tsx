@@ -1,12 +1,11 @@
-import { useCallback, useState } from 'react';
-import { deleteGroup } from './api';
-import { IGroup } from './Group';
-import UILink from './UILink';
-import UIPressable from './UIPressable';
-import UISecondaryBox from './UISecondaryBox';
-import useToggle from './useToggle';
+import { useState, useCallback } from 'react';
+import { deleteGroup } from '../api';
+import { IGroup } from '../types';
+import UILink from '../UI/UILink';
+import UIPressable from '../UI/UIPressable';
+import UISecondaryBox from '../UI/UISecondaryBox';
 
-function GroupSettings({ group }: { group: IGroup }) {
+export default function GroupSettings({ group }: { group: IGroup }) {
 	const [deletionSuccessful, setDeletionSuccessful] =
 		useState<boolean | null>(null);
 
@@ -39,29 +38,5 @@ function GroupSettings({ group }: { group: IGroup }) {
 					</span>
 				))}
 		</UISecondaryBox>
-	);
-}
-
-export default function GroupSettingsLink({ group }: { group: IGroup }) {
-	const [open, toggle] = useToggle(false);
-
-	return (
-		<div>
-			<div
-				style={{
-					cursor: 'pointer',
-					userSelect: 'none',
-				}}
-				onClick={toggle}
-			>
-				Settings
-			</div>
-			{open && (
-				<>
-					<br />
-					<GroupSettings group={group} />
-				</>
-			)}
-		</div>
 	);
 }

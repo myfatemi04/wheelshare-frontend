@@ -1,6 +1,6 @@
 import authorizationEndpoint from './Authentication/authorizationEndpoint';
-import UILink from './UILink';
-import UIPrimaryTitle from './UIPrimaryTitle';
+import UILink from './UI/UILink';
+import UIPrimaryTitle from './UI/UIPrimaryTitle';
 
 export default function WheelShareLoggedOut() {
 	return (

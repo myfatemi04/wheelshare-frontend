@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getGroups } from './api';
-import { IGroup } from './Group';
-import GroupCreatorLink from './GroupCreatorLink';
-import GroupJoinerLink from './GroupJoinerLink';
+import { getGroups } from '../api';
+import { IGroup } from '../Group';
+import GroupCreatorLink from '../GroupCreator/GroupCreatorLink';
+import GroupJoinerLink from '../GroupJoinerLink';
 import GroupList from './GroupList';
 
 export default function Groups() {
