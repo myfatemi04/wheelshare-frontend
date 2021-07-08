@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { IEvent } from './Event';
+import CallMergeIcon from '@material-ui/icons/CallMerge';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 export type ICarpool = {
 	driver: {
@@ -19,6 +22,7 @@ function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 				display: 'flex',
 				alignItems: 'center',
 				position: 'relative',
+				justifyContent: 'space-between',
 				padding: PADDING,
 				borderRadius: '0.5rem',
 				border: '1px solid #e0e0e0',
@@ -27,28 +31,20 @@ function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 			}}
 		>
 			<div>
-				<span style={{ fontWeight: 500 }}>{carpool.driver.name}</span>
+				<span style={{ fontWeight: 600 }}>{carpool.driver.name}</span>
 				<br />
-				Time:{' '}
-				<b>
+				<br />
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<ScheduleIcon style={{ marginRight: '1rem' }} />
 					{carpool.startTime} - {carpool.endTime}
-				</b>
+				</div>
 				<br />
-				Offset from route: <b>{carpool.extraDistance} miles</b>
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<CallMergeIcon style={{ marginRight: '1rem' }} />{' '}
+					<b>{carpool.extraDistance} miles</b>
+				</div>
 			</div>
-			<div
-				style={{
-					borderRadius: '0.5em',
-					cursor: 'pointer',
-					padding: '0.5em',
-					position: 'absolute',
-					right: PADDING,
-					userSelect: 'none',
-					backgroundColor: '#e0e0e0',
-				}}
-			>
-				Request to join
-			</div>
+			<EmojiPeopleIcon style={{ fontSize: '2em' }} />
 		</div>
 	);
 }

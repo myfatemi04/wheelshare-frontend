@@ -2,8 +2,9 @@ import { useMe } from '../hooks';
 import latlongdist, { R_miles } from '../latlongdist';
 import usePlace from '../usePlace';
 import { IEvent, IEventSignup } from './Event';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-export default function Signups({
+export default function EventSignups({
 	event,
 	signups,
 	myPlaceId,
@@ -12,7 +13,6 @@ export default function Signups({
 	signups: IEventSignup[];
 	myPlaceId: string | null;
 }) {
-	const PADDING = '1rem';
 	const placeDetails = usePlace(myPlaceId);
 	const locationLongitude = event.latitude;
 	const locationLatitude = event.longitude;
@@ -59,6 +59,7 @@ export default function Signups({
 						style={{
 							display: 'flex',
 							alignItems: 'center',
+							justifyContent: 'space-between',
 							position: 'relative',
 							padding: '1rem',
 							borderRadius: '0.5rem',
@@ -70,19 +71,7 @@ export default function Signups({
 					>
 						<b>{user.name}</b>
 						{extraDistance ? `: +${extraDistance.toFixed(1)} miles` : ''}
-						<div
-							style={{
-								borderRadius: '0.5em',
-								cursor: 'pointer',
-								padding: '0.5em',
-								position: 'absolute',
-								right: PADDING,
-								userSelect: 'none',
-								backgroundColor: '#e0e0e0',
-							}}
-						>
-							Invite to carpool
-						</div>
+						<PersonAddIcon />
 					</div>
 				);
 			})}
