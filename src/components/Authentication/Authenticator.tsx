@@ -19,21 +19,12 @@ function inferRedirectUrl() {
 	return redirectUrl;
 }
 
-export default function Authenticator() {
-	const { provider } = useParams<{ provider: string }>();
-	const [code, error] = useCodeAndError();
-	const { refresh } = useContext(AuthenticationContext);
-
-	const [pending, setPending] = useState(true);
+function useToken(
+	code: string | null,
+	provider: string
+): [string | null, boolean] {
+	const [pending, setPending] = useState(false);
 	const [token, setToken] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (token) {
-			localStorage.setItem('session_token', token);
-		} else {
-			localStorage.removeItem('session_token');
-		}
-	}, [token]);
 
 	useEffect(() => {
 		if (code) {
@@ -46,10 +37,34 @@ export default function Authenticator() {
 		}
 	}, [code, provider]);
 
+	return [token, pending];
+}
+
+function useLocalStorageSync(key: string, value: string | null) {
 	useEffect(() => {
-		// Refresh when the token changes
+		if (value) {
+			localStorage.setItem(key, value);
+		} else {
+			localStorage.removeItem(key);
+		}
+	}, [key, value]);
+}
+
+function useRefresh(refresh: Function, watch: string | null) {
+	useEffect(() => {
 		refresh();
-	}, [token, refresh]);
+	}, [watch, refresh]);
+}
+
+export default function Authenticator() {
+	const { provider } = useParams<{ provider: string }>();
+	const [code, error] = useCodeAndError();
+	const { refresh } = useContext(AuthenticationContext);
+
+	const [token, pending] = useToken(code, provider);
+
+	useLocalStorageSync('session_token', token);
+	useRefresh(refresh, token);
 
 	let children: JSX.Element;
 
@@ -86,15 +101,5 @@ export default function Authenticator() {
 		);
 	}
 
-	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-			}}
-		>
-			{children}
-		</div>
-	);
+	return children;
 }

@@ -1,11 +1,11 @@
-import { lazy, Suspense, useContext, useState, useEffect } from 'react';
+import { CSSProperties, lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import AuthenticationContext from './Authentication/AuthenticationContext';
+import { getReceivedInvitationsAndRequests } from './api';
+import { useMe } from './hooks';
+import Notifications from './Notifications';
+import { IInvitation } from './types';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
-import Notifications from './Notifications';
-import { getReceivedInvitationsAndRequests } from './api';
-import { IInvitation } from './types';
 
 const Authenticator = lazy(() => import('./Authentication/Authenticator'));
 const Group = lazy(() => import('./Group'));
@@ -37,33 +37,54 @@ const dummyNotificationData: IInvitation[] = [
 	},
 ];
 
-export default function App() {
-	const { user } = useContext(AuthenticationContext);
-	// eslint-disable-next-line
+const style: CSSProperties = {
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	width: '30rem',
+	maxWidth: '30rem',
+	marginLeft: 'auto',
+	marginRight: 'auto',
+};
+
+function useNotifications() {
 	const [notifications, setNotifications] = useState(dummyNotificationData);
+
 	useEffect(() => {
 		getReceivedInvitationsAndRequests().then(setNotifications);
 	}, []);
+
+	return notifications;
+}
+
+export default function App() {
+	const user = useMe();
+	const notifications = useNotifications();
 	return (
 		<div style={{ padding: '1rem' }}>
-			{notifications.length > 0 ? (
-				<Notifications notifications={notifications} />
-			) : (
-				<span>No notifications</span>
-			)}
-			<BrowserRouter>
-				<Switch>
-					<Route
-						path="/"
-						exact
-						component={user ? WheelShare : WheelShareLoggedOut}
-					/>
-					<Suspense fallback={null}>
-						<Route path="/groups/:id" component={Group} />
-						<Route component={Authenticator} path="/auth/:provider/callback" />
-					</Suspense>
-				</Switch>
-			</BrowserRouter>
+			<div style={style}>
+				{notifications.length > 0 ? (
+					<Notifications notifications={notifications} />
+				) : (
+					<span>No notifications</span>
+				)}
+				<BrowserRouter>
+					<Switch>
+						<Route
+							path="/"
+							exact
+							component={user ? WheelShare : WheelShareLoggedOut}
+						/>
+						<Suspense fallback={null}>
+							<Route path="/groups/:id" component={Group} />
+							<Route
+								component={Authenticator}
+								path="/auth/:provider/callback"
+							/>
+						</Suspense>
+					</Switch>
+				</BrowserRouter>
+			</div>
 		</div>
 	);
 }
