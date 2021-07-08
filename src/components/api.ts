@@ -2,8 +2,10 @@ import { IEventSignup } from './Event';
 import { GroupPreview } from './GroupJoinerLink';
 import { IInvitation } from './types';
 
+const base = process.env.REACT_APP_API_DOMAIN + 'api';
+
 async function post(path: string, data: any) {
-	const res = await fetch('http://localhost:5000/api' + path, {
+	const res = await fetch(base + path, {
 		method: 'post',
 		body: JSON.stringify(data),
 		headers: {
@@ -15,7 +17,7 @@ async function post(path: string, data: any) {
 }
 
 async function delete$(path: string) {
-	const res = await fetch('http://localhost:5000/api' + path, {
+	const res = await fetch(base + path, {
 		method: 'delete',
 		headers: {
 			Authorization: 'Bearer ' + localStorage.getItem('session_token'),
@@ -26,7 +28,7 @@ async function delete$(path: string) {
 }
 
 async function get(path: string) {
-	const res = await fetch('http://localhost:5000/api' + path, {
+	const res = await fetch(base + path, {
 		headers: {
 			Authorization: 'Bearer ' + localStorage.getItem('session_token'),
 		},
