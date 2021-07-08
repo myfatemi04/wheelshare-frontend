@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode } from 'react';
 
 const style: CSSProperties = {
-	fontSize: '4rem',
+	fontSize: '3rem',
 	marginTop: '0.25em',
 	marginBottom: '0.25em',
 };

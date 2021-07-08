@@ -42,7 +42,7 @@ const style: CSSProperties = {
 	flexDirection: 'column',
 	alignItems: 'center',
 	width: '30rem',
-	maxWidth: '30rem',
+	maxWidth: '100%',
 	marginLeft: 'auto',
 	marginRight: 'auto',
 };
@@ -61,7 +61,7 @@ export default function App() {
 	const user = useMe();
 	const notifications = useNotifications();
 	return (
-		<div style={{ padding: '1rem' }}>
+		<div style={{ padding: '1rem', maxWidth: '100vw' }}>
 			<div style={style}>
 				{notifications.length > 0 ? (
 					<Notifications notifications={notifications} />
