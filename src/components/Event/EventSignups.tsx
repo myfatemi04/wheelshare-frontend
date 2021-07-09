@@ -71,7 +71,11 @@ export default function EventSignups({
 					>
 						<b>{user.name}</b>
 						{extraDistance ? `: +${extraDistance.toFixed(1)} miles` : ''}
-						<PersonAddIcon />
+						<PersonAddIcon
+							onClick={() => {
+								// Invite to carpool and create carpool
+							}}
+						/>
 					</div>
 				);
 			})}

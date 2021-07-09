@@ -70,7 +70,7 @@ export default function Event({ event }: { event: IEvent }) {
 		};
 
 		const addOrUpdateSignup = () => {
-			if (!prev.interested) {
+			if (!prev.interested || prev.placeId !== placeId) {
 				addOrUpdateEventSignup(event.id, placeId)
 					.then(() => {
 						prev.placeId = placeId;
@@ -97,6 +97,7 @@ export default function Event({ event }: { event: IEvent }) {
 				for (let signup of signups) {
 					if (signup.user.id === me?.id) {
 						setInterested(true);
+						setPlaceId(signup.placeId);
 						existingSignup.current.eventId = event.id;
 						existingSignup.current.placeId = signup.placeId;
 						existingSignup.current.interested = true;
@@ -129,6 +130,7 @@ export default function Event({ event }: { event: IEvent }) {
 							setPlaceId(placeID);
 						}}
 						style={placeId != null ? { border: '2px solid ' + green } : {}}
+						placeId={placeId}
 					/>
 					{false && (
 						<div

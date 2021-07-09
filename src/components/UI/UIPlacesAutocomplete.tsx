@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { CSSProperties, useRef, useState } from 'react';
 import PlacesAutocomplete, { Suggestion } from 'react-places-autocomplete';
+import getPlaceDetails from '../getPlaceDetails';
 
 type Opts = Parameters<PlacesAutocomplete['props']['children']>['0'];
 
@@ -45,14 +47,29 @@ export default function UIPlacesAutocomplete({
 	placeholder = 'Enter a location',
 	disabled = false,
 	style,
+	placeId,
 }: {
 	onSelected?: (address: string, placeID: string) => void;
 	placeholder?: string;
 	disabled?: boolean;
 	style?: CSSProperties;
+	placeId?: string | null;
 }) {
 	const [location, setLocation] = useState('');
 	const suggestionsRef = useRef<readonly Suggestion[]>([]);
+
+	useEffect(() => {
+		if (placeId) {
+			getPlaceDetails(placeId).then((result) => {
+				if (result.formattedAddress.startsWith(result.name)) {
+					setLocation(result.formattedAddress);
+				} else {
+					setLocation(`${result.name}, ${result.formattedAddress}`);
+				}
+			});
+		}
+	}, [placeId]);
+
 	return (
 		<PlacesAutocomplete
 			onChange={(location) => {
