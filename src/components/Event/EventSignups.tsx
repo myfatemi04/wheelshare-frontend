@@ -26,7 +26,10 @@ export default function EventSignups({
 					return null;
 				}
 				let extraDistance = null;
-				if (placeDetails != null) {
+				if (
+					placeDetails != null &&
+					!(latitude === null || longitude === null)
+				) {
 					const myLatitude = placeDetails.latitude;
 					const myLongitude = placeDetails.longitude;
 					const meToThem = latlongdist(
