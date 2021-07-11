@@ -48,7 +48,7 @@ export default function Event({ event }: { event: IEvent }) {
 	const [placeId, setPlaceId] = useState<string | null>(null);
 	const [interested, setInterested] = useState(false);
 	const [updating, setUpdating] = useState(false);
-	const [signups, setSignups] = useState<IEventSignup[]>([]);
+	const [signups, setSignups] = useState<IEventSignup[] | null>(null);
 	const toggleInterested = useCallback(() => setInterested((i) => !i), []);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
 	const existingSignup = useRef({
@@ -59,6 +59,10 @@ export default function Event({ event }: { event: IEvent }) {
 	const me = useMe();
 
 	useEffect(() => {
+		if (signups === null) {
+			return;
+		}
+
 		const removeSignup = () => {
 			if (prev.interested) {
 				removeEventSignup(event.id)
@@ -71,6 +75,12 @@ export default function Event({ event }: { event: IEvent }) {
 
 		const addOrUpdateSignup = () => {
 			if (!prev.interested || prev.placeId !== placeId) {
+				console.log('Adding or updating signup.', prev, {
+					interested,
+					placeId,
+					eventId: event.id,
+					signups,
+				});
 				addOrUpdateEventSignup(event.id, placeId)
 					.then(() => {
 						prev.placeId = placeId;
@@ -88,12 +98,11 @@ export default function Event({ event }: { event: IEvent }) {
 		} else {
 			addOrUpdateSignup();
 		}
-	}, [event.id, interested, placeId, updating]);
+	}, [event.id, interested, placeId, signups, updating]);
 
 	useEffect(() => {
 		getEventSignups(event.id)
 			.then((signups) => {
-				setSignups(signups);
 				for (let signup of signups) {
 					if (signup.user.id === me?.id) {
 						setInterested(true);
@@ -103,6 +112,7 @@ export default function Event({ event }: { event: IEvent }) {
 						existingSignup.current.interested = true;
 					}
 				}
+				setSignups(signups);
 			})
 			.catch(console.error);
 	}, [event.id, me?.id]);
@@ -157,7 +167,9 @@ export default function Event({ event }: { event: IEvent }) {
 						</div>
 					)}
 					<EventCarpools event={event} />
-					<EventSignups event={event} myPlaceId={placeId} signups={signups} />
+					{signups !== null && (
+						<EventSignups event={event} myPlaceId={placeId} signups={signups} />
+					)}
 				</>
 			)}
 		</UISecondaryBox>
