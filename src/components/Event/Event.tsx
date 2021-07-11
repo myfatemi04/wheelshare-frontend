@@ -132,6 +132,7 @@ export default function Event({ event }: { event: IEvent }) {
 						style={placeId != null ? { border: '2px solid ' + green } : {}}
 						placeId={placeId}
 					/>
+					<br />
 					{false && (
 						<div
 							style={{

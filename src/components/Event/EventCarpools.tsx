@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { IEvent } from './Event';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
-import ScheduleIcon from '@material-ui/icons/Schedule';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import { useState } from 'react';
+import { lightgrey } from '../colors';
+import UIButton from '../UI/UIButton';
+import { IEvent } from './Event';
 
 export type ICarpool = {
 	driver: {
@@ -77,6 +79,11 @@ export default function Carpools({ event }: { event: IEvent }) {
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>Carpools</h3>
+			<br />
+			<>Available to drive?</>
+			<UIButton onClick={() => {}} style={{ backgroundColor: lightgrey }}>
+				I'm not available
+			</UIButton>
 			{carpools.map((carpool) => (
 				<CarpoolRow carpool={carpool} key={carpool.driver.id} />
 			))}
