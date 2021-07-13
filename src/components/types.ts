@@ -53,9 +53,13 @@ export type IEvent = {
 	id: number;
 	name: string;
 	groupId: number;
-	startTime: Date;
+	group: {
+		id: number;
+		name: string;
+	};
+	startTime: string; // Datestring
 	duration: number;
-	endTime: Date | null;
+	endTime: string | null; // Datestring
 	daysOfWeek: number;
 	placeId: string;
 	formattedAddress: string;

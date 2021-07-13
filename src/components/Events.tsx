@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getEvents } from './api';
-import { IEvent } from './Event/Event';
+import { IEvent } from './types';
 import EventStream from './EventStream';
 
 export default function Events() {

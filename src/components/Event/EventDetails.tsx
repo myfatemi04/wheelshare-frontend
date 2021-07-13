@@ -8,7 +8,7 @@ export default function Details({
 	formattedAddress,
 }: {
 	startTime: string;
-	endTime: string;
+	endTime: string | null;
 	formattedAddress: string;
 }) {
 	return (
@@ -27,7 +27,9 @@ export default function Details({
 				}}
 			>
 				<EventIcon style={{ marginRight: '1rem' }} />
-				{formatStartAndEndTime(startTime, endTime)}
+				{endTime
+					? formatStartAndEndTime(startTime, endTime)
+					: new Date(startTime).toLocaleString()}
 			</div>
 			<br />
 			<div

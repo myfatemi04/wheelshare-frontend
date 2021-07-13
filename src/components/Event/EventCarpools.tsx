@@ -1,14 +1,11 @@
 // import CallMergeIcon from '@material-ui/icons/CallMerge';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-import { useCallback } from 'react';
-// import ScheduleIcon from '@material-ui/icons/Schedule';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createCarpool } from '../api';
 import { lightgrey } from '../colors';
 import { useMe } from '../hooks';
-import { ICarpool } from '../types';
+import { ICarpool, IEvent } from '../types';
 import UIButton from '../UI/UIButton';
-import { IEvent } from './Event';
 
 function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 	const PADDING = '1rem';

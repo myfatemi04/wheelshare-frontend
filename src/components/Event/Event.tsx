@@ -6,7 +6,7 @@ import {
 } from '../api';
 import { green, lightgrey } from '../colors';
 import { useMe } from '../hooks';
-import { IEventSignup } from '../types';
+import { IEvent, IEventSignup } from '../types';
 import UIButton from '../UI/UIButton';
 import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
 import UISecondaryBox from '../UI/UISecondaryBox';
@@ -15,17 +15,6 @@ import useThrottle from '../useThrottle';
 import EventCarpools from './EventCarpools';
 import EventDetails from './EventDetails';
 import EventSignups from './EventSignups';
-
-export type IEvent = {
-	id: number;
-	name: string;
-	group: string;
-	formattedAddress: string;
-	startTime: string;
-	endTime: string;
-	latitude: number;
-	longitude: number;
-};
 
 function GroupName({ name }: { name: string }) {
 	return <span style={{ color: '#303030', textAlign: 'center' }}>{name}</span>;
@@ -108,7 +97,7 @@ export default function Event({ event }: { event: IEvent }) {
 	return (
 		<UISecondaryBox>
 			<UISecondaryHeader>{name}</UISecondaryHeader>
-			<GroupName name={group} />
+			<GroupName name={group.name} />
 			<EventDetails {...{ startTime, endTime, formattedAddress }} />
 			<UIButton
 				onClick={toggleInterestedThrottled}
