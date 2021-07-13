@@ -106,7 +106,6 @@ export default function Carpool() {
 							DAWN - DUSK
 						</div>
 					</div>
-					<h3>Members</h3>
 					<MemberList members={carpool.members} />
 				</>
 			) : (
