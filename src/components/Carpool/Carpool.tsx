@@ -1,5 +1,4 @@
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { useMemo } from 'react';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import {
 	cancelCarpoolInvite,
@@ -7,13 +6,11 @@ import {
 	leaveCarpool,
 	sendCarpoolInvite,
 } from '../api';
-import { lightgrey } from '../colors';
+import { useMe } from '../hooks';
 import { ICarpool } from '../types';
-import UIButton from '../UI/UIButton';
 import UISecondaryBox from '../UI/UISecondaryBox';
-import useToggle from '../useToggle';
 import CarpoolDetails from './CarpoolDetails';
-import InvitationList from './InvitationList';
+import InvitationsAndRequests from './InvitationsAndRequests';
 import MemberList from './MemberList';
 
 export const CarpoolContext = createContext({
@@ -35,8 +32,6 @@ export default function Carpool({ id }: { id: number }) {
 	useEffect(() => {
 		getCarpool(id).then(setCarpool);
 	}, [id]);
-
-	const [invitationsOpen, toggleInvitationsOpen] = useToggle(false);
 
 	const sendInvite = useCallback(
 		(user: { id: number; name: string }) => {
@@ -95,6 +90,13 @@ export default function Carpool({ id }: { id: number }) {
 		}
 	}, [eventId, id]);
 
+	const me = useMe();
+
+	const isMember = useMemo(
+		() => carpool?.members.some((m) => m.id === me?.id),
+		[carpool?.members, me?.id]
+	);
+
 	if (!carpool) {
 		return <>Loading...</>;
 	}
@@ -113,39 +115,7 @@ export default function Carpool({ id }: { id: number }) {
 					<>
 						<h1 style={{ marginBottom: '0rem' }}>{carpool.name}</h1>
 						<h2 style={{ marginBottom: '0rem' }}>{carpool.event.name}</h2>
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								margin: '0.5rem 0',
-							}}
-						>
-							{/* Requests */}
-							<UIButton
-								style={{
-									marginRight: '0.25rem',
-									backgroundColor: lightgrey,
-									display: 'flex',
-									alignItems: 'center',
-								}}
-								onClick={console.log}
-							>
-								<MailOutlineIcon style={{ marginRight: '0.5rem' }} /> 1 request
-							</UIButton>
-							{/* Invitations */}
-							<UIButton
-								style={{
-									marginLeft: '0.25rem',
-									backgroundColor: lightgrey,
-									display: 'flex',
-									alignItems: 'center',
-								}}
-								onClick={toggleInvitationsOpen}
-							>
-								<PersonAddIcon style={{ marginRight: '0.5rem' }} /> Invite
-							</UIButton>
-						</div>
-						{invitationsOpen && <InvitationList />}
+						{isMember && <InvitationsAndRequests />}
 						<CarpoolDetails carpool={carpool} />
 						<MemberList members={carpool.members} />
 					</>
