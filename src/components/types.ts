@@ -63,7 +63,7 @@ export type IEvent = {
 		members: {
 			id: number;
 			name: string;
-		};
+		}[];
 	}[];
 	startTime: string; // Datestring
 	duration: number;

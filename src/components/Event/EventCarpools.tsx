@@ -1,5 +1,6 @@
 // import CallMergeIcon from '@material-ui/icons/CallMerge';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import { useMemo } from 'react';
 import { useCallback, useState } from 'react';
 import { createCarpool } from '../api';
 import { lightgrey } from '../colors';
@@ -44,10 +45,19 @@ function CarpoolRow({ carpool }: { carpool: IEvent['carpools'][0] }) {
 	);
 }
 
+type CreationStatus = null | 'pending' | 'completed' | 'errored';
+
 export default function Carpools({ event }: { event: IEvent }) {
-	const [creationStatus, setCreationStatus] =
-		useState<null | 'pending' | 'completed' | 'errored'>(null);
+	const [creationStatus, setCreationStatus] = useState<CreationStatus>(null);
 	const me = useMe()!;
+	const myCarpool = useMemo(
+		() =>
+			event.carpools.find((carpool) =>
+				carpool.members.some((member) => member.id === me.id)
+			),
+		[event.carpools, me.id]
+	);
+	const alreadyInCarpool = myCarpool !== undefined;
 
 	const createEmptyCarpool = useCallback(() => {
 		setCreationStatus('pending');
@@ -65,21 +75,28 @@ export default function Carpools({ event }: { event: IEvent }) {
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			<h3 style={{ marginBlockEnd: '0' }}>Carpools</h3>
-			<br />
-			<>Available to drive?</>
-			<UIButton
-				onClick={createEmptyCarpool}
-				style={{ backgroundColor: lightgrey }}
-			>
-				{creationStatus === null
-					? 'Create Empty Carpool'
-					: creationStatus === 'pending'
-					? 'Creating...'
-					: creationStatus === 'completed'
-					? 'Created!'
-					: 'Errored'}
-			</UIButton>
+			<h3 style={{ marginBottom: '0' }}>Carpools</h3>
+			{alreadyInCarpool ? (
+				<span>You are already in a carpool for this event</span>
+			) : (
+				<>
+					<span>Available to drive?</span>
+					{creationStatus !== 'completed' ? (
+						<UIButton
+							onClick={createEmptyCarpool}
+							style={{ backgroundColor: lightgrey }}
+						>
+							{creationStatus === null
+								? 'Create Empty Carpool'
+								: creationStatus === 'pending'
+								? 'Creating...'
+								: 'Errored'}
+						</UIButton>
+					) : (
+						'Created!'
+					)}
+				</>
+			)}
 			{event.carpools.map((carpool) => (
 				<CarpoolRow carpool={carpool} key={carpool.id} />
 			))}
