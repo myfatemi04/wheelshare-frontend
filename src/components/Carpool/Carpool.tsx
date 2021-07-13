@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCarpool } from './api';
-import { ICarpool } from './types';
-import UISecondaryBox from './UI/UISecondaryBox';
+import { getCarpool } from '../api';
+import { ICarpool } from '../types';
+import UISecondaryBox from '../UI/UISecondaryBox';
 
 function MemberList({ members }: { members: ICarpool['members'] }) {
 	return (

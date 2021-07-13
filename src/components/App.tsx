@@ -8,6 +8,7 @@ import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
 
 const Authenticator = lazy(() => import('./Authentication/Authenticator'));
+const Carpool = lazy(() => import('./Carpool/Carpool'));
 const Group = lazy(() => import('./Group'));
 
 const dummyNotificationData: IInvitation[] = [
@@ -81,6 +82,7 @@ export default function App() {
 								component={Authenticator}
 								path="/auth/:provider/callback"
 							/>
+							<Route path="/carpools/:id" component={Carpool} />
 						</Suspense>
 					</Switch>
 				</BrowserRouter>
