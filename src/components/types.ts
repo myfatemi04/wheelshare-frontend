@@ -70,6 +70,10 @@ export type IEvent = {
 export type IEventSignup = {
 	eventId: number;
 	userId: number;
+	user: {
+		id: number;
+		name: string;
+	};
 	placeId: string | null;
 	formattedAddress: string | null;
 	latitude: number | null;

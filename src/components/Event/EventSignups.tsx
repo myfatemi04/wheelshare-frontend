@@ -1,8 +1,9 @@
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useMe } from '../hooks';
 import latlongdist, { R_miles } from '../latlongdist';
+import { IEventSignup } from '../types';
 import usePlace from '../usePlace';
-import { IEvent, IEventSignup } from './Event';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { IEvent } from './Event';
 
 export default function EventSignups({
 	event,

@@ -26,17 +26,17 @@ export default function MemberList({
 							<div
 								className="member"
 								style={{ display: 'flex', alignItems: 'center' }}
+								key={member.id}
 							>
-								{}
 								<AccountCircleIcon style={{ marginRight: '8px' }} />
-								<div key={member.id}>{member.name}</div>
+								<div>{member.name}</div>
 							</div>
 						) : (
 							''
 						);
 					})}
 					{members.length > 2
-						? members.length - 2 == 1
+						? members.length - 2 === 1
 							? members.length - 2 + ' other...'
 							: members.length - 2 + ' others...'
 						: ''}{' '}
