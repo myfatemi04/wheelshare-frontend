@@ -57,6 +57,14 @@ export type IEvent = {
 		id: number;
 		name: string;
 	};
+	carpools: {
+		id: number;
+		name: string;
+		members: {
+			id: number;
+			name: string;
+		};
+	}[];
 	startTime: string; // Datestring
 	duration: number;
 	endTime: string | null; // Datestring

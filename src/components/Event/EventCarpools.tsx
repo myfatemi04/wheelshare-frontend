@@ -4,10 +4,10 @@ import { useCallback, useState } from 'react';
 import { createCarpool } from '../api';
 import { lightgrey } from '../colors';
 import { useMe } from '../hooks';
-import { ICarpool, IEvent } from '../types';
+import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';
 
-function CarpoolRow({ carpool }: { carpool: ICarpool }) {
+function CarpoolRow({ carpool }: { carpool: IEvent['carpools'][0] }) {
 	const PADDING = '1rem';
 	return (
 		<div
@@ -44,27 +44,7 @@ function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 	);
 }
 
-const dummyCarpoolData: ICarpool[] = [
-	{
-		id: 0,
-		name: 'carpoollo2398',
-		eventId: 0,
-		event: {
-			id: 0,
-			name: 'test event',
-			latitude: 0,
-			longitude: 0,
-			formattedAddress: 'your house',
-			placeId: 'secret',
-		},
-		members: [],
-		invitations: [],
-	},
-];
-
 export default function Carpools({ event }: { event: IEvent }) {
-	// eslint-disable-next-line
-	const [carpools, _setCarpools] = useState(dummyCarpoolData);
 	const [creationStatus, setCreationStatus] =
 		useState<null | 'pending' | 'completed' | 'errored'>(null);
 	const me = useMe()!;
@@ -100,7 +80,7 @@ export default function Carpools({ event }: { event: IEvent }) {
 					? 'Created!'
 					: 'Errored'}
 			</UIButton>
-			{carpools.map((carpool) => (
+			{event.carpools.map((carpool) => (
 				<CarpoolRow carpool={carpool} key={carpool.id} />
 			))}
 		</div>
