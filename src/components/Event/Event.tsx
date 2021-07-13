@@ -11,7 +11,6 @@ import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import UISecondaryHeader from '../UI/UISecondaryHeader';
 import useThrottle from '../useThrottle';
-import useToggle from '../useToggle';
 import EventCarpools from './EventCarpools';
 import EventDetails from './EventDetails';
 import EventSignups from './EventSignups';
@@ -44,7 +43,6 @@ export type IEventSignup = {
 
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;
-	const [haveRide, toggleHaveRide] = useToggle(false);
 	const [placeId, setPlaceId] = useState<string | null>(null);
 	const [interested, setInterested] = useState(false);
 	const [updating, setUpdating] = useState(false);
@@ -143,29 +141,6 @@ export default function Event({ event }: { event: IEvent }) {
 						placeId={placeId}
 					/>
 					<br />
-					{false && (
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								cursor: 'pointer',
-								userSelect: 'none',
-							}}
-							onClick={toggleHaveRide}
-						>
-							<input
-								type="checkbox"
-								style={{
-									borderRadius: '0.5em',
-									width: '2em',
-									height: '2em',
-									margin: '1em',
-								}}
-								checked={haveRide}
-							/>
-							I don't have any way to get there yet
-						</div>
-					)}
 					<EventCarpools event={event} />
 					{signups !== null && (
 						<EventSignups event={event} myPlaceId={placeId} signups={signups} />

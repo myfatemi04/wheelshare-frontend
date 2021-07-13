@@ -1,8 +1,11 @@
 // import CallMergeIcon from '@material-ui/icons/CallMerge';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import { useCallback } from 'react';
 // import ScheduleIcon from '@material-ui/icons/Schedule';
 import { useState } from 'react';
+import { createCarpool } from '../api';
 import { lightgrey } from '../colors';
+import { useMe } from '../hooks';
 import { ICarpool } from '../types';
 import UIButton from '../UI/UIButton';
 import { IEvent } from './Event';
@@ -65,14 +68,40 @@ const dummyCarpoolData: ICarpool[] = [
 export default function Carpools({ event }: { event: IEvent }) {
 	// eslint-disable-next-line
 	const [carpools, _setCarpools] = useState(dummyCarpoolData);
+	const [creationStatus, setCreationStatus] =
+		useState<null | 'pending' | 'completed' | 'errored'>(null);
+	const me = useMe()!;
+
+	const createEmptyCarpool = useCallback(() => {
+		setCreationStatus('pending');
+
+		createCarpool({ name: me.name + "'s Carpool", eventId: event.id })
+			.then(() => {
+				setCreationStatus('completed');
+			})
+			.catch(() => {
+				setCreationStatus('errored');
+			});
+
+		setTimeout(() => setCreationStatus('completed'), 1000);
+	}, [event.id, me.name]);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>Carpools</h3>
 			<br />
 			<>Available to drive?</>
-			<UIButton onClick={() => {}} style={{ backgroundColor: lightgrey }}>
-				I'm not available
+			<UIButton
+				onClick={createEmptyCarpool}
+				style={{ backgroundColor: lightgrey }}
+			>
+				{creationStatus === null
+					? 'Create Empty Carpool'
+					: creationStatus === 'pending'
+					? 'Creating...'
+					: creationStatus === 'completed'
+					? 'Created!'
+					: 'Errored'}
 			</UIButton>
 			{carpools.map((carpool) => (
 				<CarpoolRow carpool={carpool} key={carpool.id} />

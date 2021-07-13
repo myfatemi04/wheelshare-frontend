@@ -167,3 +167,13 @@ export async function getReceivedInvitationsAndRequests() {
 export async function getCarpool(id: number) {
 	return await get('/carpools/' + id);
 }
+
+export async function createCarpool({
+	eventId,
+	name,
+}: {
+	eventId: number;
+	name: string;
+}) {
+	return await post('/carpools/', { eventId, name });
+}
