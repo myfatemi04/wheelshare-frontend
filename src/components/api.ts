@@ -178,7 +178,7 @@ export async function createCarpool({
 }: {
 	eventId: number;
 	name: string;
-}) {
+}): Promise<{ id: number }> {
 	return await post('/carpools/', { eventId, name });
 }
 

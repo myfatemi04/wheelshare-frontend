@@ -1,12 +1,12 @@
 // import CallMergeIcon from '@material-ui/icons/CallMerge';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-import { useMemo } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createCarpool } from '../api';
 import { lightgrey } from '../colors';
 import { useMe } from '../hooks';
 import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';
+import UILink from '../UI/UILink';
 
 function CarpoolRow({ carpool }: { carpool: IEvent['carpools'][0] }) {
 	const PADDING = '1rem';
@@ -49,6 +49,8 @@ type CreationStatus = null | 'pending' | 'completed' | 'errored';
 
 export default function Carpools({ event }: { event: IEvent }) {
 	const [creationStatus, setCreationStatus] = useState<CreationStatus>(null);
+	const [createdCarpoolId, setCreatedCarpoolId] = useState<null | number>(null);
+
 	const me = useMe()!;
 	const myCarpool = useMemo(
 		() =>
@@ -63,14 +65,13 @@ export default function Carpools({ event }: { event: IEvent }) {
 		setCreationStatus('pending');
 
 		createCarpool({ name: me.name + "'s Carpool", eventId: event.id })
-			.then(() => {
+			.then(({ id }) => {
+				setCreatedCarpoolId(id);
 				setCreationStatus('completed');
 			})
 			.catch(() => {
 				setCreationStatus('errored');
 			});
-
-		setTimeout(() => setCreationStatus('completed'), 1000);
 	}, [event.id, me.name]);
 
 	return (
@@ -80,20 +81,28 @@ export default function Carpools({ event }: { event: IEvent }) {
 				<span>You are already in a carpool for this event</span>
 			) : (
 				<>
-					<span>Available to drive?</span>
 					{creationStatus !== 'completed' ? (
-						<UIButton
-							onClick={createEmptyCarpool}
-							style={{ backgroundColor: lightgrey }}
-						>
-							{creationStatus === null
-								? 'Create Empty Carpool'
-								: creationStatus === 'pending'
-								? 'Creating...'
-								: 'Errored'}
-						</UIButton>
+						<>
+							<span>Available to drive?</span>
+							<UIButton
+								onClick={createEmptyCarpool}
+								style={{ backgroundColor: lightgrey }}
+							>
+								{creationStatus === null
+									? 'Create Empty Carpool'
+									: creationStatus === 'pending'
+									? 'Creating...'
+									: 'Errored'}
+							</UIButton>
+						</>
 					) : (
-						'Created!'
+						<span>
+							Created{' '}
+							<UILink href={`/carpools/${createdCarpoolId}`}>
+								your carpool
+							</UILink>
+							!
+						</span>
 					)}
 				</>
 			)}
