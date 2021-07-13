@@ -1,20 +1,11 @@
-import CallMergeIcon from '@material-ui/icons/CallMerge';
+// import CallMergeIcon from '@material-ui/icons/CallMerge';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-import ScheduleIcon from '@material-ui/icons/Schedule';
+// import ScheduleIcon from '@material-ui/icons/Schedule';
 import { useState } from 'react';
 import { lightgrey } from '../colors';
+import { ICarpool } from '../types';
 import UIButton from '../UI/UIButton';
 import { IEvent } from './Event';
-
-export type ICarpool = {
-	driver: {
-		id: number;
-		name: string;
-	};
-	startTime: string;
-	endTime: string;
-	extraDistance: number;
-};
 
 function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 	const PADDING = '1rem';
@@ -32,20 +23,22 @@ function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 				marginBottom: '0.5rem',
 			}}
 		>
-			<div>
-				<span style={{ fontWeight: 600 }}>{carpool.driver.name}</span>
-				<br />
-				<br />
-				<div style={{ display: 'flex', alignItems: 'center' }}>
-					<ScheduleIcon style={{ marginRight: '1rem' }} />
-					{carpool.startTime} - {carpool.endTime}
-				</div>
-				<br />
-				<div style={{ display: 'flex', alignItems: 'center' }}>
+			{/* <div> */}
+			<span
+				style={{ fontWeight: 600, cursor: 'pointer' }}
+				onClick={() => {
+					window.location.href = '/carpools/' + carpool.id;
+				}}
+			>
+				{carpool.name}
+			</span>
+			<br />
+			<br />
+			{/* <div style={{ display: 'flex', alignItems: 'center' }}>
 					<CallMergeIcon style={{ marginRight: '1rem' }} />{' '}
 					<b>{carpool.extraDistance} miles</b>
-				</div>
-			</div>
+				</div> */}
+			{/* </div> */}
 			<EmojiPeopleIcon style={{ fontSize: '2em' }} />
 		</div>
 	);
@@ -53,22 +46,19 @@ function CarpoolRow({ carpool }: { carpool: ICarpool }) {
 
 const dummyCarpoolData: ICarpool[] = [
 	{
-		driver: {
+		id: 0,
+		name: 'carpoollo2398',
+		eventId: 0,
+		event: {
 			id: 0,
-			name: 'Michael Fatemi',
+			name: 'test event',
+			latitude: 0,
+			longitude: 0,
+			formattedAddress: 'your house',
+			placeId: 'secret',
 		},
-		startTime: '10:00',
-		endTime: '10:10',
-		extraDistance: 6.9,
-	},
-	{
-		driver: {
-			id: 1,
-			name: 'Joshua Hsueh',
-		},
-		startTime: '10:05',
-		endTime: '10:10',
-		extraDistance: 420,
+		members: [],
+		invitations: [],
 	},
 ];
 
@@ -85,7 +75,7 @@ export default function Carpools({ event }: { event: IEvent }) {
 				I'm not available
 			</UIButton>
 			{carpools.map((carpool) => (
-				<CarpoolRow carpool={carpool} key={carpool.driver.id} />
+				<CarpoolRow carpool={carpool} key={carpool.id} />
 			))}
 		</div>
 	);
