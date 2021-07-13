@@ -15,13 +15,14 @@ async function post(path: string, data: any) {
 	return await res.json();
 }
 
-async function delete$(path: string) {
+async function delete$(path: string, body?: any) {
 	const res = await fetch(base + path, {
 		method: 'delete',
 		headers: {
 			Authorization: 'Bearer ' + localStorage.getItem('session_token'),
 			'Content-Type': 'application/json',
 		},
+		body: body ? JSON.stringify(body) : undefined,
 	});
 	return await res.json();
 }
@@ -175,4 +176,12 @@ export async function createCarpool({
 	name: string;
 }) {
 	return await post('/carpools/', { eventId, name });
+}
+
+export async function sendCarpoolInvite(carpoolId: number, userId: number) {
+	return await post('/carpools/' + carpoolId + '/invite', { userId });
+}
+
+export async function cancelCarpoolInvite(carpoolId: number, userId: number) {
+	return await delete$('/carpools/' + carpoolId + '/invite', { userId });
 }

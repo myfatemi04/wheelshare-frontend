@@ -1,19 +1,20 @@
+import CancelIcon from '@material-ui/icons/Cancel';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useMemo } from 'react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getEventSignups } from '../api';
-import { ICarpool, IEventSignup } from '../types';
+import { useMe } from '../hooks';
+import { IEventSignup } from '../types';
+import { CarpoolContext } from './Carpool';
 
 function InvitationRow({
-	carpoolId,
-	userId,
-	userName,
+	user,
 	isInvited,
 }: {
-	carpoolId: number;
-	userId: number;
-	userName: string;
+	user: { id: number; name: string };
 	isInvited: boolean;
 }) {
+	const { sendInvite, cancelInvite } = useContext(CarpoolContext);
 	return (
 		<div
 			style={{
@@ -24,49 +25,65 @@ function InvitationRow({
 				padding: '0.25rem',
 			}}
 		>
-			<span>{userName}</span>
+			<span>{user.name}</span>
+			{isInvited ? (
+				<CancelIcon
+					onClick={() => cancelInvite(user)}
+					style={{ cursor: 'pointer' }}
+				/>
+			) : (
+				<PersonAddIcon
+					onClick={() => sendInvite(user)}
+					style={{ cursor: 'pointer' }}
+				/>
+			)}
 		</div>
 	);
 }
 
-export default function InvitationList({ carpool }: { carpool: ICarpool }) {
+export default function InvitationList() {
+	const { carpool } = useContext(CarpoolContext);
+	const me = useMe()!;
+
 	const eventId = carpool.event.id;
 
 	const [availableSignups, setAvailableSignups] =
 		useState<IEventSignup[] | null>(null);
 
 	useEffect(() => {
-		getEventSignups(eventId).then(setAvailableSignups);
-	}, [eventId]);
+		getEventSignups(eventId).then((signups) =>
+			setAvailableSignups(signups.filter((signup) => signup.user.id !== me.id))
+		);
+	}, [eventId, me.id]);
 
-	const existingSignups = useMemo(
+	const invitedUserIDs = useMemo(
 		() =>
 			new Set(
 				carpool.invitations
 					.filter((invitation) => !invitation.isRequest)
 					.map((invitation) => invitation.user.id)
 			),
-		[carpool]
+		[carpool.invitations]
 	);
 
 	const availableSignupsAlreadyInvited = useMemo(
 		() =>
 			availableSignups
 				? availableSignups.filter((signup) =>
-						existingSignups.has(signup.userId)
+						invitedUserIDs.has(signup.user.id)
 				  )
 				: null,
-		[availableSignups, existingSignups]
+		[availableSignups, invitedUserIDs]
 	);
 
 	const availableSignupsNotInvited = useMemo(
 		() =>
 			availableSignups
 				? availableSignups.filter(
-						(signup) => !existingSignups.has(signup.userId)
+						(signup) => !invitedUserIDs.has(signup.user.id)
 				  )
 				: null,
-		[availableSignups, existingSignups]
+		[availableSignups, invitedUserIDs]
 	);
 
 	return (
@@ -80,22 +97,18 @@ export default function InvitationList({ carpool }: { carpool: ICarpool }) {
 		>
 			<h1 style={{ marginBottom: '0.25rem' }}>Invite Somebody</h1>
 			{availableSignups === null && 'Loading'}
+			{availableSignupsAlreadyInvited?.map((signup) => (
+				<InvitationRow
+					key={signup.user.id}
+					user={signup.user}
+					isInvited={true}
+				/>
+			))}
 			{availableSignupsNotInvited?.map((signup) => (
 				<InvitationRow
 					key={signup.user.id}
-					userId={signup.user.id}
-					userName={signup.user.name}
-					carpoolId={carpool.id}
+					user={signup.user}
 					isInvited={false}
-				/>
-			))}
-			{availableSignupsAlreadyInvited?.map((signup) => (
-				<InvitationRow
-					key={signup.userId}
-					userId={signup.user.id}
-					userName={signup.user.name}
-					carpoolId={carpool.id}
-					isInvited
 				/>
 			))}
 		</div>

@@ -33,7 +33,13 @@ export type ICarpool = {
 		id: number;
 		name: string;
 	}[];
-	invitations: IInvitation[];
+	invitations: {
+		user: {
+			id: number;
+			name: string;
+		};
+		isRequest: boolean;
+	}[];
 };
 
 /**
@@ -81,7 +87,7 @@ export type IEvent = {
 
 export type IEventSignup = {
 	eventId: number;
-	userId: number;
+	// userId: number;
 	user: {
 		id: number;
 		name: string;
