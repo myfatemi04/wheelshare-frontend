@@ -1,10 +1,16 @@
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { ICarpool } from '../types';
+
 import UISecondaryBox from '../UI/UISecondaryBox';
+import UIButton from '../UI/UIButton';
+import { lightgrey } from '../colors';
 
 function MemberList({ members }: { members: ICarpool['members'] }) {
 	return (
@@ -46,9 +52,39 @@ export default function Carpool() {
 		<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
 			{carpool ? (
 				<>
-					<h1>{name}</h1>
-					<h2>{event.name}</h2>
-					<div style={{ fontSize: '1.5rem', fontWeight: 600 }}>
+					<h1 style={{ marginBottom: '0rem' }}>{name}</h1>
+					<h2 style={{ marginBottom: '0rem' }}>{event.name}</h2>
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							margin: '0.5rem 0',
+						}}
+					>
+						<UIButton
+							style={{
+								marginRight: '0.25rem',
+								backgroundColor: lightgrey,
+								display: 'flex',
+								alignItems: 'center',
+							}}
+							onClick={console.log}
+						>
+							<MailOutlineIcon style={{ marginRight: '0.5rem' }} /> 1 request
+						</UIButton>
+						<UIButton
+							style={{
+								marginLeft: '0.25rem',
+								backgroundColor: lightgrey,
+								display: 'flex',
+								alignItems: 'center',
+							}}
+							onClick={console.log}
+						>
+							<PersonAddIcon style={{ marginRight: '0.5rem' }} /> Invite
+						</UIButton>
+					</div>
+					<div style={{ fontSize: '1.5rem', fontWeight: 400 }}>
 						<div
 							style={{
 								color: '#303030',
