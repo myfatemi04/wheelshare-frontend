@@ -10,9 +10,11 @@ import { ICarpool } from '../types';
 
 import UISecondaryBox from '../UI/UISecondaryBox';
 import MemberList from './MemberList';
+import InvitationList from './InvitationList';
 import UIButton from '../UI/UIButton';
 import { lightgrey } from '../colors';
 import { getCarpool } from '../api';
+import useToggle from '../useToggle';
 
 export default function Carpool() {
 	const id = +useParams<{ id: string }>().id;
@@ -21,6 +23,8 @@ export default function Carpool() {
 	useEffect(() => {
 		getCarpool(id).then(setCarpool);
 	}, [id]);
+
+	const [invitationsOpen, toggleInvitationsOpen] = useToggle(false);
 
 	return (
 		<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
@@ -35,6 +39,7 @@ export default function Carpool() {
 							margin: '0.5rem 0',
 						}}
 					>
+						{/* Requests */}
 						<UIButton
 							style={{
 								marginRight: '0.25rem',
@@ -46,6 +51,7 @@ export default function Carpool() {
 						>
 							<MailOutlineIcon style={{ marginRight: '0.5rem' }} /> 1 request
 						</UIButton>
+						{/* Invitations */}
 						<UIButton
 							style={{
 								marginLeft: '0.25rem',
@@ -53,11 +59,12 @@ export default function Carpool() {
 								display: 'flex',
 								alignItems: 'center',
 							}}
-							onClick={console.log}
+							onClick={toggleInvitationsOpen}
 						>
 							<PersonAddIcon style={{ marginRight: '0.5rem' }} /> Invite
 						</UIButton>
 					</div>
+					{invitationsOpen && <InvitationList carpool={carpool} />}
 					<div style={{ fontSize: '1.5rem', fontWeight: 400 }}>
 						<div
 							style={{

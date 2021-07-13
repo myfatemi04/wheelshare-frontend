@@ -6,6 +6,7 @@ import {
 } from '../api';
 import { green, lightgrey } from '../colors';
 import { useMe } from '../hooks';
+import { IEventSignup } from '../types';
 import UIButton from '../UI/UIButton';
 import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
 import UISecondaryBox from '../UI/UISecondaryBox';
@@ -29,17 +30,6 @@ export type IEvent = {
 function GroupName({ name }: { name: string }) {
 	return <span style={{ color: '#303030', textAlign: 'center' }}>{name}</span>;
 }
-
-export type IEventSignup = {
-	user: {
-		id: number;
-		name: number;
-	};
-	placeId: string;
-	formattedAddress: string;
-	latitude: number;
-	longitude: number;
-};
 
 export default function Event({ event }: { event: IEvent }) {
 	const { name, group, formattedAddress, startTime, endTime } = event;

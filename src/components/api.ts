@@ -1,6 +1,5 @@
-import { IEventSignup } from './Event/Event';
 import { GroupPreview } from './GroupJoinerLink';
-import { IInvitation } from './types';
+import { IInvitation, IEventSignup } from './types';
 
 const base = process.env.REACT_APP_API_DOMAIN + 'api';
 
