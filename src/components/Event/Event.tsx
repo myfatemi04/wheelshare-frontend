@@ -8,6 +8,7 @@ import { green, lightgrey } from '../colors';
 import { useMe } from '../hooks';
 import { IEvent, IEventSignup } from '../types';
 import UIButton from '../UI/UIButton';
+import UILink from '../UI/UILink';
 import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import UISecondaryHeader from '../UI/UISecondaryHeader';
@@ -16,8 +17,8 @@ import EventCarpools from './EventCarpools';
 import EventDetails from './EventDetails';
 import EventSignups from './EventSignups';
 
-function GroupName({ name }: { name: string }) {
-	return <span style={{ color: '#303030', textAlign: 'center' }}>{name}</span>;
+function GroupName({ group }: { group: IEvent['group'] }) {
+	return <UILink href={`/groups/${group.id}`}>{group.name}</UILink>;
 }
 
 export default function Event({ event }: { event: IEvent }) {
@@ -96,8 +97,10 @@ export default function Event({ event }: { event: IEvent }) {
 
 	return (
 		<UISecondaryBox>
-			<UISecondaryHeader>{name}</UISecondaryHeader>
-			<GroupName name={group.name} />
+			<div style={{ textAlign: 'center' }}>
+				<UISecondaryHeader>{name}</UISecondaryHeader>
+				<GroupName group={group} />
+			</div>
 			<EventDetails {...{ startTime, endTime, formattedAddress }} />
 			<UIButton
 				onClick={toggleInterestedThrottled}
