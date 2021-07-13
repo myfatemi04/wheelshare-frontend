@@ -5,7 +5,8 @@ import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
 
 const Authenticator = lazy(() => import('./Authentication/Authenticator'));
-const Carpool = lazy(() => import('./Carpool/Carpool'));
+const CarpoolPage = lazy(() => import('./Carpool/CarpoolPage'));
+const EventPage = lazy(() => import('./Event/EventPage'));
 const Group = lazy(() => import('./Group'));
 
 const style: CSSProperties = {
@@ -36,7 +37,8 @@ export default function App() {
 								component={Authenticator}
 								path="/auth/:provider/callback"
 							/>
-							<Route path="/carpools/:id" component={Carpool} />
+							<Route path="/carpools/:id" component={CarpoolPage} />
+							<Route path="/events/:id" component={EventPage} />
 						</Suspense>
 					</Switch>
 				</BrowserRouter>

@@ -1,5 +1,5 @@
 import { GroupPreview } from './GroupJoinerLink';
-import { IInvitation, IEventSignup, ICarpool } from './types';
+import { IInvitation, IEventSignup, ICarpool, IEvent } from './types';
 
 const base = process.env.REACT_APP_API_DOMAIN + 'api';
 
@@ -86,8 +86,12 @@ export async function createEvent({
 	};
 }
 
-export async function getEvents() {
+export async function getEvents(): Promise<IEvent[]> {
 	return await get('/events');
+}
+
+export async function getEvent(id: number): Promise<IEvent> {
+	return await get('/events/' + id);
 }
 
 export async function getGroup(id: number) {
