@@ -15,9 +15,20 @@ export type IUser = {
 export type ICarpool = {
 	id: number;
 	name: string;
-	description: string;
 	eventId: number | null;
-	event?: IEvent;
+	event: {
+		id: number;
+		name: string;
+		formattedAddress: string;
+		latitude: number;
+		longitude: number;
+		placeId: string;
+	};
+	// driverId: number | null;
+	// driver: {
+	// 	id: number;
+	// 	name: string;
+	// };
 	members: {
 		id: number;
 		name: string;
