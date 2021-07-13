@@ -1,7 +1,13 @@
-import { IUser } from '../types';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-export default function MemberList({ members }: { members: IUser[] }) {
+export default function MemberList({
+	members,
+}: {
+	members: {
+		id: number;
+		name: string;
+	}[];
+}) {
 	return (
 		<div className="MemberList">
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
