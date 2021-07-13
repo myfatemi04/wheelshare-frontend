@@ -36,7 +36,7 @@ export default function Notification({
 			) : (
 				<span> invited you to join </span>
 			)}
-			{notification.carpool.name + sentTime.toLocaleString()}
+			{notification.carpool.name + ' at ' + sentTime.toLocaleString()}
 			{notification.isRequest ? (
 				<div className="notification-buttons" style={{ display: 'flex' }}>
 					<UIButton onClick={acceptReq}>Accept</UIButton>

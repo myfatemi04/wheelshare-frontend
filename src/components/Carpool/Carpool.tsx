@@ -1,10 +1,10 @@
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import { createContext } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cancelCarpoolInvite, getCarpool, sendCarpoolInvite } from '../api';
 import { lightgrey } from '../colors';
+import Header from '../Header/Header';
 import { ICarpool } from '../types';
 import UIButton from '../UI/UIButton';
 import UISecondaryBox from '../UI/UISecondaryBox';
@@ -84,6 +84,7 @@ export default function Carpool() {
 
 	return (
 		<CarpoolContext.Provider value={{ carpool, sendInvite, cancelInvite }}>
+			<Header />
 			<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
 				{carpool ? (
 					<>
