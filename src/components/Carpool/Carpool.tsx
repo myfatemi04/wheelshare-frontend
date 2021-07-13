@@ -9,21 +9,10 @@ import { useParams } from 'react-router-dom';
 import { ICarpool } from '../types';
 
 import UISecondaryBox from '../UI/UISecondaryBox';
+import MemberList from './MemberList';
 import UIButton from '../UI/UIButton';
 import { lightgrey } from '../colors';
 import { getCarpool } from '../api';
-
-function MemberList({ members }: { members: ICarpool['members'] }) {
-	return (
-		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			{members.length > 0
-				? members.map((member) => {
-						return <div key={member.id}>{member.name}</div>;
-				  })
-				: 'This carpool has no members.'}
-		</div>
-	);
-}
 
 export default function Carpool() {
 	const id = +useParams<{ id: string }>().id;
