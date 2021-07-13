@@ -1,11 +1,19 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties } from 'react';
 
-const style: CSSProperties = {
+const baseStyle: CSSProperties = {
 	fontSize: '3rem',
 	marginTop: '0.25em',
 	marginBottom: '0.25em',
 };
 
-export default function UIPrimaryTitle({ children }: { children: ReactNode }) {
-	return <h1 style={style}>{children}</h1>;
+export default function UIPrimaryTitle({
+	children,
+	style,
+	...props
+}: JSX.IntrinsicElements['h1']) {
+	return (
+		<h1 style={style ? { ...baseStyle, ...style } : baseStyle} {...props}>
+			{children}
+		</h1>
+	);
 }

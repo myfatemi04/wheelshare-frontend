@@ -9,6 +9,7 @@ import UIPrimaryTitle from '../UI/UIPrimaryTitle';
 export default function Header() {
 	const me = useMe();
 	const notifications = useNotifications();
+
 	return (
 		<div
 			style={{
@@ -18,7 +19,12 @@ export default function Header() {
 				alignItems: 'center',
 			}}
 		>
-			<UIPrimaryTitle>WheelShare</UIPrimaryTitle>
+			<UIPrimaryTitle
+				style={{ cursor: 'pointer' }}
+				onClick={() => (window.location.href = '/')}
+			>
+				WheelShare
+			</UIPrimaryTitle>
 			{me ? (
 				<>
 					{me.name}
