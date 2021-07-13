@@ -1,6 +1,8 @@
+import authorizationEndpoint from '../Authentication/authorizationEndpoint';
 import logout from '../Authentication/logout';
 import { useMe, useNotifications } from '../hooks';
 import Notifications from '../Notifications/Notifications';
+import UILink from '../UI/UILink';
 import UIPressable from '../UI/UIPressable';
 import UIPrimaryTitle from '../UI/UIPrimaryTitle';
 
@@ -29,7 +31,7 @@ export default function Header() {
 					)}
 				</>
 			) : (
-				<span>Log In</span>
+				<UILink href={authorizationEndpoint}>Log in</UILink>
 			)}
 		</div>
 	);
