@@ -189,3 +189,7 @@ export async function sendCarpoolInvite(carpoolId: number, userId: number) {
 export async function cancelCarpoolInvite(carpoolId: number, userId: number) {
 	return await delete$('/carpools/' + carpoolId + '/invite', { userId });
 }
+
+export async function leaveCarpool(carpoolId: number) {
+	return await post(`/carpools/${carpoolId}/leave`, {});
+}

@@ -1,7 +1,12 @@
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { cancelCarpoolInvite, getCarpool, sendCarpoolInvite } from '../api';
+import {
+	cancelCarpoolInvite,
+	getCarpool,
+	leaveCarpool,
+	sendCarpoolInvite,
+} from '../api';
 import { lightgrey } from '../colors';
 import { ICarpool } from '../types';
 import UIButton from '../UI/UIButton';
@@ -18,6 +23,9 @@ export const CarpoolContext = createContext({
 	},
 	cancelInvite: (user: { id: number; name: string }) => {
 		console.error('not implemented: cancelInvite');
+	},
+	leave: () => {
+		console.error('not implemented: leave');
 	},
 });
 
@@ -75,12 +83,31 @@ export default function Carpool({ id }: { id: number }) {
 		[id]
 	);
 
+	const eventId = carpool?.eventId;
+
+	const leave = useCallback(() => {
+		if (eventId) {
+			leaveCarpool(id)
+				.then(() => {
+					window.location.href = '/events/' + eventId;
+				})
+				.catch(console.error);
+		}
+	}, [eventId, id]);
+
 	if (!carpool) {
 		return <>Loading...</>;
 	}
 
 	return (
-		<CarpoolContext.Provider value={{ carpool, sendInvite, cancelInvite }}>
+		<CarpoolContext.Provider
+			value={{
+				carpool,
+				sendInvite,
+				cancelInvite,
+				leave,
+			}}
+		>
 			<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
 				{carpool ? (
 					<>
