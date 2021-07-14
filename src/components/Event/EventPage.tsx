@@ -16,7 +16,7 @@ export default function EventPage() {
 	return (
 		<>
 			<Header />
-			{event ? <Event event={event} /> : <span>Loading...</span>}
+			{event ? <Event id={id} /> : <span>Loading...</span>}
 		</>
 	);
 }

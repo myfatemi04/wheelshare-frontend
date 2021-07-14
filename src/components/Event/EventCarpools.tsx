@@ -1,15 +1,41 @@
-// import CallMergeIcon from '@material-ui/icons/CallMerge';
+import CancelIcon from '@material-ui/icons/Cancel';
+import CheckIcon from '@material-ui/icons/Check';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { createCarpool } from '../api';
 import { lightgrey } from '../../lib/colors';
 import { useMe } from '../hooks';
 import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';
 import UILink from '../UI/UILink';
+import EventContext from './EventContext';
+import {
+	useCancelCarpoolRequest,
+	useInvitationState,
+	useSendCarpoolRequest,
+} from '../../state/Notifications/NotificationsHooks';
 
-function CarpoolRow({ carpool }: { carpool: IEvent['carpools'][0] }) {
+function CarpoolRow({
+	carpool,
+	inCarpoolAlready,
+}: {
+	carpool: IEvent['carpools'][0];
+	inCarpoolAlready: boolean;
+}) {
 	const PADDING = '1rem';
+	const inviteState = useInvitationState(carpool.id);
+
+	const cancelCarpoolRequest = useCancelCarpoolRequest();
+	const sendCarpoolRequest = useSendCarpoolRequest();
+
+	const sendButton = useCallback(() => {
+		sendCarpoolRequest(carpool.id);
+	}, [sendCarpoolRequest, carpool.id]);
+
+	const cancelButton = useCallback(() => {
+		cancelCarpoolRequest(carpool.id);
+	}, [cancelCarpoolRequest, carpool.id]);
+
 	return (
 		<div
 			style={{
@@ -40,14 +66,32 @@ function CarpoolRow({ carpool }: { carpool: IEvent['carpools'][0] }) {
 					<b>{carpool.extraDistance} miles</b>
 				</div> */}
 			{/* </div> */}
-			<EmojiPeopleIcon style={{ fontSize: '2em' }} />
+			{!inCarpoolAlready && (
+				<>
+					{inviteState === 'none' ? (
+						<EmojiPeopleIcon
+							style={{ fontSize: '2em', cursor: 'pointer' }}
+							onClick={sendButton}
+						/>
+					) : inviteState === 'requested' ? (
+						<CancelIcon
+							style={{ fontSize: '2em', cursor: 'pointer' }}
+							onClick={cancelButton}
+						/>
+					) : (
+						// inviteState === 'invited
+						<CheckIcon style={{ fontSize: '2em', cursor: 'pointer' }} />
+					)}
+				</>
+			)}
 		</div>
 	);
 }
 
 type CreationStatus = null | 'pending' | 'completed' | 'errored';
 
-export default function Carpools({ event }: { event: IEvent }) {
+export default function Carpools() {
+	const { event } = useContext(EventContext);
 	const [creationStatus, setCreationStatus] = useState<CreationStatus>(null);
 	const [createdCarpoolId, setCreatedCarpoolId] = useState<null | number>(null);
 
@@ -59,7 +103,8 @@ export default function Carpools({ event }: { event: IEvent }) {
 			),
 		[event.carpools, me.id]
 	);
-	const alreadyInCarpool = myCarpool !== undefined;
+	const alreadyInCarpool =
+		myCarpool !== undefined || creationStatus === 'completed';
 
 	const createEmptyCarpool = useCallback(() => {
 		setCreationStatus('pending');
@@ -107,7 +152,11 @@ export default function Carpools({ event }: { event: IEvent }) {
 				</>
 			)}
 			{event.carpools.map((carpool) => (
-				<CarpoolRow carpool={carpool} key={carpool.id} />
+				<CarpoolRow
+					carpool={carpool}
+					key={carpool.id}
+					inCarpoolAlready={alreadyInCarpool}
+				/>
 			))}
 		</div>
 	);

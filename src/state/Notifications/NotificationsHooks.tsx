@@ -2,6 +2,14 @@ import { useMemo } from 'react';
 import { useContext } from 'react';
 import { NotificationsContext } from './NotificationsProvider';
 
+export function useSendCarpoolRequest() {
+	return useContext(NotificationsContext).sendCarpoolRequest;
+}
+
+export function useCancelCarpoolRequest() {
+	return useContext(NotificationsContext).cancelCarpoolRequest;
+}
+
 export function useInvitationState(
 	carpoolId: number
 ): 'invited' | 'requested' | 'none' {
