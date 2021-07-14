@@ -1,3 +1,4 @@
+import * as immutable from 'immutable';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import {
@@ -35,6 +36,7 @@ export default function Event({
 	const [interested, setInterested] = useState(false);
 	const [updating, setUpdating] = useState(false);
 	const [signups, setSignups] = useState<IEventSignup[] | null>(null);
+	const [hasCarpool, setHasCarpool] = useState(false);
 	const toggleInterested = useCallback(() => setInterested((i) => !i), []);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
 	const existingSignup = useRef({
@@ -43,6 +45,18 @@ export default function Event({
 		eventId: null as number | null,
 	});
 	const me = useMe();
+
+	const [tentativeInvites, setTentativeInvites] = useState(
+		immutable.Set<number>()
+	);
+
+	const addTentativeInvite = useCallback((userId: number) => {
+		setTentativeInvites((t) => t.add(userId));
+	}, []);
+
+	const removeTentativeInvite = useCallback((userId: number) => {
+		setTentativeInvites((t) => t.delete(userId));
+	}, []);
 
 	const refresh = useCallback(() => {
 		getEvent(id).then(setEvent);
@@ -116,7 +130,19 @@ export default function Event({
 	const { name, group, formattedAddress, startTime, endTime } = event;
 
 	return (
-		<EventContext.Provider value={{ event, refresh, default: false }}>
+		<EventContext.Provider
+			value={{
+				event,
+				refresh,
+				default: false,
+				addTentativeInvite,
+				removeTentativeInvite,
+				tentativeInvites,
+				signups,
+				hasCarpool,
+				setHasCarpool,
+			}}
+		>
 			<UISecondaryBox>
 				<div style={{ textAlign: 'center' }}>
 					<UISecondaryHeader>{name}</UISecondaryHeader>
@@ -146,11 +172,7 @@ export default function Event({
 						<br />
 						<EventCarpools />
 						{signups !== null && (
-							<EventSignups
-								event={event}
-								myPlaceId={placeId}
-								signups={signups}
-							/>
+							<EventSignups myPlaceId={placeId} signups={signups} />
 						)}
 					</>
 				)}

@@ -1,6 +1,7 @@
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import { useEffect } from 'react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { lightgrey } from '../../lib/colors';
 import {
@@ -91,7 +92,8 @@ function CarpoolRow({
 type CreationStatus = null | 'pending' | 'completed' | 'errored';
 
 export default function Carpools() {
-	const { event } = useContext(EventContext);
+	const { event, tentativeInvites, signups, setHasCarpool } =
+		useContext(EventContext);
 	const [creationStatus, setCreationStatus] = useState<CreationStatus>(null);
 	const [createdCarpoolId, setCreatedCarpoolId] = useState<null | number>(null);
 
@@ -106,6 +108,10 @@ export default function Carpools() {
 	const alreadyInCarpool =
 		myCarpool !== undefined || creationStatus === 'completed';
 
+	useEffect(() => {
+		setHasCarpool(alreadyInCarpool);
+	}, [alreadyInCarpool, setHasCarpool]);
+
 	const createEmptyCarpool = useCallback(() => {
 		setCreationStatus('pending');
 
@@ -118,6 +124,55 @@ export default function Carpools() {
 				setCreationStatus('errored');
 			});
 	}, [event.id, me.name]);
+
+	const tentativeInviteNames = useMemo(() => {
+		if (!signups) return [];
+		const names = tentativeInvites.map((id) => {
+			const signup = signups.find((s) => s.user.id === id);
+			return signup?.user.name;
+		});
+		const nonNull = names.filter((n) => n != null);
+		return nonNull.toArray() as string[];
+	}, [tentativeInvites, signups]);
+
+	let createCarpoolSection;
+
+	if (tentativeInviteNames.length > 0) {
+		const inviteeCount = tentativeInviteNames.length;
+		const peoplePlural = inviteeCount > 1 ? 'People' : 'Person';
+		createCarpoolSection = (
+			<>
+				<br />
+				<b>You have invited these people to carpool with you:</b>
+				{tentativeInviteNames.join(',')}
+				<UIButton
+					onClick={createEmptyCarpool}
+					style={{ backgroundColor: lightgrey }}
+				>
+					{creationStatus === null
+						? `Create Carpool With ${inviteeCount} ${peoplePlural}`
+						: creationStatus === 'pending'
+						? 'Creating...'
+						: 'Errored'}
+				</UIButton>
+			</>
+		);
+	} else
+		createCarpoolSection = (
+			<>
+				<span>Available to drive?</span>
+				<UIButton
+					onClick={createEmptyCarpool}
+					style={{ backgroundColor: lightgrey }}
+				>
+					{creationStatus === null
+						? 'Create Empty Carpool'
+						: creationStatus === 'pending'
+						? 'Creating...'
+						: 'Errored'}
+				</UIButton>
+			</>
+		);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -133,19 +188,7 @@ export default function Carpools() {
 					<UILink href={`/carpools/${myCarpool.id}`}>{myCarpool.name}</UILink>
 				</span>
 			) : (
-				<>
-					<span>Available to drive?</span>
-					<UIButton
-						onClick={createEmptyCarpool}
-						style={{ backgroundColor: lightgrey }}
-					>
-						{creationStatus === null
-							? 'Create Empty Carpool'
-							: creationStatus === 'pending'
-							? 'Creating...'
-							: 'Errored'}
-					</UIButton>
-				</>
+				createCarpoolSection
 			)}
 			{event.carpools.map((carpool) => (
 				<CarpoolRow
