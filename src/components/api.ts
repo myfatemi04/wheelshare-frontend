@@ -175,11 +175,13 @@ export async function getCarpool(id: number): Promise<ICarpool> {
 export async function createCarpool({
 	eventId,
 	name,
+	invitedUserIds,
 }: {
 	eventId: number;
 	name: string;
+	invitedUserIds: number[];
 }): Promise<{ id: number }> {
-	return await post('/carpools/', { eventId, name });
+	return await post('/carpools/', { eventId, name, invitedUserIds });
 }
 
 export async function sendCarpoolInvite(carpoolId: number, userId: number) {

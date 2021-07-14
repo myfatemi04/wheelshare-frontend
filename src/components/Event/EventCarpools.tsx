@@ -112,10 +112,14 @@ export default function Carpools() {
 		setHasCarpool(alreadyInCarpool);
 	}, [alreadyInCarpool, setHasCarpool]);
 
-	const createEmptyCarpool = useCallback(() => {
+	const createCarpoolCallback = useCallback(() => {
 		setCreationStatus('pending');
 
-		createCarpool({ name: me.name + "'s Carpool", eventId: event.id })
+		createCarpool({
+			name: me.name + "'s Carpool",
+			eventId: event.id,
+			invitedUserIds: tentativeInvites.toArray(),
+		})
 			.then(({ id }) => {
 				setCreatedCarpoolId(id);
 				setCreationStatus('completed');
@@ -123,7 +127,7 @@ export default function Carpools() {
 			.catch(() => {
 				setCreationStatus('errored');
 			});
-	}, [event.id, me.name]);
+	}, [event.id, me.name, tentativeInvites]);
 
 	const tentativeInviteNames = useMemo(() => {
 		if (!signups) return [];
@@ -146,7 +150,7 @@ export default function Carpools() {
 				<b>You have invited these people to carpool with you:</b>
 				{tentativeInviteNames.join(',')}
 				<UIButton
-					onClick={createEmptyCarpool}
+					onClick={createCarpoolCallback}
 					style={{ backgroundColor: lightgrey }}
 				>
 					{creationStatus === null
@@ -162,7 +166,7 @@ export default function Carpools() {
 			<>
 				<span>Available to drive?</span>
 				<UIButton
-					onClick={createEmptyCarpool}
+					onClick={createCarpoolCallback}
 					style={{ backgroundColor: lightgrey }}
 				>
 					{creationStatus === null
