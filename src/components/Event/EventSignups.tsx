@@ -28,7 +28,7 @@ function EventSignup({
 		hasCarpool,
 	} = useContext(EventContext);
 
-	let extraDistance = useMemo(() => {
+	const extraDistance = useMemo(() => {
 		if (myPlaceDetails != null && !(latitude === null || longitude === null)) {
 			const myLatitude = myPlaceDetails.latitude;
 			const myLongitude = myPlaceDetails.longitude;
@@ -90,8 +90,10 @@ function EventSignup({
 			}}
 			key={user.id}
 		>
-			<b>{user.name}</b>
-			{extraDistance ? `: +${extraDistance.toFixed(1)} miles` : ''}
+			<span>
+				<b>{user.name}</b>
+				{extraDistance ? ` +${extraDistance.toFixed(1)} miles` : ''}
+			</span>
 
 			{!hasCarpool &&
 				(isTentativelyInvited ? (

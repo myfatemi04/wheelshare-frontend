@@ -1,10 +1,9 @@
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-import { useEffect } from 'react';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { lightgrey } from '../../lib/colors';
-import furthestPoint from '../../lib/furthestpoint';
+import { Location } from '../../lib/estimateoptimalpath';
 import {
 	useCancelCarpoolRequest,
 	useInvitationState,
@@ -15,9 +14,33 @@ import { useMe } from '../hooks';
 import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';
 import UILink from '../UI/UILink';
-import EventContext from './EventContext';
-import estimateOptimalPath, { Location } from '../../lib/estimateoptimalpath';
+import useOptimalPath from '../useOptimalPath';
 import usePlace from '../usePlace';
+import EventContext from './EventContext';
+
+function useMemberLocations(members: IEvent['carpools'][0]['members']) {
+	const { signups } = useContext(EventContext);
+
+	return useMemo(
+		() =>
+			members
+				.map((member) => {
+					const signup = signups[member.id];
+					if (!signup) {
+						return null;
+					}
+					if (signup.latitude === null) {
+						return null;
+					}
+					return {
+						latitude: signup.latitude,
+						longitude: signup.longitude,
+					};
+				})
+				.filter(Boolean) as Location[],
+		[members, signups]
+	);
+}
 
 function CarpoolRow({
 	carpool,
@@ -31,8 +54,6 @@ function CarpoolRow({
 
 	const cancelCarpoolRequest = useCancelCarpoolRequest();
 	const sendCarpoolRequest = useSendCarpoolRequest();
-
-	const { signups } = useContext(EventContext);
 
 	const sendButton = useCallback(() => {
 		sendCarpoolRequest(carpool.id);
@@ -49,53 +70,25 @@ function CarpoolRow({
 
 	const myLocation = usePlace(myPlaceId);
 
-	const extraDistance = useMemo(() => {
-		if (!myLocation) {
-			console.log('!myLocation');
-			return null;
-		}
+	const memberLocations = useMemberLocations(carpool.members);
 
-		// Calculates the minimum distance if I'm in the carpool
-		// and subtracts the distance if I'm not in the carpool
+	const pathInCarpool = useOptimalPath(memberLocations, {
+		latitude,
+		longitude,
+	});
 
-		const memberLocations = carpool.members
-			.map((member) => {
-				const signup = signups[member.id];
-				if (!signup) {
-					return null;
-				}
-				return {
-					latitude: signup.latitude,
-					longitude: signup.longitude,
-				};
-			})
-			.filter(Boolean) as Location[];
-
-		const { maxLocation: driverLocation } = furthestPoint(memberLocations, {
+	const pathNotInCarpool = useOptimalPath(
+		myLocation ? [...memberLocations, myLocation] : [],
+		{
 			latitude,
 			longitude,
-		});
+		}
+	);
 
-		const passengerLocations = memberLocations.filter(
-			(location) => location !== driverLocation
-		);
-
-		const { distance: distanceInCarpool } = estimateOptimalPath({
-			from: driverLocation,
-			waypoints: [...passengerLocations, myLocation],
-			to: { latitude, longitude },
-		});
-
-		const { distance: distanceNotInCarpool } = estimateOptimalPath({
-			from: driverLocation,
-			waypoints: passengerLocations,
-			to: { latitude, longitude },
-		});
-
-		return distanceInCarpool - distanceNotInCarpool;
-	}, [carpool.members, latitude, longitude, myLocation, signups]);
-
-	console.log(carpool.id, extraDistance);
+	const extraDistance =
+		myLocation && pathInCarpool && pathNotInCarpool
+			? pathInCarpool.distance - pathNotInCarpool.distance
+			: null;
 
 	return (
 		<div
@@ -113,20 +106,16 @@ function CarpoolRow({
 		>
 			{/* <div> */}
 			<span
-				style={{ fontWeight: 600, cursor: 'pointer' }}
+				style={{ cursor: 'pointer' }}
 				onClick={() => {
 					window.location.href = '/carpools/' + carpool.id;
 				}}
 			>
-				{carpool.name} {extraDistance !== null && '+ ' + extraDistance}
+				<b>{carpool.name}</b>
+				{extraDistance !== null && ' +' + extraDistance.toFixed(1) + ' miles'}
 			</span>
 			<br />
 			<br />
-			{/* <div style={{ display: 'flex', alignItems: 'center' }}>
-					<CallMergeIcon style={{ marginRight: '1rem' }} />{' '}
-					<b>{carpool.extraDistance} miles</b>
-				</div> */}
-			{/* </div> */}
 			{!inCarpoolAlready && (
 				<>
 					{inviteState === 'none' ? (

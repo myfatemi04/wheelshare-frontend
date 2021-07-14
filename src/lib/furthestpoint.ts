@@ -6,7 +6,7 @@ export default function furthestPoint(
 	destination: Location
 ) {
 	let maxDistance = 0;
-	let maxLocation = { latitude: 0, longitude: 0 };
+	let maxLocation = null;
 	for (let i = 0; i < locations.length; i++) {
 		let distance = getDistance(locations[i], destination);
 

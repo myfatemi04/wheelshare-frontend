@@ -1,5 +1,5 @@
 import { Location } from './estimateoptimalpath';
-import latlongdist from './latlongdist';
+import latlongdist, { R_miles } from './latlongdist';
 
 export default function getDistance(...locations: Location[]): number {
 	let distance = 0;
@@ -10,7 +10,8 @@ export default function getDistance(...locations: Location[]): number {
 			from.latitude,
 			from.longitude,
 			to.latitude,
-			to.longitude
+			to.longitude,
+			R_miles
 		);
 	}
 	return distance;
