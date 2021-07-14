@@ -5,14 +5,8 @@ import { getGroup, getGroupEvents } from './api';
 import EventCreatorLink from './EventCreator/EventCreatorLink';
 import EventStream from './EventStream';
 import GroupSettingsLink from './GroupSettings/GroupSettingsLink';
-import { IEvent } from './types';
+import { IEvent, IGroup } from './types';
 import UILink from './UI/UILink';
-
-export type IGroup = {
-	id: number;
-	events: IEvent[];
-	name: string;
-};
 
 export default function Group() {
 	const { id } = useParams<{ id: string }>();

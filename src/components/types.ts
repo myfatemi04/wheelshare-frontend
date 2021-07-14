@@ -49,6 +49,7 @@ export type ICarpool = {
 export type IGroup = {
 	id: number;
 	name: string;
+	events: IEvent[];
 };
 
 /**

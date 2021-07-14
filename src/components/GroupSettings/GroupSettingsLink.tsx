@@ -1,4 +1,4 @@
-import { IGroup } from '../Group';
+import { IGroup } from '../types';
 import useToggle from '../useToggle';
 import GroupSettings from './GroupSettings';
 

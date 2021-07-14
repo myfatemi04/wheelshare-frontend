@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getGroups } from '../api';
-import { IGroup } from '../Group';
+import { IGroup } from '../types';
 import GroupCreatorLink from '../GroupCreator/GroupCreatorLink';
 import GroupJoinerLink from '../GroupJoinerLink';
 import GroupList from './GroupList';

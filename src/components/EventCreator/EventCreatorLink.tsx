@@ -1,5 +1,5 @@
 import EventCreator from './EventCreator';
-import { IGroup } from '../Group';
+import { IGroup } from '../types';
 import useToggle from '../useToggle';
 
 export default function EventCreatorLink({ group }: { group: IGroup }) {

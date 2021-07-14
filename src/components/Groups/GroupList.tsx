@@ -1,4 +1,4 @@
-import { IGroup } from '../Group';
+import { IGroup } from '../types';
 import UISecondaryBox from '../UI/UISecondaryBox';
 
 function GroupListItem({ group }: { group: IGroup }) {

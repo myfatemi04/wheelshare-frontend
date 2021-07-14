@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
-import { createEvent } from '../api';
 import { green, lightgrey } from '../../lib/colors';
-import { IGroup } from '../Group';
+import { createEvent } from '../api';
+import { IGroup } from '../types';
 import UIButton from '../UI/UIButton';
 import UIDateInput from '../UI/UIDateInput';
 import UIDatetimeInput from '../UI/UIDatetimeInput';
