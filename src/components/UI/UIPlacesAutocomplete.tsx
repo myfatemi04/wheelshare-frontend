@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { CSSProperties, useRef, useState } from 'react';
 import PlacesAutocomplete, { Suggestion } from 'react-places-autocomplete';
-import getPlaceDetails from '../getPlaceDetails';
+import getPlaceDetails from '../../lib/getPlaceDetails';
 
 type Opts = Parameters<PlacesAutocomplete['props']['children']>['0'];
 

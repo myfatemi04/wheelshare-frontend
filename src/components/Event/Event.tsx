@@ -4,7 +4,7 @@ import {
 	getEventSignups,
 	removeEventSignup,
 } from '../api';
-import { green, lightgrey } from '../colors';
+import { green, lightgrey } from '../../lib/colors';
 import { useMe } from '../hooks';
 import { IEvent, IEventSignup } from '../types';
 import UIButton from '../UI/UIButton';

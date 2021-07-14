@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
-import { toggleBit } from '../bits';
-import { green, lightgrey } from '../colors';
+import { toggleBit } from '../../lib/bits';
+import { green, lightgrey } from '../../lib/colors';
 
 const DAY_NAMES = [
 	'Sunday',

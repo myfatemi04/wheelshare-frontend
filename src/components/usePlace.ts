@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import getPlaceDetails, { PlaceDetails } from './getPlaceDetails';
+import getPlaceDetails, { PlaceDetails } from '../lib/getPlaceDetails';
 import useThrottle from './useThrottle';
 
 export default function usePlace(placeId: string | null) {

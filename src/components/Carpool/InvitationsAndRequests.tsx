@@ -1,4 +1,4 @@
-import { lightgrey } from '../colors';
+import { lightgrey } from '../../lib/colors';
 import UIButton from '../UI/UIButton';
 import InvitationList from './InvitationList';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';

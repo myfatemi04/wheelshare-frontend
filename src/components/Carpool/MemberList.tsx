@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useContext } from 'react';
 import { useInvitationState } from '../../state/Notifications/NotificationsHooks';
 import { NotificationsContext } from '../../state/Notifications/NotificationsProvider';
-import { lightgrey } from '../colors';
+import { lightgrey } from '../../lib/colors';
 import { useMe } from '../hooks';
 import UIButton from '../UI/UIButton';
 import { CarpoolContext } from './Carpool';

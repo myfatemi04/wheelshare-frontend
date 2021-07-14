@@ -1,6 +1,6 @@
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useMe } from '../hooks';
-import latlongdist, { R_miles } from '../latlongdist';
+import latlongdist, { R_miles } from '../../lib/latlongdist';
 import { IEventSignup, IEvent } from '../types';
 import usePlace from '../usePlace';
 

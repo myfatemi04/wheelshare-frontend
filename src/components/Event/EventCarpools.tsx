@@ -2,7 +2,7 @@
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import { useCallback, useMemo, useState } from 'react';
 import { createCarpool } from '../api';
-import { lightgrey } from '../colors';
+import { lightgrey } from '../../lib/colors';
 import { useMe } from '../hooks';
 import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';

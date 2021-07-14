@@ -1,4 +1,4 @@
-import formatStartAndEndTime from '../dates';
+import formatStartAndEndTime from '../../lib/dates';
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
