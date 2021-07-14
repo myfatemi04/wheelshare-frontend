@@ -1,4 +1,4 @@
-import latlongdist from './latlongdist';
+import getDistance from './getdistance';
 
 export type Location = {
 	latitude: number;
@@ -10,21 +10,6 @@ export type Path = {
 	to: Location;
 	waypoints: Location[];
 };
-
-function getDistance(...locations: Location[]): number {
-	let distance = 0;
-	for (let i = 0; i < locations.length - 1; i++) {
-		const from = locations[i];
-		const to = locations[i + 1];
-		distance += latlongdist(
-			from.latitude,
-			from.longitude,
-			to.latitude,
-			to.longitude
-		);
-	}
-	return distance;
-}
 
 export default function estimateOptimalPath(path: Path): {
 	path: Path;

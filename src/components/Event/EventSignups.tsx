@@ -110,13 +110,11 @@ function EventSignup({
 }
 
 export default function EventSignups({
-	signups,
 	myPlaceId,
 }: {
-	signups: IEventSignup[];
 	myPlaceId: string | null;
 }) {
-	const { event } = useContext(EventContext);
+	const { event, signups } = useContext(EventContext);
 	const carpools = event.carpools;
 	const myPlaceDetails = usePlace(myPlaceId);
 
@@ -125,7 +123,9 @@ export default function EventSignups({
 		const members = carpools.map((c) => c.members);
 		const allMembers = members.reduce((a, b) => a.concat(b), []);
 		const allMembersIds = allMembers.map((m) => m.id);
-		return signups.filter((s) => !allMembersIds.includes(s.user.id));
+		return Object.keys(signups)
+			.filter((id) => !allMembersIds.includes(+id))
+			.map((id) => signups[id]);
 	}, [signups, carpools]);
 
 	return (

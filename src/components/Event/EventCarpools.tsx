@@ -4,6 +4,7 @@ import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import { useEffect } from 'react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { lightgrey } from '../../lib/colors';
+import furthestPoint from '../../lib/furthestpoint';
 import {
 	useCancelCarpoolRequest,
 	useInvitationState,
@@ -15,6 +16,8 @@ import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';
 import UILink from '../UI/UILink';
 import EventContext from './EventContext';
+import estimateOptimalPath, { Location } from '../../lib/estimateoptimalpath';
+import usePlace from '../usePlace';
 
 function CarpoolRow({
 	carpool,
@@ -29,6 +32,8 @@ function CarpoolRow({
 	const cancelCarpoolRequest = useCancelCarpoolRequest();
 	const sendCarpoolRequest = useSendCarpoolRequest();
 
+	const { signups } = useContext(EventContext);
+
 	const sendButton = useCallback(() => {
 		sendCarpoolRequest(carpool.id);
 	}, [sendCarpoolRequest, carpool.id]);
@@ -36,6 +41,61 @@ function CarpoolRow({
 	const cancelButton = useCallback(() => {
 		cancelCarpoolRequest(carpool.id);
 	}, [cancelCarpoolRequest, carpool.id]);
+
+	const {
+		event: { latitude, longitude },
+		myPlaceId,
+	} = useContext(EventContext);
+
+	const myLocation = usePlace(myPlaceId);
+
+	const extraDistance = useMemo(() => {
+		if (!myLocation) {
+			console.log('!myLocation');
+			return null;
+		}
+
+		// Calculates the minimum distance if I'm in the carpool
+		// and subtracts the distance if I'm not in the carpool
+
+		const memberLocations = carpool.members
+			.map((member) => {
+				const signup = signups[member.id];
+				if (!signup) {
+					return null;
+				}
+				return {
+					latitude: signup.latitude,
+					longitude: signup.longitude,
+				};
+			})
+			.filter(Boolean) as Location[];
+
+		const { maxLocation: driverLocation } = furthestPoint(memberLocations, {
+			latitude,
+			longitude,
+		});
+
+		const passengerLocations = memberLocations.filter(
+			(location) => location !== driverLocation
+		);
+
+		const { distance: distanceInCarpool } = estimateOptimalPath({
+			from: driverLocation,
+			waypoints: [...passengerLocations, myLocation],
+			to: { latitude, longitude },
+		});
+
+		const { distance: distanceNotInCarpool } = estimateOptimalPath({
+			from: driverLocation,
+			waypoints: passengerLocations,
+			to: { latitude, longitude },
+		});
+
+		return distanceInCarpool - distanceNotInCarpool;
+	}, [carpool.members, latitude, longitude, myLocation, signups]);
+
+	console.log(carpool.id, extraDistance);
 
 	return (
 		<div
@@ -58,7 +118,7 @@ function CarpoolRow({
 					window.location.href = '/carpools/' + carpool.id;
 				}}
 			>
-				{carpool.name}
+				{carpool.name} {extraDistance !== null && '+ ' + extraDistance}
 			</span>
 			<br />
 			<br />
@@ -132,7 +192,7 @@ export default function Carpools() {
 	const tentativeInviteNames = useMemo(() => {
 		if (!signups) return [];
 		const names = tentativeInvites.map((id) => {
-			const signup = signups.find((s) => s.user.id === id);
+			const signup = signups[id];
 			return signup?.user.name;
 		});
 		const nonNull = names.filter((n) => n != null);

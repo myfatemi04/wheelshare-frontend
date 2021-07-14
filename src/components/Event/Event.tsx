@@ -24,6 +24,8 @@ function GroupName({ group }: { group: IEvent['group'] }) {
 	return <UILink href={`/groups/${group.id}`}>{group.name}</UILink>;
 }
 
+const NOT_LOADED = {};
+
 export default function Event({
 	id,
 	initial,
@@ -32,10 +34,11 @@ export default function Event({
 	initial?: IEvent;
 }) {
 	const [event, setEvent] = useState<IEvent | null>(initial || null);
-	const [placeId, setPlaceId] = useState<string | null>(null);
+	const [myPlaceId, setPlaceId] = useState<string | null>(null);
 	const [interested, setInterested] = useState(false);
 	const [updating, setUpdating] = useState(false);
-	const [signups, setSignups] = useState<IEventSignup[] | null>(null);
+	const [signups, setSignups] =
+		useState<Record<string, IEventSignup>>(NOT_LOADED);
 	const [hasCarpool, setHasCarpool] = useState(false);
 	const toggleInterested = useCallback(() => setInterested((i) => !i), []);
 	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
@@ -65,7 +68,7 @@ export default function Event({
 	useEffect(refresh, [refresh]);
 
 	useEffect(() => {
-		if (signups === null) {
+		if (signups === NOT_LOADED) {
 			return;
 		}
 
@@ -80,16 +83,16 @@ export default function Event({
 		};
 
 		const addOrUpdateSignup = () => {
-			if (!prev.interested || prev.placeId !== placeId) {
+			if (!prev.interested || prev.placeId !== myPlaceId) {
 				console.log('Adding or updating signup.', prev, {
 					interested,
-					placeId,
+					placeId: myPlaceId,
 					eventId: id,
 					signups,
 				});
-				addOrUpdateEventSignup(id, placeId)
+				addOrUpdateEventSignup(id, myPlaceId)
 					.then(() => {
-						prev.placeId = placeId;
+						prev.placeId = myPlaceId;
 						prev.eventId = id;
 						prev.interested = true;
 					})
@@ -104,7 +107,7 @@ export default function Event({
 		} else {
 			addOrUpdateSignup();
 		}
-	}, [id, interested, placeId, signups, updating]);
+	}, [id, interested, myPlaceId, signups, updating]);
 
 	useEffect(() => {
 		getEventSignups(id)
@@ -118,7 +121,11 @@ export default function Event({
 						existingSignup.current.interested = true;
 					}
 				}
-				setSignups(signups);
+				const signupMap: Record<string, IEventSignup> = {};
+				for (let signup of signups) {
+					signupMap[signup.user.id] = signup;
+				}
+				setSignups(signupMap);
 			})
 			.catch(console.error);
 	}, [id, me?.id]);
@@ -141,6 +148,7 @@ export default function Event({
 				signups,
 				hasCarpool,
 				setHasCarpool,
+				myPlaceId,
 			}}
 		>
 			<UISecondaryBox>
@@ -166,14 +174,12 @@ export default function Event({
 							onSelected={(_address, placeID) => {
 								setPlaceId(placeID);
 							}}
-							style={placeId != null ? { border: '2px solid ' + green } : {}}
-							placeId={placeId}
+							style={myPlaceId != null ? { border: '2px solid ' + green } : {}}
+							placeId={myPlaceId}
 						/>
 						<br />
 						<EventCarpools />
-						{signups !== null && (
-							<EventSignups myPlaceId={placeId} signups={signups} />
-						)}
+						{signups !== null && <EventSignups myPlaceId={myPlaceId} />}
 					</>
 				)}
 			</UISecondaryBox>

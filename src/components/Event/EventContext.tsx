@@ -8,7 +8,7 @@ const EventContext = createContext({
 	},
 	event: null! as IEvent,
 	default: true,
-	signups: null as IEventSignup[] | null,
+	signups: {} as Record<string, IEventSignup>,
 	addTentativeInvite: (id: number) => {
 		console.error('not implemented: addTentativeInvite');
 	},
@@ -20,6 +20,7 @@ const EventContext = createContext({
 	setHasCarpool: (has: boolean) => {
 		console.error('not implemented: setHasCarpool');
 	},
+	myPlaceId: null as string | null,
 });
 
 export default EventContext;
