@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useCallback, useState } from 'react';
 import * as immutable from 'immutable';
 import * as api from '../../components/api';
+import { useEffect } from 'react';
 
 export const NotificationsContext = createContext({
 	invitedCarpoolIds: immutable.Set<number>(),
@@ -18,14 +19,32 @@ export default function NotificationsProvider({
 }: {
 	children: ReactNode;
 }) {
-	// eslint-disable-next-line
-	const [invitedCarpoolIds, _setInvitedCarpoolIds] = useState(
+	const [invitedCarpoolIds, setInvitedCarpoolIds] = useState(
 		immutable.Set<number>()
 	);
 
 	const [requestedCarpoolIds, setRequestedCarpoolIds] = useState(
 		immutable.Set<number>()
 	);
+
+	useEffect(() => {
+		api.getSentRequestsAndInvites().then((invitations) => {
+			setInvitedCarpoolIds((ids) =>
+				ids.concat(
+					invitations
+						.filter((invite) => !invite.isRequest)
+						.map((invite) => invite.carpool.id)
+				)
+			);
+			setRequestedCarpoolIds((ids) =>
+				ids.concat(
+					invitations
+						.filter((invite) => invite.isRequest)
+						.map((invite) => invite.carpool.id)
+				)
+			);
+		});
+	}, []);
 
 	const sendCarpoolRequest = useCallback((carpoolId: number) => {
 		api

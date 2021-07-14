@@ -201,3 +201,7 @@ export async function sendCarpoolRequest(carpoolId: number) {
 export async function cancelCarpoolRequest(carpoolId: number) {
 	return await delete$('/carpools/' + carpoolId + '/request');
 }
+
+export async function getSentRequestsAndInvites() {
+	return (await get('/users/@me/sent_requests_and_invites')) as IInvitation[];
+}
