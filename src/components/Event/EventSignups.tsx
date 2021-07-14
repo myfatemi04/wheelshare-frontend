@@ -3,6 +3,7 @@ import { useMe } from '../hooks';
 import latlongdist, { R_miles } from '../../lib/latlongdist';
 import { IEventSignup, IEvent } from '../types';
 import usePlace from '../usePlace';
+import { useMemo } from 'react';
 
 export default function EventSignups({
 	event,
@@ -13,15 +14,24 @@ export default function EventSignups({
 	signups: IEventSignup[];
 	myPlaceId: string | null;
 }) {
+	const carpools = event.carpools;
 	const placeDetails = usePlace(myPlaceId);
 	const locationLongitude = event.latitude;
 	const locationLatitude = event.longitude;
 	const me = useMe();
 
+	const signupsWithoutCarpool = useMemo(() => {
+		// A list of users not in any carpool
+		const members = carpools.map((c) => c.members);
+		const allMembers = members.reduce((a, b) => a.concat(b), []);
+		const allMembersIds = allMembers.map((m) => m.id);
+		return signups.filter((s) => !allMembersIds.includes(s.user.id));
+	}, [signups, carpools]);
+
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			<h3 style={{ marginBlockEnd: '0' }}>People</h3>
-			{signups.map(({ latitude, longitude, user }) => {
+			<h3 style={{ marginBlockEnd: '0' }}>People without a carpool</h3>
+			{signupsWithoutCarpool.map(({ latitude, longitude, user }) => {
 				if (user.id === me?.id) {
 					return null;
 				}

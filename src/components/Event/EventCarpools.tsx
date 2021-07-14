@@ -122,33 +122,29 @@ export default function Carpools() {
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBottom: '0' }}>Carpools</h3>
-			{alreadyInCarpool ? (
-				<span>You are already in a carpool for this event</span>
+			{creationStatus === 'completed' ? (
+				<span>
+					Created{' '}
+					<UILink href={`/carpools/${createdCarpoolId}`}>your carpool</UILink>!
+				</span>
+			) : myCarpool ? (
+				<span>
+					You are already in a carpool for this event:{' '}
+					<UILink href={`/carpools/${myCarpool.id}`}>{myCarpool.name}</UILink>
+				</span>
 			) : (
 				<>
-					{creationStatus !== 'completed' ? (
-						<>
-							<span>Available to drive?</span>
-							<UIButton
-								onClick={createEmptyCarpool}
-								style={{ backgroundColor: lightgrey }}
-							>
-								{creationStatus === null
-									? 'Create Empty Carpool'
-									: creationStatus === 'pending'
-									? 'Creating...'
-									: 'Errored'}
-							</UIButton>
-						</>
-					) : (
-						<span>
-							Created{' '}
-							<UILink href={`/carpools/${createdCarpoolId}`}>
-								your carpool
-							</UILink>
-							!
-						</span>
-					)}
+					<span>Available to drive?</span>
+					<UIButton
+						onClick={createEmptyCarpool}
+						style={{ backgroundColor: lightgrey }}
+					>
+						{creationStatus === null
+							? 'Create Empty Carpool'
+							: creationStatus === 'pending'
+							? 'Creating...'
+							: 'Errored'}
+					</UIButton>
 				</>
 			)}
 			{event.carpools.map((carpool) => (
