@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { green, lightgrey } from '../../lib/colors';
+import getPlaceDetails from '../../lib/getPlaceDetails';
 import {
 	addOrUpdateEventSignup,
 	getEvent,
@@ -14,7 +15,6 @@ import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import UISecondaryHeader from '../UI/UISecondaryHeader';
 import useImmutable from '../useImmutable';
-import useThrottle from '../useThrottle';
 import EventCarpools from './EventCarpools';
 import EventContext from './EventContext';
 import EventDetails from './EventDetails';
@@ -51,20 +51,10 @@ export default function Event({
 		duration: 0,
 		...(initial || {}),
 	});
-	const [myPlaceId, setPlaceId] = useState<string | null>(null);
-	const [interested, setInterested] = useState(false);
-	const [updating, setUpdating] = useState(false);
 	const [signups, setSignups] =
-		useState<Record<string, IEventSignup>>(NOT_LOADED);
-	const [hasCarpool, setHasCarpool] = useState(false);
-	const toggleInterested = useCallback(() => setInterested((i) => !i), []);
-	const toggleInterestedThrottled = useThrottle(toggleInterested, 500);
-	const existingSignup = useRef({
-		interested: false,
-		placeId: null as string | null,
-		eventId: null as number | null,
-	});
-	const me = useMe();
+		useImmutable<Record<string, IEventSignup>>(NOT_LOADED);
+
+	const me = useMe()!;
 
 	const [tentativeInvites] = useImmutable<Record<number, boolean>>({});
 
@@ -74,60 +64,44 @@ export default function Event({
 
 	useEffect(refresh, [refresh]);
 
-	useEffect(() => {
-		if (signups === NOT_LOADED) {
-			return;
-		}
+	const updateSignup = useCallback(
+		async (placeId: string | null) => {
+			await addOrUpdateEventSignup(id, placeId);
 
-		const removeSignup = () => {
-			if (prev.interested) {
-				removeEventSignup(id)
-					.then(() => {
-						prev.interested = false;
-					})
-					.finally(() => setUpdating(false));
+			if (placeId) {
+				const details = await getPlaceDetails(placeId);
+
+				signups[me.id] = {
+					user: { id: me.id, name: me.name },
+					placeId,
+					...details,
+				};
+			} else {
+				signups[me.id] = {
+					user: { id: me.id, name: me.name },
+					placeId: null,
+					latitude: null,
+					longitude: null,
+					formattedAddress: null,
+				};
 			}
-		};
+		},
+		[id, me.id, me.name, signups]
+	);
 
-		const addOrUpdateSignup = () => {
-			if (!prev.interested || prev.placeId !== myPlaceId) {
-				console.log('Adding or updating signup.', prev, {
-					interested,
-					placeId: myPlaceId,
-					eventId: id,
-					signups,
-				});
-				addOrUpdateEventSignup(id, myPlaceId)
-					.then(() => {
-						prev.placeId = myPlaceId;
-						prev.eventId = id;
-						prev.interested = true;
-					})
-					.finally(() => setUpdating(false));
-			}
-		};
+	const removeSignup = useCallback(async () => {
+		await removeEventSignup(id);
 
-		const prev = existingSignup.current;
-
-		if (!interested) {
-			removeSignup();
-		} else {
-			addOrUpdateSignup();
+		if (signups[me.id]) {
+			delete signups[me.id];
 		}
-	}, [id, interested, myPlaceId, signups, updating]);
+	}, [id, me.id, signups]);
+
+	const interested = !!signups[me.id];
 
 	useEffect(() => {
 		getEventSignups(id)
 			.then((signups) => {
-				for (let signup of signups) {
-					if (signup.user.id === me?.id) {
-						setInterested(true);
-						setPlaceId(signup.placeId);
-						existingSignup.current.eventId = id;
-						existingSignup.current.placeId = signup.placeId;
-						existingSignup.current.interested = true;
-					}
-				}
 				const signupMap: Record<string, IEventSignup> = {};
 				for (let signup of signups) {
 					signupMap[signup.user.id] = signup;
@@ -135,7 +109,7 @@ export default function Event({
 				setSignups(signupMap);
 			})
 			.catch(console.error);
-	}, [id, me?.id]);
+	}, [id, setSignups]);
 
 	if (!event) {
 		return <UISecondaryBox>Loading...</UISecondaryBox>;
@@ -151,9 +125,6 @@ export default function Event({
 				default: false,
 				tentativeInvites,
 				signups,
-				hasCarpool,
-				setHasCarpool,
-				myPlaceId,
 			}}
 		>
 			<UISecondaryBox>
@@ -163,7 +134,7 @@ export default function Event({
 				</div>
 				<EventDetails {...{ startTime, endTime, formattedAddress }} />
 				<UIButton
-					onClick={toggleInterestedThrottled}
+					onClick={interested ? () => removeSignup() : () => updateSignup(null)}
 					style={{
 						backgroundColor: interested ? green : lightgrey,
 						color: interested ? 'white' : 'black',
@@ -176,15 +147,19 @@ export default function Event({
 					<>
 						<UIPlacesAutocomplete
 							placeholder="Pickup and dropoff location"
-							onSelected={(_address, placeID) => {
-								setPlaceId(placeID);
+							onSelected={(_address, placeId) => {
+								updateSignup(placeId);
 							}}
-							style={myPlaceId != null ? { border: '2px solid ' + green } : {}}
-							placeId={myPlaceId}
+							style={
+								signups[me.id]?.placeId != null
+									? { border: '2px solid ' + green }
+									: {}
+							}
+							placeId={signups[me.id]?.placeId}
 						/>
 						<br />
 						<EventCarpools />
-						{signups !== null && <EventSignups myPlaceId={myPlaceId} />}
+						{signups !== null && <EventSignups />}
 					</>
 				)}
 			</UISecondaryBox>

@@ -13,12 +13,12 @@ export const R_miles = 3958.8;
  * @returns The distance in meters between point 1 and point 2
  */
 export default function latlongdist(
-	lat1: number,
-	lon1: number,
-	lat2: number,
-	lon2: number,
+	firstLocation: { latitude: number; longitude: number },
+	secondLocation: { latitude: number; longitude: number },
 	R = R_meters
 ) {
+	const { latitude: lat1, longitude: lon1 } = firstLocation;
+	const { latitude: lat2, longitude: lon2 } = secondLocation;
 	const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
 	const φ2 = (lat2 * Math.PI) / 180;
 	const Δφ = ((lat2 - lat1) * Math.PI) / 180;

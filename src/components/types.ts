@@ -86,17 +86,19 @@ export type IEvent = {
  */
 
 export type IEventSignup = {
-	eventId: number;
-	// userId: number;
 	user: {
 		id: number;
 		name: string;
 	};
-	placeId: string | null;
-	formattedAddress: string | null;
-	latitude: number | null;
-	longitude: number | null;
-};
+} & (
+	| { placeId: null; formattedAddress: null; latitude: null; longitude: null }
+	| {
+			placeId: string;
+			formattedAddress: string;
+			latitude: number;
+			longitude: number;
+	  }
+);
 
 export type IInvitation = {
 	user: {

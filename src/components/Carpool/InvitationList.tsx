@@ -1,10 +1,9 @@
 import CancelIcon from '@material-ui/icons/Cancel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import { useMemo } from 'react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { getEventSignups } from '../api';
-import { useMe } from '../hooks';
 import { IEventSignup } from '../types';
+import useImmutable from '../useImmutable';
 import { CarpoolContext } from './Carpool';
 
 function InvitationRow({
@@ -43,18 +42,15 @@ function InvitationRow({
 
 export default function InvitationList() {
 	const { carpool } = useContext(CarpoolContext);
-	const me = useMe()!;
 
 	const eventId = carpool.event.id;
 
 	const [availableSignups, setAvailableSignups] =
-		useState<IEventSignup[] | null>(null);
+		useImmutable<IEventSignup[] | null>(null);
 
 	useEffect(() => {
-		getEventSignups(eventId).then((signups) =>
-			setAvailableSignups(signups.filter((signup) => signup.user.id !== me.id))
-		);
-	}, [eventId, me.id]);
+		getEventSignups(eventId).then(setAvailableSignups);
+	}, [eventId, setAvailableSignups]);
 
 	const invitedUserIDs = useMemo(
 		() =>

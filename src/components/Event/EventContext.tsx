@@ -9,11 +9,6 @@ const EventContext = createContext({
 	default: true,
 	signups: {} as Record<string, IEventSignup>,
 	tentativeInvites: {} as Record<number, boolean>,
-	hasCarpool: false,
-	setHasCarpool: (has: boolean) => {
-		console.error('not implemented: setHasCarpool');
-	},
-	myPlaceId: null as string | null,
 });
 
 export default EventContext;

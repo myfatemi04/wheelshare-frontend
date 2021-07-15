@@ -6,13 +6,7 @@ export default function getDistance(...locations: Location[]): number {
 	for (let i = 0; i < locations.length - 1; i++) {
 		const from = locations[i];
 		const to = locations[i + 1];
-		distance += latlongdist(
-			from.latitude,
-			from.longitude,
-			to.latitude,
-			to.longitude,
-			R_miles
-		);
+		distance += latlongdist(from, to, R_miles);
 	}
 	return distance;
 }

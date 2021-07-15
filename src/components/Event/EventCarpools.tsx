@@ -11,8 +11,8 @@ import {
 import { useMe } from '../hooks';
 import { IEvent } from '../types';
 import useOptimalPath from '../useOptimalPath';
-import usePlace from '../usePlace';
 import EventContext from './EventContext';
+import useMySignup from './useMySignup';
 
 function useMemberLocations(members: IEvent['carpools'][0]['members']) {
 	const { signups } = useContext(EventContext);
@@ -61,10 +61,17 @@ function CarpoolRow({
 
 	const {
 		event: { latitude, longitude },
-		myPlaceId,
 	} = useContext(EventContext);
 
-	const myLocation = usePlace(myPlaceId);
+	const mySignup = useMySignup();
+
+	const myLocation =
+		mySignup && mySignup.latitude !== null
+			? {
+					latitude: mySignup.latitude,
+					longitude: mySignup.longitude,
+			  }
+			: null;
 
 	const memberLocations = useMemberLocations(carpool.members);
 

@@ -1,68 +1,42 @@
 import CancelIcon from '@material-ui/icons/Cancel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useContext, useMemo } from 'react';
-import { PlaceDetails } from '../../lib/getPlaceDetails';
 import latlongdist, { R_miles } from '../../lib/latlongdist';
 import { useMe } from '../hooks';
 import { IEventSignup } from '../types';
-import usePlace from '../usePlace';
 import EventCarpoolCreateButton from './EventCarpoolCreateButton';
 import EventContext from './EventContext';
+import pickLatLong from './pickLatLong';
+import useMySignup from './useMySignup';
 
-function EventSignup({
-	signup,
-	locationLatitude,
-	locationLongitude,
-	myPlaceDetails,
-}: {
-	signup: IEventSignup;
-	locationLatitude: number;
-	locationLongitude: number;
-	myPlaceDetails: PlaceDetails | null;
-}) {
-	const { user, latitude, longitude } = signup;
+function EventSignup({ signup }: { signup: IEventSignup }) {
+	const { user } = signup;
 	const me = useMe();
-	const { tentativeInvites, hasCarpool } = useContext(EventContext);
+	const { tentativeInvites, event } = useContext(EventContext);
+	const mySignup = useMySignup();
+	const myLocation = pickLatLong(mySignup);
+	const theirLocation = pickLatLong(signup);
+	const eventLocation = pickLatLong(event)!;
 
 	const extraDistance = useMemo(() => {
-		if (myPlaceDetails != null && !(latitude === null || longitude === null)) {
-			const myLatitude = myPlaceDetails.latitude;
-			const myLongitude = myPlaceDetails.longitude;
-			const meToThem = latlongdist(
-				latitude,
-				longitude,
-				locationLongitude,
-				locationLatitude,
-				R_miles
-			);
-			const themToLocation = latlongdist(
-				latitude,
-				longitude,
-				myLatitude,
-				myLongitude,
-				R_miles
-			);
-			const totalWithThem = meToThem + themToLocation;
-			const totalWithoutThem = latlongdist(
-				locationLongitude,
-				locationLatitude,
-				myLatitude,
-				myLongitude,
-				R_miles
-			);
-			return totalWithThem - totalWithoutThem;
+		if (myLocation != null && theirLocation != null) {
+			const meToThem = latlongdist(myLocation, theirLocation, R_miles);
+			const themToLocation = latlongdist(theirLocation, eventLocation, R_miles);
+			const meToLocation = latlongdist(myLocation, eventLocation, R_miles);
+			return meToThem + themToLocation - meToLocation;
 		} else {
 			return null;
 		}
-	}, [
-		latitude,
-		longitude,
-		locationLatitude,
-		locationLongitude,
-		myPlaceDetails,
-	]);
+	}, [eventLocation, myLocation, theirLocation]);
 
 	const isTentativelyInvited = signup.user.id in tentativeInvites;
+	const hasCarpool = useMemo(
+		() =>
+			event.carpools.some((carpool) =>
+				carpool.members.some((member) => member.id === me?.id)
+			),
+		[event.carpools, me?.id]
+	);
 
 	if (user.id === me?.id) {
 		return null;
@@ -104,14 +78,9 @@ function EventSignup({
 	);
 }
 
-export default function EventSignups({
-	myPlaceId,
-}: {
-	myPlaceId: string | null;
-}) {
+export default function EventSignups() {
 	const { event, signups } = useContext(EventContext);
 	const carpools = event.carpools;
-	const myPlaceDetails = usePlace(myPlaceId);
 
 	const signupsWithoutCarpool = useMemo(() => {
 		// A list of users not in any carpool
@@ -128,13 +97,7 @@ export default function EventSignups({
 			<h3 style={{ marginBlockEnd: '0' }}>People without a carpool</h3>
 			<EventCarpoolCreateButton />
 			{signupsWithoutCarpool.map((signup) => (
-				<EventSignup
-					key={signup.user.id}
-					signup={signup}
-					myPlaceDetails={myPlaceDetails}
-					locationLatitude={event.latitude}
-					locationLongitude={event.longitude}
-				/>
+				<EventSignup key={signup.user.id} signup={signup} />
 			))}
 		</div>
 	);
