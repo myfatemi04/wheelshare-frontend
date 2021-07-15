@@ -75,9 +75,6 @@ export default function Authenticator() {
 					<>
 						<h1>Sign In Error</h1>
 						We couldn't use your Ion account to log in.
-						<br />
-						<br />
-						<a href="/">Home</a>
 					</>
 				);
 				break;
@@ -94,9 +91,6 @@ export default function Authenticator() {
 		children = (
 			<>
 				<h1>Sign In Error</h1>
-				<br />
-				<br />
-				<a href="/">Home</a>
 			</>
 		);
 	}

@@ -44,7 +44,13 @@ async function get(path: string) {
 			Authorization: 'Bearer ' + localStorage.getItem('session_token'),
 		},
 	});
-	return await res.json();
+	const result = await res.json();
+	return result;
+	// if (res.ok) {
+	// 	return result;
+	// } else {
+	// 	throw new Error(result.message);
+	// }
 }
 
 export async function getEventSignups(

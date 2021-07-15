@@ -2,7 +2,6 @@ import { CSSProperties, lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NotificationsProvider from '../state/Notifications/NotificationsProvider';
 import { useMe } from './hooks';
-import UseImmutableTest from './UseImmutableTest';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
 
@@ -25,30 +24,35 @@ export default function App() {
 	const user = useMe();
 
 	return (
-		<NotificationsProvider>
-			<div style={{ padding: '1rem', maxWidth: '100vw' }}>
-				<UseImmutableTest />
-				<div style={style}>
+		<div style={{ padding: '1rem', maxWidth: '100vw' }}>
+			<div style={style}>
+				<Suspense fallback={null}>
 					<BrowserRouter>
 						<Switch>
-							<Route
-								path="/"
-								exact
-								component={user ? WheelShare : WheelShareLoggedOut}
-							/>
-							<Suspense fallback={null}>
-								<Route
-									component={Authenticator}
-									path="/auth/:provider/callback"
-								/>
-								<Route path="/carpools/:id" component={CarpoolPage} />
-								<Route path="/events/:id" component={EventPage} />
-								<Route path="/groups/:id" component={Group} />
-							</Suspense>
+							{user ? (
+								<NotificationsProvider>
+									<Route path="/" exact component={WheelShare} />
+									<Route
+										component={Authenticator}
+										path="/auth/:provider/callback"
+									/>
+									<Route path="/carpools/:id" component={CarpoolPage} />
+									<Route path="/events/:id" component={EventPage} />
+									<Route path="/groups/:id" component={Group} />
+								</NotificationsProvider>
+							) : (
+								<>
+									<WheelShareLoggedOut />
+									<Route
+										component={Authenticator}
+										path="/auth/:provider/callback"
+									/>
+								</>
+							)}
 						</Switch>
 					</BrowserRouter>
-				</div>
+				</Suspense>
 			</div>
-		</NotificationsProvider>
+		</div>
 	);
 }

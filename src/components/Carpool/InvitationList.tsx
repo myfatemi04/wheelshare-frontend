@@ -42,14 +42,12 @@ function InvitationRow({
 export default function InvitationList() {
 	const { carpool } = useContext(CarpoolContext);
 
-	const eventId = carpool.event.id;
-
 	const [availableSignups, setAvailableSignups] =
 		useImmutable<PotentialInvitee[] | null>(null);
 
 	useEffect(() => {
-		getPotentialInvitees(eventId).then(setAvailableSignups);
-	}, [eventId, setAvailableSignups]);
+		getPotentialInvitees(carpool.id).then(setAvailableSignups);
+	}, [carpool.id, setAvailableSignups]);
 
 	const invitedUserIDs = useMemo(
 		() =>
@@ -63,9 +61,11 @@ export default function InvitationList() {
 
 	const availableSignupsAlreadyInvited = useMemo(
 		() =>
-			availableSignups?.filter((signup) =>
-				invitedUserIDs.has(signup.user.id)
-			) ?? null,
+			availableSignups
+				? availableSignups.filter((signup) =>
+						invitedUserIDs.has(signup.user.id)
+				  )
+				: null,
 		[availableSignups, invitedUserIDs]
 	);
 
@@ -90,20 +90,26 @@ export default function InvitationList() {
 		>
 			<h1 style={{ marginBottom: '0.25rem' }}>Invite Somebody</h1>
 			{availableSignups === null && 'Loading'}
-			{availableSignupsAlreadyInvited?.map((signup) => (
-				<InvitationRow
-					key={signup.user.id}
-					user={signup.user}
-					isInvited={true}
-				/>
-			))}
-			{availableSignupsNotInvited?.map((signup) => (
-				<InvitationRow
-					key={signup.user.id}
-					user={signup.user}
-					isInvited={false}
-				/>
-			))}
+			{availableSignupsAlreadyInvited?.map(
+				(signup) =>
+					!carpool.members.some(({ id }) => id === signup.user.id) && (
+						<InvitationRow
+							key={signup.user.id}
+							user={signup.user}
+							isInvited={true}
+						/>
+					)
+			)}
+			{availableSignupsNotInvited?.map(
+				(signup) =>
+					!carpool.members.some(({ id }) => id === signup.user.id) && (
+						<InvitationRow
+							key={signup.user.id}
+							user={signup.user}
+							isInvited={false}
+						/>
+					)
+			)}
 		</div>
 	);
 }

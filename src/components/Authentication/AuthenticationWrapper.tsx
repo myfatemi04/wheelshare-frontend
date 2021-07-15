@@ -15,7 +15,15 @@ export default function AuthenticationWrapper({
 		const sessionToken = localStorage.getItem('session_token');
 
 		if (sessionToken) {
-			getMe().then(setUser).catch(none);
+			getMe()
+				.then((user) => {
+					if ('status' in user && user.status === 'error') {
+						setUser(null);
+					} else {
+						setUser(user);
+					}
+				})
+				.catch(() => none());
 		} else {
 			none();
 		}
