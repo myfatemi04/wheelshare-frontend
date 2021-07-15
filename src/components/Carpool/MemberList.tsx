@@ -18,22 +18,13 @@ function MemberRow({ member }: { member: { id: number; name: string } }) {
 	);
 }
 
-export default function MemberList({
-	members,
-}: {
-	members: {
-		id: number;
-		name: string;
-	}[];
-}) {
-	const { leave, carpool } = useContext(CarpoolContext);
-	const membersToShow = members.slice(0, 2);
-	const hiddenMemberCount = members.length - membersToShow.length;
-	const me = useMe()!;
+const shownMembersCount = 2;
 
-	const isMember = useMemo(() => {
-		return members.some(({ id }) => id === me.id);
-	}, [me.id, members]);
+export default function MemberList() {
+	const { leave, carpool } = useContext(CarpoolContext);
+	const members = carpool.members;
+	const membersToShow = members.slice(0, shownMembersCount);
+	const hiddenMemberCount = members.size - membersToShow.size;
 
 	const { sendCarpoolRequest, cancelCarpoolRequest } =
 		useContext(NotificationsContext);
@@ -47,6 +38,12 @@ export default function MemberList({
 		cancelCarpoolRequest(carpool.id);
 	}, [carpool.id, cancelCarpoolRequest]);
 
+	const me = useMe()!;
+
+	const isMember = useMemo(() => {
+		return members.some(({ id }) => id === me?.id);
+	}, [me?.id, members]);
+
 	return (
 		<div
 			style={{
@@ -57,7 +54,7 @@ export default function MemberList({
 			}}
 		>
 			<h3 style={{ marginBlockEnd: '0' }}>Members</h3>
-			{members.length > 0 ? (
+			{members.size > 0 ? (
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					{membersToShow.map((member) => (
 						<MemberRow member={member} key={member.id} />

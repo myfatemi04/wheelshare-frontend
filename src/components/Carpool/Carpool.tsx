@@ -1,5 +1,11 @@
-import { useMemo } from 'react';
-import { createContext, useCallback, useEffect, useState } from 'react';
+import * as immutable from 'immutable';
+import {
+	createContext,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import {
 	cancelCarpoolInvite,
 	getCarpool,
@@ -7,14 +13,33 @@ import {
 	sendCarpoolInvite,
 } from '../api';
 import { useMe } from '../hooks';
-import { ICarpool } from '../types';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import CarpoolDetails from './CarpoolDetails';
 import InvitationsAndRequests from './InvitationsAndRequests';
 import MemberList from './MemberList';
 
+class CarpoolState extends immutable.Record({
+	id: 0,
+	name: '',
+	eventId: -1,
+	event: {
+		id: -1,
+		name: '',
+		formattedAddress: '',
+		latitude: 0,
+		longitude: 0,
+		placeId: '',
+	},
+	members: immutable.List<{ id: number; name: string }>(),
+	invitations:
+		immutable.Map<
+			number,
+			{ isRequest: boolean; user: { id: number; name: string } }
+		>(),
+}) {}
+
 export const CarpoolContext = createContext({
-	carpool: null! as ICarpool,
+	carpool: new CarpoolState(),
 	sendInvite: (user: { id: number; name: string }) => {
 		console.error('not implemented: sendInvite');
 	},
@@ -27,10 +52,23 @@ export const CarpoolContext = createContext({
 });
 
 export default function Carpool({ id }: { id: number }) {
-	const [carpool, setCarpool] = useState<ICarpool | null>(null);
+	const [carpool, setCarpool] = useState(new CarpoolState());
 
 	useEffect(() => {
-		getCarpool(id).then(setCarpool);
+		getCarpool(id).then((carpool) => {
+			setCarpool(
+				new CarpoolState({
+					id: carpool.id,
+					name: carpool.name,
+					eventId: carpool.eventId || carpool.event.id,
+					event: carpool.event,
+					members: immutable.List(carpool.members),
+					invitations: immutable.Map(
+						carpool.invitations.map((invite) => [invite.user.id, invite])
+					),
+				})
+			);
+		});
 	}, [id]);
 
 	const sendInvite = useCallback(
@@ -38,15 +76,11 @@ export default function Carpool({ id }: { id: number }) {
 			if (carpool) {
 				sendCarpoolInvite(id, user.id)
 					.then(() => {
-						setCarpool(
-							(carpool) =>
-								carpool && {
-									...carpool,
-									invitations: [
-										...carpool.invitations,
-										{ isRequest: false, user },
-									],
-								}
+						setCarpool((carpool) =>
+							carpool.set(
+								'invitations',
+								carpool.invitations.set(user.id, { isRequest: false, user })
+							)
 						);
 					})
 					.catch(console.error);
@@ -78,7 +112,7 @@ export default function Carpool({ id }: { id: number }) {
 		[id]
 	);
 
-	const eventId = carpool?.eventId;
+	const eventId = carpool.eventId;
 
 	const leave = useCallback(() => {
 		if (eventId) {
@@ -93,8 +127,8 @@ export default function Carpool({ id }: { id: number }) {
 	const me = useMe();
 
 	const isMember = useMemo(
-		() => carpool?.members.some((m) => m.id === me?.id),
-		[carpool?.members, me?.id]
+		() => carpool.members.some((m) => m.id === me?.id),
+		[carpool.members, me?.id]
 	);
 
 	if (!carpool) {
@@ -116,8 +150,8 @@ export default function Carpool({ id }: { id: number }) {
 						<h1 style={{ marginBottom: '0rem' }}>{carpool.name}</h1>
 						<h2 style={{ marginBottom: '0rem' }}>{carpool.event.name}</h2>
 						{isMember && <InvitationsAndRequests />}
-						<CarpoolDetails carpool={carpool} />
-						<MemberList members={carpool.members} />
+						<CarpoolDetails />
+						<MemberList />
 					</>
 				) : (
 					<h2>Loading</h2>

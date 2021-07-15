@@ -61,6 +61,7 @@ export default function InvitationList() {
 			new Set(
 				carpool.invitations
 					.filter((invitation) => !invitation.isRequest)
+					.valueSeq()
 					.map((invitation) => invitation.user.id)
 			),
 		[carpool.invitations]
@@ -68,11 +69,9 @@ export default function InvitationList() {
 
 	const availableSignupsAlreadyInvited = useMemo(
 		() =>
-			availableSignups
-				? availableSignups.filter((signup) =>
-						invitedUserIDs.has(signup.user.id)
-				  )
-				: null,
+			availableSignups?.filter((signup) =>
+				invitedUserIDs.has(signup.user.id)
+			) ?? null,
 		[availableSignups, invitedUserIDs]
 	);
 

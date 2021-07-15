@@ -1,9 +1,11 @@
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { useContext } from 'react';
 
-import { ICarpool } from '../types';
+import { CarpoolContext } from './Carpool';
 
-export default function CarpoolDetails({ carpool }: { carpool: ICarpool }) {
+export default function CarpoolDetails() {
+	const { carpool } = useContext(CarpoolContext);
 	return (
 		<div style={{ fontSize: '1.5rem', fontWeight: 400 }}>
 			<div
