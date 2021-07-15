@@ -17,14 +17,15 @@ export default function GroupMembersLink() {
 			{open && (
 				<>
 					<br />
-					<UISecondaryBox>
+					<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
 						<h1>Members</h1>
-
-						<GroupInviteCodeGenerator />
 
 						{group.users.map(({ name }) => (
 							<span key={name}>{name}</span>
 						))}
+						<br />
+
+						<GroupInviteCodeGenerator />
 					</UISecondaryBox>
 				</>
 			)}

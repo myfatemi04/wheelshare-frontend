@@ -20,7 +20,7 @@ export default function GroupSettings({ group }: { group: IGroup }) {
 	}, [group.id]);
 
 	return (
-		<UISecondaryBox>
+		<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
 			<h1>Settings</h1>
 			{deletionSuccessful !== true && (
 				<UIPressable onClick={onClickedDelete}>Delete Group</UIPressable>

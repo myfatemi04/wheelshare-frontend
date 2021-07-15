@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { GroupContext } from '../Group/Group';
+import UIPressable from '../UI/UIPressable';
 import useToggle from '../useToggle';
 import EventCreator from './EventCreator';
 
@@ -8,22 +9,14 @@ export default function EventCreatorLink() {
 	const { group } = useContext(GroupContext);
 
 	return (
-		<div>
-			<div
-				style={{
-					cursor: 'pointer',
-					userSelect: 'none',
-				}}
-				onClick={toggle}
-			>
-				Create Event
-			</div>
+		<>
+			<UIPressable onClick={toggle}>Create Event</UIPressable>
 			{open && (
 				<>
 					<br />
 					<EventCreator group={group} />
 				</>
 			)}
-		</div>
+		</>
 	);
 }

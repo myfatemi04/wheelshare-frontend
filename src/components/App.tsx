@@ -1,6 +1,7 @@
 import { CSSProperties, lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NotificationsProvider from '../state/Notifications/NotificationsProvider';
+import Header from './Header/Header';
 import { useMe } from './hooks';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
@@ -31,11 +32,8 @@ export default function App() {
 						<Switch>
 							{user ? (
 								<NotificationsProvider>
+									<Header />
 									<Route path="/" exact component={WheelShare} />
-									<Route
-										component={Authenticator}
-										path="/auth/:provider/callback"
-									/>
 									<Route path="/carpools/:id" component={CarpoolPage} />
 									<Route path="/events/:id" component={EventPage} />
 									<Route path="/groups/:id" component={Group} />

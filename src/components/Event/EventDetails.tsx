@@ -1,16 +1,13 @@
 import formatStartAndEndTime from '../../lib/dates';
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { useContext } from 'react';
+import EventContext from './EventContext';
 
-export default function Details({
-	startTime,
-	endTime,
-	formattedAddress,
-}: {
-	startTime: string;
-	endTime: string | null;
-	formattedAddress: string;
-}) {
+export default function EventDetails() {
+	const { startTime, endTime, formattedAddress } =
+		useContext(EventContext).event;
+
 	return (
 		<div
 			style={{

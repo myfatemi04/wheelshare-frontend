@@ -19,48 +19,50 @@ const DEFAULT_GROUP = (): IGroup => ({
 export const GroupContext = createContext({ group: DEFAULT_GROUP() });
 
 export default function Group({ id }: { id: number }) {
-	const [group, setGroup] = useImmutable<IGroup>(DEFAULT_GROUP());
-	const [found, setFound] = useState(false);
+	const [group, setGroup] = useImmutable<IGroup | null>(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
+		setLoading(true);
 		getGroup(id)
 			.then(setGroup)
-			.catch(() => setFound(false));
+			.finally(() => setLoading(false));
 	}, [id, setGroup]);
 
-	return found ? (
+	if (loading) {
+		return <h1>Loading...</h1>;
+	}
+
+	return group ? (
 		<GroupContext.Provider value={{ group }}>
+			<h1>{group.name}</h1>
 			<div
 				style={{
-					textAlign: 'center',
-					maxWidth: '30rem',
-					marginLeft: 'auto',
-					marginRight: 'auto',
+					display: 'flex',
+					flexDirection: 'column',
+					width: '100%',
+					alignItems: 'center',
 				}}
 			>
-				<h1>{group.name}</h1>
 				<UILink href="/">Home</UILink>
-				<br />
 				<br />
 				<GroupMembersLink />
 				<br />
 				<GroupSettingsLink />
 				<br />
 				<EventCreatorLink />
-				<br />
-
-				{group.events.length > 0 ? (
-					<EventStream events={group.events} />
-				) : (
-					<span>
-						There are no events yet. Click 'create event' above to add one!
-					</span>
-				)}
 			</div>
+			<br />
+
+			{group.events.length > 0 ? (
+				<EventStream events={group.events} />
+			) : (
+				<span>
+					There are no events yet. Click 'create event' above to add one!
+				</span>
+			)}
 		</GroupContext.Provider>
 	) : (
-		<>
-			<h1>Group not found</h1>
-		</>
+		<h1>Group not found</h1>
 	);
 }

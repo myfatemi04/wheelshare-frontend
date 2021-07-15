@@ -37,3 +37,7 @@ export function useMyCarpool() {
 
 	return carpool;
 }
+
+export function useMutableEvent() {
+	return useContext(EventContext).event;
+}

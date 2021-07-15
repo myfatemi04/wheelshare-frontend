@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { lightgrey } from '../../lib/colors';
 import { generateCode, resetCode } from '../api';
 import UIButton from '../UI/UIButton';
@@ -6,6 +6,8 @@ import { GroupContext } from './Group';
 
 export default function GroupInviteCodeGenerator() {
 	const { group } = useContext(GroupContext);
+
+	const [shown, setShown] = useState(false);
 
 	const generateJoinCode = useCallback(() => {
 		generateCode(group.id).then((code) => {
@@ -22,11 +24,15 @@ export default function GroupInviteCodeGenerator() {
 	if (group.joinCode) {
 		return (
 			<>
-				<span>
+				<span style={{ userSelect: 'none' }}>
 					Join this group with the code{' '}
-					<b>
-						<code>{group.joinCode}</code>
-					</b>
+					<code
+						style={{ userSelect: 'text' }}
+						onClick={() => setShown((shown) => !shown)}
+					>
+						{shown ? group.joinCode : 'XXXXXX'}
+					</code>{' '}
+					(click to show/hide)
 				</span>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					<UIButton
