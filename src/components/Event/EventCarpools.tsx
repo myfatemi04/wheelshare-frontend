@@ -12,10 +12,11 @@ import { useMe } from '../hooks';
 import { IEvent } from '../types';
 import useOptimalPath from '../useOptimalPath';
 import EventContext from './EventContext';
-import useMySignup from './useMySignup';
+import { useMySignup } from './EventHooks';
 
 function useMemberLocations(members: IEvent['carpools'][0]['members']) {
-	const { signups } = useContext(EventContext);
+	const { event } = useContext(EventContext);
+	const signups = event.signups;
 
 	return useMemo(
 		() =>

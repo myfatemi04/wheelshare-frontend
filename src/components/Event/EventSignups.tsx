@@ -7,7 +7,7 @@ import { IEventSignup } from '../types';
 import EventCarpoolCreateButton from './EventCarpoolCreateButton';
 import EventContext from './EventContext';
 import pickLatLong from './pickLatLong';
-import useMySignup from './useMySignup';
+import { useMySignup } from './EventHooks';
 
 function EventSignup({ signup }: { signup: IEventSignup }) {
 	const { user } = signup;
@@ -79,7 +79,8 @@ function EventSignup({ signup }: { signup: IEventSignup }) {
 }
 
 export default function EventSignups() {
-	const { event, signups } = useContext(EventContext);
+	const { event } = useContext(EventContext);
+	const signups = event.signups;
 	const carpools = event.carpools;
 
 	const signupsWithoutCarpool = useMemo(() => {
@@ -91,6 +92,8 @@ export default function EventSignups() {
 			.filter((id) => !allMembersIds.includes(+id))
 			.map((id) => signups[id]);
 	}, [signups, carpools]);
+
+	console.log(signups);
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>

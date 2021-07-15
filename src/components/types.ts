@@ -71,6 +71,7 @@ export type IEvent = {
 			name: string;
 		}[];
 	}[];
+	signups: Record<string, IEventSignup>;
 	startTime: string; // Datestring
 	duration: number;
 	endTime: string | null; // Datestring

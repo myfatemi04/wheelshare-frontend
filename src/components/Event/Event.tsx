@@ -1,14 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import getPlaceDetails from '../../lib/getPlaceDetails';
-import {
-	addOrUpdateEventSignup,
-	getEvent,
-	getEventSignups,
-	removeEventSignup,
-} from '../api';
+import { addOrUpdateEventSignup, getEvent, removeEventSignup } from '../api';
 import { useMe } from '../hooks';
-import { IEvent, IEventSignup } from '../types';
+import { IEvent } from '../types';
 import UIButton from '../UI/UIButton';
 import UILink from '../UI/UILink';
 import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
@@ -24,8 +19,6 @@ function GroupName({ group }: { group: IEvent['group'] }) {
 	return <UILink href={`/groups/${group.id}`}>{group.name}</UILink>;
 }
 
-const NOT_LOADED = {};
-
 export default function Event({
 	id,
 	initial,
@@ -33,13 +26,14 @@ export default function Event({
 	id: number;
 	initial?: IEvent;
 }) {
-	const [event, setEvent] = useImmutable<IEvent | null>({
+	const [event, setEvent] = useImmutable<IEvent>({
 		id,
 		name: '',
 		group: {
 			id: 0,
 			name: '',
 		},
+		signups: {},
 		carpools: [],
 		startTime: '',
 		endTime: '',
@@ -51,8 +45,6 @@ export default function Event({
 		duration: 0,
 		...(initial || {}),
 	});
-	const [signups, setSignups] =
-		useImmutable<Record<string, IEventSignup>>(NOT_LOADED);
 
 	const me = useMe()!;
 
@@ -71,13 +63,13 @@ export default function Event({
 			if (placeId) {
 				const details = await getPlaceDetails(placeId);
 
-				signups[me.id] = {
+				event.signups[me.id] = {
 					user: { id: me.id, name: me.name },
 					placeId,
 					...details,
 				};
 			} else {
-				signups[me.id] = {
+				event.signups[me.id] = {
 					user: { id: me.id, name: me.name },
 					placeId: null,
 					latitude: null,
@@ -86,30 +78,18 @@ export default function Event({
 				};
 			}
 		},
-		[id, me.id, me.name, signups]
+		[event.signups, id, me.id, me.name]
 	);
 
 	const removeSignup = useCallback(async () => {
 		await removeEventSignup(id);
 
-		if (signups[me.id]) {
-			delete signups[me.id];
+		if (event.signups[me.id]) {
+			delete event.signups[me.id];
 		}
-	}, [id, me.id, signups]);
+	}, [id, me.id, event.signups]);
 
-	const interested = !!signups[me.id];
-
-	useEffect(() => {
-		getEventSignups(id)
-			.then((signups) => {
-				const signupMap: Record<string, IEventSignup> = {};
-				for (let signup of signups) {
-					signupMap[signup.user.id] = signup;
-				}
-				setSignups(signupMap);
-			})
-			.catch(console.error);
-	}, [id, setSignups]);
+	const interested = !!event.signups[me.id];
 
 	if (!event) {
 		return <UISecondaryBox>Loading...</UISecondaryBox>;
@@ -124,7 +104,6 @@ export default function Event({
 				refresh,
 				default: false,
 				tentativeInvites,
-				signups,
 			}}
 		>
 			<UISecondaryBox>
@@ -151,15 +130,15 @@ export default function Event({
 								updateSignup(placeId);
 							}}
 							style={
-								signups[me.id]?.placeId != null
+								event.signups[me.id]?.placeId != null
 									? { border: '2px solid ' + green }
 									: {}
 							}
-							placeId={signups[me.id]?.placeId}
+							placeId={event.signups[me.id]?.placeId}
 						/>
 						<br />
 						<EventCarpools />
-						{signups !== null && <EventSignups />}
+						{event.signups !== null && <EventSignups />}
 					</>
 				)}
 			</UISecondaryBox>

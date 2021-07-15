@@ -1,6 +1,4 @@
-const domain = process.env.REACT_APP_API_DOMAIN;
-
-console.log({ domain });
+import { domain } from '../api';
 
 export async function createSession(code: string, redirectUrl: string) {
 	const res = await fetch(domain + 'create_session', {

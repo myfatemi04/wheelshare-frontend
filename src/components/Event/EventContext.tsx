@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { IEvent, IEventSignup } from '../types';
+import { IEvent } from '../types';
 
 const EventContext = createContext({
 	refresh: () => {
@@ -7,7 +7,6 @@ const EventContext = createContext({
 	},
 	event: null! as IEvent,
 	default: true,
-	signups: {} as Record<string, IEventSignup>,
 	tentativeInvites: {} as Record<number, boolean>,
 });
 

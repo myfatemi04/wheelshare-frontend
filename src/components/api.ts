@@ -1,12 +1,12 @@
 import { GroupPreview } from './GroupJoinerLink';
 import { IInvitation, IEventSignup, ICarpool, IEvent, IGroup } from './types';
 
-const base = (() => {
-	const domain =
-		process.env.NODE_ENV === 'production'
-			? process.env.REACT_APP_API_PROD
-			: process.env.REACT_APP_API_LOCAL;
+export const domain =
+	process.env.NODE_ENV === 'production'
+		? process.env.REACT_APP_API_PROD
+		: process.env.REACT_APP_API_LOCAL;
 
+export const base = (() => {
 	if (domain?.endsWith('/')) {
 		return domain.slice(0, -1) + '/api';
 	} else {
