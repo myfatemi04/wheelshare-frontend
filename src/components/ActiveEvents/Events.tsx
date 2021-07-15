@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
-import { getEvents } from './api';
-import { IEvent } from './types';
-import EventStream from './EventStream';
-import useImmutable from './useImmutable';
+import { getActiveEvents } from '../api';
+import EventStream from '../EventStream';
+import { IEvent } from '../types';
+import useImmutable from '../useImmutable';
 
-export default function Events() {
+export default function ActiveEvents() {
 	const [events, setEvents] = useImmutable<IEvent[]>([]);
 
 	const hasEvents = events.length > 0;
 
 	useEffect(() => {
 		if (!hasEvents) {
-			getEvents().then(setEvents);
+			getActiveEvents().then(setEvents);
 		}
 	}, [hasEvents, setEvents]);
 

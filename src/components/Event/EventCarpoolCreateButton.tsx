@@ -1,10 +1,11 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { lightgrey } from '../../lib/colors';
 import { createCarpool } from '../api';
 import { useMe } from '../hooks';
 import UIButton from '../UI/UIButton';
 import UILink from '../UI/UILink';
 import EventContext from './EventContext';
+import { useMyCarpool } from './EventHooks';
 
 type CreationStatus = null | 'pending' | 'completed' | 'errored';
 
@@ -15,13 +16,7 @@ export default function EventCarpoolCreateButton() {
 	const [createdCarpoolId, setCreatedCarpoolId] = useState<null | number>(null);
 
 	const me = useMe()!;
-	const myCarpool = useMemo(
-		() =>
-			event.carpools.find((carpool) =>
-				carpool.members.some((member) => member.id === me.id)
-			),
-		[event.carpools, me.id]
-	);
+	const myCarpool = useMyCarpool();
 
 	const createCarpoolCallback = useCallback(async () => {
 		setCreationStatus('pending');

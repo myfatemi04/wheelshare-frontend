@@ -218,3 +218,11 @@ export async function cancelCarpoolRequest(carpoolId: number) {
 export async function getSentRequestsAndInvites() {
 	return (await get('/users/@me/sent_requests_and_invites')) as IInvitation[];
 }
+
+export async function getActiveEvents() {
+	return (await get('/users/@me/active_events')) as IEvent[];
+}
+
+export async function getActiveCarpools() {
+	return (await get('/users/@me/active_carpools')) as ICarpool[];
+}
