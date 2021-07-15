@@ -1,4 +1,3 @@
-import events from 'events';
 import EventCreatorLink from '../EventCreator/EventCreatorLink';
 import EventStream from '../EventStream';
 import GroupSettingsLink from '../GroupSettings/GroupSettingsLink';
