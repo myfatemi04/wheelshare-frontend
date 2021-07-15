@@ -38,7 +38,7 @@ export default function MemberList() {
 		cancelCarpoolRequest(carpool.id);
 	}, [carpool.id, cancelCarpoolRequest]);
 
-	const me = useMe()!;
+	const me = useMe() || { id: 0, name: '' };
 
 	const isMember = useMemo(() => {
 		return members.some(({ id }) => id === me?.id);

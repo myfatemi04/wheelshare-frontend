@@ -13,16 +13,17 @@ export function useCancelCarpoolRequest() {
 export function useInvitationState(
 	carpoolId: number
 ): 'invited' | 'requested' | 'none' {
-	const notifications = useContext(NotificationsContext);
+	const { invitedCarpoolIds, requestedCarpoolIds } =
+		useContext(NotificationsContext);
 
 	const invited = useMemo(
-		() => notifications.invitedCarpoolIds.has(carpoolId),
-		[carpoolId, notifications.invitedCarpoolIds]
+		() => carpoolId in invitedCarpoolIds,
+		[carpoolId, invitedCarpoolIds]
 	);
 
 	const requested = useMemo(
-		() => notifications.requestedCarpoolIds.has(carpoolId),
-		[carpoolId, notifications.requestedCarpoolIds]
+		() => carpoolId in requestedCarpoolIds,
+		[carpoolId, requestedCarpoolIds]
 	);
 
 	return invited ? 'invited' : requested ? 'requested' : 'none';

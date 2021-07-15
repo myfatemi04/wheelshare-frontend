@@ -10,7 +10,7 @@ export default function UseImmutableTest() {
 	return (
 		<div>
 			{JSON.stringify(imm)}
-			Reset button
+			<br />
 			<button onClick={() => imm.z.a++}>Increment</button>
 			<button onClick={() => imm.z.c.push(imm.z.c.length)}>Push</button>
 		</div>

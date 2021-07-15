@@ -46,7 +46,7 @@ export default function Event({
 		...(initial || {}),
 	});
 
-	const me = useMe()!;
+	const me = useMe() || { id: 0, name: '' };
 
 	const [tentativeInvites] = useImmutable<Record<number, boolean>>({});
 

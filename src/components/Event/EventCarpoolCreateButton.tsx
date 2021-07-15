@@ -15,7 +15,7 @@ export default function EventCarpoolCreateButton() {
 	const [creationStatus, setCreationStatus] = useState<CreationStatus>(null);
 	const [createdCarpoolId, setCreatedCarpoolId] = useState<null | number>(null);
 
-	const me = useMe()!;
+	const me = useMe() || { id: 0, name: '' };
 	const myCarpool = useMyCarpool();
 
 	const createCarpoolCallback = useCallback(async () => {

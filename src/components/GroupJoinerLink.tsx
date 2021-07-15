@@ -51,7 +51,9 @@ function GroupJoiner() {
 			{group && (
 				<>
 					<br />
-					<span>Found group: {group.name}</span>
+					<span>
+						Found group: <b>{group.name}</b>
+					</span>
 					<UIButton
 						onClick={join}
 						style={!buttonEnabled ? { color: 'grey' } : {}}

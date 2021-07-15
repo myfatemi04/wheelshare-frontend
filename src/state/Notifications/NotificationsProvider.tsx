@@ -1,11 +1,11 @@
-import { createContext, ReactNode, useCallback, useState } from 'react';
-import * as immutable from 'immutable';
+import { createContext, ReactNode, useCallback } from 'react';
 import * as api from '../../components/api';
 import { useEffect } from 'react';
+import useImmutable from '../../components/useImmutable';
 
 export const NotificationsContext = createContext({
-	invitedCarpoolIds: immutable.Set<number>(),
-	requestedCarpoolIds: immutable.Set<number>(),
+	invitedCarpoolIds: {} as Record<number, boolean>,
+	requestedCarpoolIds: {} as Record<number, boolean>,
 
 	sendCarpoolRequest: (carpoolId: number) =>
 		console.error('not implemented: sendCarpoolRequest'),
@@ -19,44 +19,47 @@ export default function NotificationsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [invitedCarpoolIds, setInvitedCarpoolIds] = useState(
-		immutable.Set<number>()
-	);
-
-	const [requestedCarpoolIds, setRequestedCarpoolIds] = useState(
-		immutable.Set<number>()
-	);
+	const [invitedCarpoolIds, setInvitedCarpoolIds] = useImmutable<
+		Record<number, boolean>
+	>({});
+	const [requestedCarpoolIds, setRequestedCarpoolIds] = useImmutable<
+		Record<number, boolean>
+	>({});
 
 	useEffect(() => {
 		api.getSentRequestsAndInvites().then((invitations) => {
-			setInvitedCarpoolIds((ids) =>
-				ids.concat(
-					invitations
-						.filter((invite) => !invite.isRequest)
-						.map((invite) => invite.carpool.id)
-				)
-			);
-			setRequestedCarpoolIds((ids) =>
-				ids.concat(
-					invitations
-						.filter((invite) => invite.isRequest)
-						.map((invite) => invite.carpool.id)
-				)
-			);
+			const invited = {} as Record<number, boolean>;
+			const requested = {} as Record<number, boolean>;
+			for (let invitation of invitations) {
+				if (invitation.isRequest) {
+					invited[invitation.carpool.id] = true;
+				} else {
+					requested[invitation.carpool.id] = true;
+				}
+			}
+
+			setInvitedCarpoolIds(invited);
+			setRequestedCarpoolIds(requested);
 		});
-	}, []);
+	}, [setInvitedCarpoolIds, setRequestedCarpoolIds]);
 
-	const sendCarpoolRequest = useCallback((carpoolId: number) => {
-		api
-			.sendCarpoolRequest(carpoolId)
-			.then(() => setRequestedCarpoolIds((ids) => ids.add(carpoolId)));
-	}, []);
+	const sendCarpoolRequest = useCallback(
+		(carpoolId: number) => {
+			api.sendCarpoolRequest(carpoolId).then(() => {
+				requestedCarpoolIds[carpoolId] = true;
+			});
+		},
+		[requestedCarpoolIds]
+	);
 
-	const cancelCarpoolRequest = useCallback((carpoolId: number) => {
-		api
-			.cancelCarpoolRequest(carpoolId)
-			.then(() => setRequestedCarpoolIds((ids) => ids.delete(carpoolId)));
-	}, []);
+	const cancelCarpoolRequest = useCallback(
+		(carpoolId: number) => {
+			api.cancelCarpoolRequest(carpoolId).then(() => {
+				delete requestedCarpoolIds[carpoolId];
+			});
+		},
+		[requestedCarpoolIds]
+	);
 
 	return (
 		<NotificationsContext.Provider

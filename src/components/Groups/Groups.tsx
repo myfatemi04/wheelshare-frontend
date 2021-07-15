@@ -7,7 +7,7 @@ import GroupList from './GroupList';
 
 export default function Groups() {
 	const [groups, setGroups] = useState<IGroup[]>([]);
-	// eslint-disable-next-line
+
 	useEffect(() => {
 		getGroups().then(setGroups);
 	}, []);

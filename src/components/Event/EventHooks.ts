@@ -12,7 +12,7 @@ export function useSignups() {
 
 export function useMySignup() {
 	const signups = useSignups();
-	const me = useMe()!;
+	const me = useMe() || { id: 0, name: '' };
 
 	const signup = useMemo(() => signups[me.id] ?? null, [signups, me.id]);
 
@@ -22,7 +22,7 @@ export function useMySignup() {
 }
 
 export function useMyCarpool() {
-	const me = useMe()!;
+	const me = useMe() || { id: 0, name: '' };
 	const { event } = useContext(EventContext);
 
 	const carpool = useMemo(
