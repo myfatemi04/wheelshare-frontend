@@ -14,14 +14,18 @@ function createEdgeForObject<T extends PlainJSObject>(
 	value: T,
 	setValue: Dispatch<SetStateAction<T>>
 ): T {
-	const keys = Object.keys(value);
 	// @ts-expect-error
 	const edge: T = {};
-	for (let key of keys) {
+	for (let [key, keyValue] of Object.entries(value)) {
+		const set = (next: SetStateAction<typeof keyValue>) => {
+			const v = typeof next === 'function' ? next(keyValue) : next;
+			setValue((value) => ({ ...value, [key]: v }));
+		};
+
 		Object.defineProperty(edge, key, {
 			enumerable: true,
 			configurable: false,
-			get: () => value[key],
+			get: () => createEdge(keyValue, set),
 			set: (v) => void setValue((value) => ({ ...value, [key]: v })),
 		});
 	}
