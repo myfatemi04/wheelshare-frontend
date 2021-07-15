@@ -1,8 +1,7 @@
 import CancelIcon from '@material-ui/icons/Cancel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useContext, useEffect, useMemo } from 'react';
-import { getEventSignups } from '../api';
-import { IEventSignup } from '../types';
+import { getPotentialInvitees, PotentialInvitee } from '../api';
 import useImmutable from '../useImmutable';
 import { CarpoolContext } from './Carpool';
 
@@ -46,10 +45,10 @@ export default function InvitationList() {
 	const eventId = carpool.event.id;
 
 	const [availableSignups, setAvailableSignups] =
-		useImmutable<IEventSignup[] | null>(null);
+		useImmutable<PotentialInvitee[] | null>(null);
 
 	useEffect(() => {
-		getEventSignups(eventId).then(setAvailableSignups);
+		getPotentialInvitees(eventId).then(setAvailableSignups);
 	}, [eventId, setAvailableSignups]);
 
 	const invitedUserIDs = useMemo(

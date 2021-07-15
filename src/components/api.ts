@@ -228,3 +228,18 @@ export async function getActiveEvents() {
 export async function getActiveCarpools() {
 	return (await get('/users/@me/active_carpools')) as ICarpool[];
 }
+
+export type PotentialInvitee = {
+	user: {
+		id: number;
+		name: string;
+	};
+	latitude: number;
+	longitude: number;
+};
+
+export async function getPotentialInvitees(
+	carpoolId: number
+): Promise<PotentialInvitee[]> {
+	return await get(`/carpools/${carpoolId}/potential_invitees`);
+}
