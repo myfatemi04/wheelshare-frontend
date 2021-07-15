@@ -7,11 +7,17 @@ export const NotificationsContext = createContext({
 	invitedCarpoolIds: {} as Record<number, boolean>,
 	requestedCarpoolIds: {} as Record<number, boolean>,
 
-	sendCarpoolRequest: (carpoolId: number) =>
+	sendCarpoolRequest: async (carpoolId: number) =>
 		console.error('not implemented: sendCarpoolRequest'),
 
-	cancelCarpoolRequest: (carpoolId: number) =>
+	cancelCarpoolRequest: async (carpoolId: number) =>
 		console.error('not implemented: cancelCarpoolRequest'),
+
+	acceptCarpoolInvite: async (carpoolId: number) =>
+		console.error('not implemented: acceptCarpoolInvite'),
+
+	denyCarpoolInvite: async (carpoolId: number) =>
+		console.error('not implemented: denyCarpoolInvite'),
 });
 
 export default function NotificationsProvider({
@@ -44,21 +50,39 @@ export default function NotificationsProvider({
 	}, [setInvitedCarpoolIds, setRequestedCarpoolIds]);
 
 	const sendCarpoolRequest = useCallback(
-		(carpoolId: number) => {
-			api.sendCarpoolRequest(carpoolId).then(() => {
-				requestedCarpoolIds[carpoolId] = true;
-			});
+		async (carpoolId: number) => {
+			await api.sendCarpoolRequest(carpoolId);
+
+			requestedCarpoolIds[carpoolId] = true;
 		},
 		[requestedCarpoolIds]
 	);
 
 	const cancelCarpoolRequest = useCallback(
-		(carpoolId: number) => {
-			api.cancelCarpoolRequest(carpoolId).then(() => {
-				delete requestedCarpoolIds[carpoolId];
-			});
+		async (carpoolId: number) => {
+			await api.cancelCarpoolRequest(carpoolId);
+
+			delete requestedCarpoolIds[carpoolId];
 		},
 		[requestedCarpoolIds]
+	);
+
+	const acceptCarpoolInvite = useCallback(
+		async (carpoolId: number) => {
+			await api.acceptInvite(carpoolId);
+
+			delete invitedCarpoolIds[carpoolId];
+		},
+		[invitedCarpoolIds]
+	);
+
+	const denyCarpoolInvite = useCallback(
+		async (carpoolId: number) => {
+			await api.denyInvite(carpoolId);
+
+			delete invitedCarpoolIds[carpoolId];
+		},
+		[invitedCarpoolIds]
 	);
 
 	return (
@@ -68,6 +92,8 @@ export default function NotificationsProvider({
 				requestedCarpoolIds,
 				sendCarpoolRequest,
 				cancelCarpoolRequest,
+				acceptCarpoolInvite,
+				denyCarpoolInvite,
 			}}
 		>
 			{children}

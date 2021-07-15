@@ -20,15 +20,23 @@ function MemberRow({ member }: { member: { id: number; name: string } }) {
 
 const shownMembersCount = 2;
 
+const defaultMe = { id: 0, name: '' };
+
 export default function MemberList() {
 	const { leave, carpool } = useContext(CarpoolContext);
 	const members = carpool.members;
 	const membersToShow = members.slice(0, shownMembersCount);
 	const hiddenMemberCount = members.length - membersToShow.length;
 
-	const { sendCarpoolRequest, cancelCarpoolRequest } =
-		useContext(NotificationsContext);
+	const {
+		sendCarpoolRequest,
+		cancelCarpoolRequest,
+		acceptCarpoolInvite,
+		denyCarpoolInvite,
+	} = useContext(NotificationsContext);
 	const invitationState = useInvitationState(carpool.id);
+
+	const me = useMe() || defaultMe;
 
 	const sendRequest = useCallback(() => {
 		sendCarpoolRequest(carpool.id);
@@ -38,7 +46,17 @@ export default function MemberList() {
 		cancelCarpoolRequest(carpool.id);
 	}, [carpool.id, cancelCarpoolRequest]);
 
-	const me = useMe() || { id: 0, name: '' };
+	const acceptInvitation = useCallback(() => {
+		acceptCarpoolInvite(carpool.id).then(() => {
+			members.push(me);
+		});
+	}, [acceptCarpoolInvite, carpool.id, members, me]);
+
+	const denyInvitation = useCallback(() => {
+		denyCarpoolInvite(carpool.id).then(() => {
+			members.push(me);
+		});
+	}, [carpool.id, denyCarpoolInvite, me, members]);
 
 	const isMember = useMemo(() => {
 		return members.some(({ id }) => id === me?.id);
@@ -78,7 +96,21 @@ export default function MemberList() {
 				<UIButton onClick={sendRequest}>Request to join</UIButton>
 			) : (
 				<span>
-					You've been invited, we need to make it so you can accept the invite
+					You've been invited to this carpool!
+					<div style={{ display: 'flex', width: '100%', textAlign: 'center' }}>
+						<UIButton
+							onClick={acceptInvitation}
+							style={{ backgroundColor: lightgrey, flex: 1, margin: '0.5rem' }}
+						>
+							Accept
+						</UIButton>
+						<UIButton
+							onClick={denyInvitation}
+							style={{ backgroundColor: lightgrey, flex: 1, margin: '0.5rem' }}
+						>
+							Deny
+						</UIButton>
+					</div>
 				</span>
 			)}
 		</div>

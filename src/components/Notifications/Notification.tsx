@@ -19,12 +19,12 @@ export default function Notification({
 	}, [carpoolId, notification.user.id]);
 
 	const acceptInv = useCallback(() => {
-		acceptInvite(carpoolId, notification.user.id);
-	}, [carpoolId, notification.user.id]);
+		acceptInvite(carpoolId);
+	}, [carpoolId]);
 
 	const rejectInv = useCallback(() => {
-		denyInvite(carpoolId, notification.user.id);
-	}, [carpoolId, notification.user.id]);
+		denyInvite(carpoolId);
+	}, [carpoolId]);
 
 	const sentTime = new Date(notification.sentTime);
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import getPlaceDetails from '../../lib/getPlaceDetails';
 import { addOrUpdateEventSignup, getEvent, removeEventSignup } from '../api';
@@ -46,12 +46,21 @@ export default function Event({
 		...(initial || {}),
 	});
 
+	const [found, setFound] = useState(false);
+
 	const me = useMe() || { id: 0, name: '' };
 
 	const [tentativeInvites] = useImmutable<Record<number, boolean>>({});
 
 	const refresh = useCallback(() => {
-		getEvent(id).then(setEvent);
+		getEvent(id).then((e) => {
+			if (e) {
+				setFound(true);
+				setEvent(e);
+			} else {
+				setFound(false);
+			}
+		});
 	}, [id, setEvent]);
 
 	useEffect(refresh, [refresh]);
@@ -91,8 +100,12 @@ export default function Event({
 
 	const interested = !!event.signups[me.id];
 
-	if (!event) {
-		return <UISecondaryBox>Loading...</UISecondaryBox>;
+	if (!found) {
+		return (
+			<>
+				<h1>Event Not Found</h1>
+			</>
+		);
 	}
 
 	const { name, group, formattedAddress, startTime, endTime } = event;

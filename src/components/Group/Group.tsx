@@ -1,4 +1,4 @@
-import { createContext, useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { getGroup } from '../api';
 import EventCreatorLink from '../EventCreator/EventCreatorLink';
 import EventStream from '../EventStream';
@@ -20,12 +20,15 @@ export const GroupContext = createContext({ group: DEFAULT_GROUP() });
 
 export default function Group({ id }: { id: number }) {
 	const [group, setGroup] = useImmutable<IGroup>(DEFAULT_GROUP());
+	const [found, setFound] = useState(false);
 
 	useEffect(() => {
-		getGroup(id).then(setGroup);
+		getGroup(id)
+			.then(setGroup)
+			.catch(() => setFound(false));
 	}, [id, setGroup]);
 
-	return (
+	return found ? (
 		<GroupContext.Provider value={{ group }}>
 			<div
 				style={{
@@ -55,5 +58,9 @@ export default function Group({ id }: { id: number }) {
 				)}
 			</div>
 		</GroupContext.Provider>
+	) : (
+		<>
+			<h1>Group not found</h1>
+		</>
 	);
 }
