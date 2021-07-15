@@ -23,7 +23,7 @@ export default function Group({ group }: { group: IGroup }) {
 			<br />
 			<EventCreatorLink group={group} />
 			<br />
-			{events && events.length > 0 ? (
+			{group.events.length > 0 ? (
 				<EventStream events={group.events} />
 			) : (
 				<span>

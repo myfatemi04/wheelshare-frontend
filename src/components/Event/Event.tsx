@@ -154,7 +154,7 @@ export default function Event({
 			<UISecondaryBox>
 				<div style={{ textAlign: 'center' }}>
 					<UISecondaryHeader>{name}</UISecondaryHeader>
-					<GroupName group={group} />
+					{group && <GroupName group={group} />}
 				</div>
 				<EventDetails {...{ startTime, endTime, formattedAddress }} />
 				<UIButton
