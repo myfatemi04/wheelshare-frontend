@@ -1,9 +1,11 @@
-import EventCreator from './EventCreator';
-import { IGroup } from '../types';
+import { useContext } from 'react';
+import { GroupContext } from '../Group/Group';
 import useToggle from '../useToggle';
+import EventCreator from './EventCreator';
 
-export default function EventCreatorLink({ group }: { group: IGroup }) {
+export default function EventCreatorLink() {
 	const [open, toggle] = useToggle(false);
+	const { group } = useContext(GroupContext);
 
 	return (
 		<div>

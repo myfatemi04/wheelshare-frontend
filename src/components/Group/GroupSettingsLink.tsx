@@ -1,9 +1,11 @@
-import { IGroup } from '../types';
+import { useContext } from 'react';
 import useToggle from '../useToggle';
+import { GroupContext } from './Group';
 import GroupSettings from './GroupSettings';
 
-export default function GroupSettingsLink({ group }: { group: IGroup }) {
+export default function GroupSettingsLink() {
 	const [open, toggle] = useToggle(false);
+	const { group } = useContext(GroupContext);
 
 	return (
 		<div>

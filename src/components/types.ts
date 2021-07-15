@@ -54,6 +54,7 @@ export type IGroup = {
 		id: number;
 		name: string;
 	}[];
+	joinCode: string | null;
 };
 
 /**

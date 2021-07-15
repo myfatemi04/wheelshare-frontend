@@ -166,7 +166,9 @@ export async function joinGroup(id: number, code: string) {
 }
 
 export async function generateCode(groupId: number) {
-	return await post('/groups/' + groupId + '/generate_code', {});
+	const { code } = await post(`/groups/${groupId}/generate_code`, {});
+
+	return code;
 }
 
 export async function resetCode(groupId: number) {
