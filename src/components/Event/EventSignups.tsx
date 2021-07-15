@@ -6,6 +6,7 @@ import latlongdist, { R_miles } from '../../lib/latlongdist';
 import { useMe } from '../hooks';
 import { IEventSignup } from '../types';
 import usePlace from '../usePlace';
+import EventCarpoolCreateButton from './EventCarpoolCreateButton';
 import EventContext from './EventContext';
 
 function EventSignup({
@@ -125,6 +126,7 @@ export default function EventSignups({
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>People without a carpool</h3>
+			<EventCarpoolCreateButton />
 			{signupsWithoutCarpool.map((signup) => (
 				<EventSignup
 					key={signup.user.id}

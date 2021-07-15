@@ -33,7 +33,24 @@ export default function Event({
 	id: number;
 	initial?: IEvent;
 }) {
-	const [event, setEvent] = useState<IEvent | null>(initial || null);
+	const [event, setEvent] = useImmutable<IEvent | null>({
+		id,
+		name: '',
+		group: {
+			id: 0,
+			name: '',
+		},
+		carpools: [],
+		startTime: '',
+		endTime: '',
+		daysOfWeek: 0,
+		placeId: '',
+		formattedAddress: '',
+		latitude: 0,
+		longitude: 0,
+		duration: 0,
+		...(initial || {}),
+	});
 	const [myPlaceId, setPlaceId] = useState<string | null>(null);
 	const [interested, setInterested] = useState(false);
 	const [updating, setUpdating] = useState(false);
@@ -53,7 +70,7 @@ export default function Event({
 
 	const refresh = useCallback(() => {
 		getEvent(id).then(setEvent);
-	}, [id]);
+	}, [id, setEvent]);
 
 	useEffect(refresh, [refresh]);
 

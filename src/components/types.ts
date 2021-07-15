@@ -59,7 +59,6 @@ export type IGroup = {
 export type IEvent = {
 	id: number;
 	name: string;
-	groupId: number;
 	group: {
 		id: number;
 		name: string;

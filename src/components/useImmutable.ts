@@ -90,7 +90,6 @@ function createEdgeForArray<T extends PlainJS>(
 					};
 				} else if (typeof target[property] === 'function') {
 					return function () {
-						console.log(target[property]);
 						// @ts-ignore
 						return target[property].apply(target, arguments);
 					};
