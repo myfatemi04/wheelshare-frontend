@@ -21,12 +21,7 @@ function EventSignup({
 }) {
 	const { user, latitude, longitude } = signup;
 	const me = useMe();
-	const {
-		addTentativeInvite,
-		removeTentativeInvite,
-		tentativeInvites,
-		hasCarpool,
-	} = useContext(EventContext);
+	const { tentativeInvites, hasCarpool } = useContext(EventContext);
 
 	const extraDistance = useMemo(() => {
 		if (myPlaceDetails != null && !(latitude === null || longitude === null)) {
@@ -66,10 +61,7 @@ function EventSignup({
 		myPlaceDetails,
 	]);
 
-	const isTentativelyInvited = useMemo(
-		() => tentativeInvites.has(signup.user.id),
-		[signup.user.id, tentativeInvites]
-	);
+	const isTentativelyInvited = signup.user.id in tentativeInvites;
 
 	if (user.id === me?.id) {
 		return null;
@@ -98,12 +90,12 @@ function EventSignup({
 			{!hasCarpool &&
 				(isTentativelyInvited ? (
 					<CancelIcon
-						onClick={() => removeTentativeInvite(user.id)}
+						onClick={() => delete tentativeInvites[user.id]}
 						style={{ cursor: 'pointer' }}
 					/>
 				) : (
 					<PersonAddIcon
-						onClick={() => addTentativeInvite(user.id)}
+						onClick={() => (tentativeInvites[user.id] = true)}
 						style={{ cursor: 'pointer' }}
 					/>
 				))}

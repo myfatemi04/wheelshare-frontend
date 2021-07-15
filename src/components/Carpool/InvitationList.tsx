@@ -59,9 +59,8 @@ export default function InvitationList() {
 	const invitedUserIDs = useMemo(
 		() =>
 			new Set(
-				carpool.invitations
+				Object.values(carpool.invitations)
 					.filter((invitation) => !invitation.isRequest)
-					.valueSeq()
 					.map((invitation) => invitation.user.id)
 			),
 		[carpool.invitations]

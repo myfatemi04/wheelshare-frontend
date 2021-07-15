@@ -167,7 +167,7 @@ export default function Carpools() {
 		createCarpool({
 			name: me.name + "'s Carpool",
 			eventId: event.id,
-			invitedUserIds: tentativeInvites.toArray(),
+			invitedUserIds: Object.keys(tentativeInvites).map(Number),
 		})
 			.then(({ id }) => {
 				setCreatedCarpoolId(id);
@@ -180,12 +180,11 @@ export default function Carpools() {
 
 	const tentativeInviteNames = useMemo(() => {
 		if (!signups) return [];
-		const names = tentativeInvites.map((id) => {
+		const names = Object.keys(tentativeInvites).map((id) => {
 			const signup = signups[id];
 			return signup?.user.name;
 		});
-		const nonNull = names.filter((n) => n != null);
-		return nonNull.toArray() as string[];
+		return names.filter((n) => n != null);
 	}, [tentativeInvites, signups]);
 
 	let createCarpoolSection;

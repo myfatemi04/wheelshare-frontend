@@ -14,23 +14,43 @@ function createEdgeForObject<T extends PlainJSObject>(
 	value: T,
 	setValue: Dispatch<SetStateAction<T>>
 ): T {
-	// @ts-expect-error
-	const edge: T = {};
-	for (let [key, keyValue] of Object.entries(value)) {
-		const set = (next: SetStateAction<typeof keyValue>) => {
-			const v = typeof next === 'function' ? next(keyValue) : next;
-			setValue((value) => ({ ...value, [key]: v }));
-		};
+	return new Proxy(value, {
+		set: (target, property, value) => {
+			setValue((v) => ({ ...v, [property]: value }));
 
-		Object.defineProperty(edge, key, {
-			enumerable: true,
-			configurable: false,
-			get: () => createEdge(keyValue, set),
-			set: (v) => void setValue((value) => ({ ...value, [key]: v })),
-		});
-	}
-	return edge;
+			return true;
+		},
+		// @ts-expect-error
+		get: (target, property: keyof T) => {
+			const keyValue = target[property];
+			const set = (next: SetStateAction<typeof keyValue>) => {
+				const v = typeof next === 'function' ? next(keyValue) : next;
+				setValue((value) => ({ ...value, [property]: v }));
+			};
+
+			return createEdge(keyValue, set);
+		},
+		deleteProperty: (target, property) => {
+			setValue((v) => {
+				const newValue = { ...v };
+				// @ts-ignore
+				delete newValue[property];
+				return newValue;
+			});
+
+			return true;
+		},
+	});
 }
+
+const inPlaceArrayOperations = [
+	'fill',
+	'reverse',
+	'push',
+	'pop',
+	'shift',
+	'unshift',
+];
 
 function createEdgeForArray<T extends PlainJS>(
 	value: PlainJSArray<T>,
@@ -58,7 +78,8 @@ function createEdgeForArray<T extends PlainJS>(
 			if (typeof property === 'number') {
 				return target[property];
 			} else {
-				if (typeof target[property] === 'function') {
+				// @ts-ignore
+				if (inPlaceArrayOperations.includes(property)) {
 					return function () {
 						const newValue = [...value];
 						const method = newValue[property];
@@ -67,9 +88,15 @@ function createEdgeForArray<T extends PlainJS>(
 						setValue(newValue);
 						return result;
 					};
-				} else {
-					return target[property];
+				} else if (typeof target[property] === 'function') {
+					return function () {
+						console.log(target[property]);
+						// @ts-ignore
+						return target[property].apply(target, arguments);
+					};
 				}
+
+				return target[property];
 			}
 		},
 	});

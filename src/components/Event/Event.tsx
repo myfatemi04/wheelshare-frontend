@@ -1,4 +1,3 @@
-import * as immutable from 'immutable';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import {
@@ -14,6 +13,7 @@ import UILink from '../UI/UILink';
 import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import UISecondaryHeader from '../UI/UISecondaryHeader';
+import useImmutable from '../useImmutable';
 import useThrottle from '../useThrottle';
 import EventCarpools from './EventCarpools';
 import EventContext from './EventContext';
@@ -49,17 +49,7 @@ export default function Event({
 	});
 	const me = useMe();
 
-	const [tentativeInvites, setTentativeInvites] = useState(
-		immutable.Set<number>()
-	);
-
-	const addTentativeInvite = useCallback((userId: number) => {
-		setTentativeInvites((t) => t.add(userId));
-	}, []);
-
-	const removeTentativeInvite = useCallback((userId: number) => {
-		setTentativeInvites((t) => t.delete(userId));
-	}, []);
+	const [tentativeInvites] = useImmutable<Record<number, boolean>>({});
 
 	const refresh = useCallback(() => {
 		getEvent(id).then(setEvent);
@@ -142,8 +132,6 @@ export default function Event({
 				event,
 				refresh,
 				default: false,
-				addTentativeInvite,
-				removeTentativeInvite,
 				tentativeInvites,
 				signups,
 				hasCarpool,

@@ -24,7 +24,7 @@ export default function MemberList() {
 	const { leave, carpool } = useContext(CarpoolContext);
 	const members = carpool.members;
 	const membersToShow = members.slice(0, shownMembersCount);
-	const hiddenMemberCount = members.size - membersToShow.size;
+	const hiddenMemberCount = members.length - membersToShow.length;
 
 	const { sendCarpoolRequest, cancelCarpoolRequest } =
 		useContext(NotificationsContext);
@@ -54,7 +54,7 @@ export default function MemberList() {
 			}}
 		>
 			<h3 style={{ marginBlockEnd: '0' }}>Members</h3>
-			{members.size > 0 ? (
+			{members.length > 0 ? (
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					{membersToShow.map((member) => (
 						<MemberRow member={member} key={member.id} />
