@@ -7,7 +7,7 @@ import { CarpoolContext } from './Carpool';
 export default function CarpoolDetails() {
 	const { carpool } = useContext(CarpoolContext);
 	return (
-		<div style={{ fontSize: '1.5rem', fontWeight: 400 }}>
+		<div>
 			<div
 				style={{
 					color: '#303030',

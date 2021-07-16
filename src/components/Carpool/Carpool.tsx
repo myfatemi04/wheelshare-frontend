@@ -1,16 +1,16 @@
-import { createContext, useCallback, useEffect, useMemo } from 'react';
+import { createContext, useCallback, useEffect } from 'react';
 import {
 	cancelCarpoolInvite,
 	getCarpool,
 	leaveCarpool,
 	sendCarpoolInvite,
 } from '../api';
-import { useMe } from '../hooks';
 import { ICarpool } from '../types';
+import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import useImmutable from '../useImmutable';
 import CarpoolDetails from './CarpoolDetails';
-import InvitationsAndRequests from './InvitationsAndRequests';
+import CarpoolTopButtons from './CarpoolTopButtons';
 import MemberList from './MemberList';
 
 type CarpoolState = {
@@ -35,13 +35,7 @@ export const CarpoolContext = createContext({
 });
 
 export default function Carpool({ id }: { id: number }) {
-	const [carpool, setCarpool] = useImmutable<CarpoolState>({
-		id,
-		name: '',
-		event: {} as ICarpool['event'],
-		members: [],
-		invitations: {},
-	});
+	const [carpool, setCarpool] = useImmutable<CarpoolState | null>(null);
 
 	useEffect(() => {
 		getCarpool(id).then((carpool) => {
@@ -78,16 +72,19 @@ export default function Carpool({ id }: { id: number }) {
 
 	const cancelInvite = useCallback(
 		(user: { id: number; name: string }) => {
+			if (!carpool) {
+				return null;
+			}
 			cancelCarpoolInvite(id, user.id)
 				.then(() => {
 					delete carpool.invitations[user.id];
 				})
 				.catch(console.error);
 		},
-		[carpool.invitations, id]
+		[carpool, id]
 	);
 
-	const eventId = carpool.event.id;
+	const eventId = carpool?.event.id;
 
 	const leave = useCallback(() => {
 		if (eventId) {
@@ -98,13 +95,6 @@ export default function Carpool({ id }: { id: number }) {
 				.catch(console.error);
 		}
 	}, [eventId, id]);
-
-	const me = useMe();
-
-	const isMember = useMemo(
-		() => carpool.members.some((m) => m.id === me?.id),
-		[carpool.members, me?.id]
-	);
 
 	if (!carpool) {
 		return <>Loading...</>;
@@ -120,17 +110,13 @@ export default function Carpool({ id }: { id: number }) {
 			}}
 		>
 			<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
-				{carpool ? (
-					<>
-						<h1 style={{ marginBottom: '0rem' }}>{carpool.name}</h1>
-						<h2 style={{ marginBottom: '0rem' }}>{carpool.event.name}</h2>
-						{isMember && <InvitationsAndRequests />}
-						<CarpoolDetails />
-						<MemberList />
-					</>
-				) : (
-					<h2>Loading</h2>
-				)}
+				<h1>{carpool.name}</h1>
+				<UILink href={'/events/' + carpool.event.id}>
+					{carpool.event.name}
+				</UILink>
+				<CarpoolTopButtons />
+				<CarpoolDetails />
+				<MemberList />
 			</UISecondaryBox>
 		</CarpoolContext.Provider>
 	);

@@ -123,8 +123,11 @@ export async function getGroups(): Promise<IGroup[]> {
 	return await get('/groups');
 }
 
-export async function deleteGroup(id: number) {
-	await delete$('/groups/' + id);
+export async function deleteGroup(
+	id: number
+): Promise<{ status: 'success' | 'error' }> {
+	const { status } = await delete$('/groups/' + id);
+	return { status };
 }
 
 export async function createGroup(name: string): Promise<{ id: number }> {
