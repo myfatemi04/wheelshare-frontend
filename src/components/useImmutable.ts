@@ -14,6 +14,9 @@ function createEdgeForObject<T extends PlainJSObject>(
 	value: T,
 	setValue: Dispatch<SetStateAction<T>>
 ): T {
+	// @ts-ignore
+	const edges: Record<keyof T, any> = {};
+
 	return new Proxy(value, {
 		set: (target, property, value) => {
 			setValue((v) => ({ ...v, [property]: value }));
@@ -22,13 +25,20 @@ function createEdgeForObject<T extends PlainJSObject>(
 		},
 		// @ts-expect-error
 		get: (target, property: keyof T) => {
+			if (property in edges) {
+				// @ts-ignore
+				return edges[property];
+			}
+
 			const keyValue = target[property];
 			const set = (next: SetStateAction<typeof keyValue>) => {
 				const v = typeof next === 'function' ? next(keyValue) : next;
 				setValue((value) => ({ ...value, [property]: v }));
 			};
 
-			return createEdge(keyValue, set);
+			const edge = createEdge(keyValue, set);
+			edges[property] = edge;
+			return edge;
 		},
 		deleteProperty: (target, property) => {
 			setValue((v) => {
@@ -122,6 +132,8 @@ export default function useImmutable<T extends PlainJS>(
 	const [value, setValue] = useState(initial);
 
 	const edge = useMemo(() => createEdge(value, setValue), [value]);
+
+	console.log('rerendered useImmutable');
 
 	return [edge, setValue];
 }
