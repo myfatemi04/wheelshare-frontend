@@ -1,32 +1,47 @@
-import { useMemo } from 'react';
-import estimateOptimalPath, { Location } from '../lib/estimateoptimalpath';
-import furthestPoint from '../lib/furthestpoint';
+import { useDebugValue, useMemo } from 'react';
+import estimateOptimalPath, {
+	Location,
+	Path,
+} from '../lib/estimateoptimalpath';
 
-export default function useOptimalPath(
-	memberLocations: Location[],
-	destination: Location
+export default function useOptimalPath<M extends Location, D extends Location>(
+	members: M[],
+	destination: D
 ) {
-	return useMemo(() => {
-		if (memberLocations.length === 0) {
+	const path = useMemo(() => {
+		if (members.length === 0) {
 			return null;
 		}
 
-		// O(n)
-		const { maxLocation: driverLocation } = furthestPoint(
-			memberLocations,
-			destination
-		);
+		// O(n^2)
+		const path = members.reduce((prev, driver) => {
+			// O(n)
+			const passengerLocations = members.filter(
+				(location) => location !== driver
+			);
 
-		// O(n)
-		const passengerLocations = memberLocations.filter(
-			(location) => location !== driverLocation
-		);
+			// O(n)
+			const path = estimateOptimalPath<M, D>({
+				from: driver,
+				waypoints: passengerLocations,
+				to: destination,
+			});
 
-		// O(n)
-		return estimateOptimalPath({
-			from: driverLocation!,
-			waypoints: passengerLocations,
-			to: destination,
-		});
-	}, [destination, memberLocations]);
+			if (prev == null) {
+				return path;
+			}
+
+			if (prev.distance > path.distance) {
+				return path;
+			}
+
+			return prev;
+		}, null! as { path: Path<M, D>; distance: number });
+
+		return path;
+	}, [destination, members]);
+
+	useDebugValue(path);
+
+	return path;
 }

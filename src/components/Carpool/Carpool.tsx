@@ -10,8 +10,10 @@ import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import useImmutable from '../useImmutable';
 import CarpoolDetails from './CarpoolDetails';
+import CarpoolRouteEstimator from './CarpoolRouteEstimator';
 import CarpoolTopButtons from './CarpoolTopButtons';
 import MemberList from './MemberList';
+import Members from './Members';
 
 type CarpoolState = {
 	id: number;
@@ -116,6 +118,9 @@ export default function Carpool({ id }: { id: number }) {
 				</UILink>
 				<CarpoolTopButtons />
 				<CarpoolDetails />
+				<Members>
+					<CarpoolRouteEstimator />
+				</Members>
 				<MemberList />
 			</UISecondaryBox>
 		</CarpoolContext.Provider>

@@ -5,14 +5,19 @@ export type Location = {
 	longitude: number;
 };
 
-export type Path = {
-	from: Location;
-	to: Location;
-	waypoints: Location[];
+export type Path<M extends Location, D extends Location> = {
+	from: M;
+	waypoints: M[];
+	to: D;
 };
 
-export default function estimateOptimalPath(path: Path): {
-	path: Path;
+export default function estimateOptimalPath<
+	M extends Location,
+	D extends Location
+>(
+	path: Path<M, D>
+): {
+	path: Path<M, D>;
 	distance: number;
 } {
 	const { from, to, waypoints } = path;
@@ -23,7 +28,7 @@ export default function estimateOptimalPath(path: Path): {
 	for (let waypoint of waypoints) {
 		// Iterate over all possible insertion points for the waypoint
 		let minDistance = Infinity;
-		let insertionPoint = 1;
+		let insertionPoint = 0;
 		for (let i = 0; i < sequence.length - 1; i++) {
 			const [start, end] = sequence.slice(i, i + 2);
 
@@ -35,17 +40,20 @@ export default function estimateOptimalPath(path: Path): {
 		}
 
 		sequence = sequence
-			.slice(0, insertionPoint)
+			.slice(0, insertionPoint + 1)
 			.concat([waypoint])
-			.concat(sequence.slice(insertionPoint));
+			.concat(sequence.slice(insertionPoint + 1));
 	}
 
 	const newWaypoints = sequence.slice(1, sequence.length - 1);
+
+	console.log({ sequence, path });
+
 	return {
 		path: {
 			from,
 			to,
-			waypoints: newWaypoints,
+			waypoints: newWaypoints as M[],
 		},
 		distance: getDistance(from, ...sequence, to),
 	};

@@ -87,24 +87,33 @@ export type IEvent = {
 	longitude: number;
 };
 
-/**
- * Model EventSignup
- */
-
-export type IEventSignup = {
+export type IEventSignupComplete = {
 	user: {
 		id: number;
 		name: string;
 	};
-} & (
-	| { placeId: null; formattedAddress: null; latitude: null; longitude: null }
-	| {
-			placeId: string;
-			formattedAddress: string;
-			latitude: number;
-			longitude: number;
-	  }
-);
+	placeId: string;
+	formattedAddress: string;
+	latitude: number;
+	longitude: number;
+};
+
+export type IEventSignupIncomplete = {
+	user: {
+		id: number;
+		name: string;
+	};
+	placeId: null;
+	formattedAddress: null;
+	latitude: null;
+	longitude: null;
+};
+
+/**
+ * Model EventSignup
+ */
+
+export type IEventSignup = IEventSignupComplete | IEventSignupIncomplete;
 
 export type IInvitation = {
 	user: {

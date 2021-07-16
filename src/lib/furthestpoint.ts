@@ -1,12 +1,12 @@
 import { Location } from './estimateoptimalpath';
 import getDistance from './getdistance';
 
-export default function furthestPoint(
-	locations: Location[],
+export default function furthestPoint<M extends Location>(
+	locations: M[],
 	destination: Location
 ) {
 	let maxDistance = 0;
-	let maxLocation = null;
+	let maxLocation: M | null = null;
 	for (let i = 0; i < locations.length; i++) {
 		let distance = getDistance(locations[i], destination);
 

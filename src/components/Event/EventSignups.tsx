@@ -93,8 +93,6 @@ export default function EventSignups() {
 			.map((id) => signups[id]);
 	}, [signups, carpools]);
 
-	console.log(signups);
-
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>People without a carpool</h3>

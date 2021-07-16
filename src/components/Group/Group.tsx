@@ -54,7 +54,7 @@ export default function Group({ id }: { id: number }) {
 			</div>
 			<br />
 
-			{group.events.length > 0 ? (
+			{group.events?.length > 0 ? (
 				<EventStream events={group.events} />
 			) : (
 				<span>

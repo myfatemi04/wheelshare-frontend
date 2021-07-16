@@ -53,6 +53,15 @@ async function get(path: string) {
 	// }
 }
 
+export async function getEventSignupsBulk(
+	eventId: number,
+	userIds: number[]
+): Promise<IEventSignup[]> {
+	return await get(
+		`/events/${eventId}/signups_bulk?userIds=${userIds.join(',')}`
+	);
+}
+
 export async function getEventSignups(
 	eventId: number
 ): Promise<IEventSignup[]> {
