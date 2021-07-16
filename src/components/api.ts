@@ -63,14 +63,22 @@ export async function addOrUpdateEventSignup(
 	eventId: number,
 	placeId: string | null
 ) {
-	return await post(`/events/${eventId}/signup`, {
-		placeId,
-	});
+	await post(`/events/${eventId}/signup`, { placeId });
 }
 
 export async function removeEventSignup(eventId: number) {
-	return await delete$(`/events/${eventId}/signup`);
+	await delete$(`/events/${eventId}/signup`);
 }
+
+type CreateEventProps = {
+	name: string;
+	startTime: Date;
+	duration: number;
+	endDate: Date | null;
+	groupId: number;
+	placeId: string;
+	daysOfWeek: number;
+};
 
 export async function createEvent({
 	name,
@@ -80,15 +88,7 @@ export async function createEvent({
 	groupId,
 	placeId,
 	daysOfWeek,
-}: {
-	name: string;
-	startTime: Date;
-	duration: number;
-	endDate: Date | null;
-	groupId: number;
-	placeId: string;
-	daysOfWeek: number;
-}) {
+}: CreateEventProps) {
 	const { id } = await post('/events', {
 		name,
 		startTime,
@@ -108,32 +108,28 @@ export async function getEvents(): Promise<IEvent[]> {
 }
 
 export async function getEvent(id: number): Promise<IEvent> {
-	return await get('/events/' + id);
+	return await get(`/events/${id}`);
 }
 
 export async function getGroup(id: number): Promise<IGroup> {
 	return await get('/groups/' + id);
 }
 
-export async function getGroupEvents(id: number) {
-	return await get('/groups/' + id + '/events');
+export async function getGroupEvents(id: number): Promise<IEvent[]> {
+	return await get(`/groups/${id}/events`);
 }
 
-export async function getGroups() {
+export async function getGroups(): Promise<IGroup[]> {
 	return await get('/groups');
 }
 
 export async function deleteGroup(id: number) {
-	return await delete$('/groups/' + id);
+	await delete$('/groups/' + id);
 }
 
-export async function createGroup(name: string) {
-	const result = await post('/groups', {
-		name,
-	});
-	return {
-		id: result.id,
-	};
+export async function createGroup(name: string): Promise<{ id: number }> {
+	const { id } = await post('/groups', { name });
+	return { id };
 }
 
 export async function getNotifications() {
@@ -161,78 +157,82 @@ export async function getMe() {
 }
 
 export async function resolveCode(code: string): Promise<GroupPreview> {
-	return await get('/resolve_code/' + code);
+	return await get(`/resolve_code/${code}`);
 }
 
 export async function joinGroup(id: number, code: string) {
-	const result = await post('/groups/' + id + '/join', { code });
+	const result = await post(`/groups/${id}/join`, { code });
 	return {
 		status: result.status,
 	};
 }
 
-export async function generateCode(groupId: number) {
+export async function generateCode(groupId: number): Promise<string> {
 	const { code } = await post(`/groups/${groupId}/generate_code`, {});
 
 	return code;
 }
 
-export async function resetCode(groupId: number) {
+export async function resetCode(groupId: number): Promise<void> {
 	return await post('/groups/' + groupId + '/reset_code', {});
 }
 
-export async function getReceivedInvitationsAndRequests() {
-	return (await get(
-		'/users/@me/received_requests_and_invites'
-	)) as IInvitation[];
+export async function getReceivedInvitationsAndRequests(): Promise<
+	IInvitation[]
+> {
+	return await get('/users/@me/received_requests_and_invites');
 }
 
 export async function getCarpool(id: number): Promise<ICarpool> {
 	return await get('/carpools/' + id);
 }
 
+type CreateCarpoolProps = {
+	eventId: number;
+	name: string;
+	invitedUserIds: number[];
+};
+
 export async function createCarpool({
 	eventId,
 	name,
 	invitedUserIds,
-}: {
-	eventId: number;
-	name: string;
-	invitedUserIds: number[];
-}): Promise<{ id: number }> {
-	return await post('/carpools/', { eventId, name, invitedUserIds });
+}: CreateCarpoolProps): Promise<{ id: number }> {
+	const { id } = await post('/carpools/', { eventId, name, invitedUserIds });
+
+	return { id };
 }
 
 export async function sendCarpoolInvite(carpoolId: number, userId: number) {
-	return await post('/carpools/' + carpoolId + '/invite', { userId });
+	await post(`/carpools/${carpoolId}/invite`, { userId });
 }
 
 export async function cancelCarpoolInvite(carpoolId: number, userId: number) {
-	return await delete$('/carpools/' + carpoolId + '/invite', { userId });
+	await delete$('/carpools/' + carpoolId + '/invite', { userId });
 }
 
 export async function leaveCarpool(carpoolId: number) {
-	return await post(`/carpools/${carpoolId}/leave`, {});
+	await post(`/carpools/${carpoolId}/leave`, {});
 }
 
 export async function sendCarpoolRequest(carpoolId: number) {
-	return await post('/carpools/' + carpoolId + '/request', {});
+	await post('/carpools/' + carpoolId + '/request', {});
 }
 
 export async function cancelCarpoolRequest(carpoolId: number) {
-	return await delete$('/carpools/' + carpoolId + '/request');
+	await delete$('/carpools/' + carpoolId + '/request');
 }
 
-export async function getSentRequestsAndInvites() {
-	return (await get('/users/@me/sent_requests_and_invites')) as IInvitation[];
+export async function getSentRequestsAndInvites(): Promise<IInvitation[]> {
+	return await get('/users/@me/sent_requests_and_invites');
 }
 
-export async function getActiveEvents() {
-	return (await get('/users/@me/active_events')) as IEvent[];
+export async function getActiveEvents(): Promise<IEvent[]> {
+	return await get('/users/@me/active_events');
 }
 
-export async function getActiveCarpools() {
-	return (await get('/users/@me/active_carpools')) as ICarpool[];
+export async function getActiveCarpools(): Promise<ICarpool[]> {
+	return await get('/users/@me/active_carpools');
 }
 
 export type PotentialInvitee = {
