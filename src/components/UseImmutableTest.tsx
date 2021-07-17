@@ -2,17 +2,18 @@ import useImmutable from './useImmutable';
 
 export default function UseImmutableTest() {
 	const [imm] = useImmutable({
-		x: 0,
-		y: 0,
-		z: { a: 1, b: 2, c: [0, 1, 2] },
+		index: 0,
+		array: [{ count: 0 }, { count: 1 }, { count: 2 }],
 	});
 
 	return (
 		<div>
 			{JSON.stringify(imm)}
 			<br />
-			<button onClick={() => imm.z.a++}>Increment</button>
-			<button onClick={() => imm.z.c.push(imm.z.c.length)}>Push</button>
+			<button onClick={() => imm.index--}>Previous</button>
+			<button onClick={() => imm.index++}>Next</button>
+			<button onClick={() => imm.array[imm.index].count++}>Increment</button>
+			<button onClick={() => imm.array[imm.index].count--}>Decrement</button>
 		</div>
 	);
 }

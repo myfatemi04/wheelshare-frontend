@@ -66,27 +66,41 @@ function createEdgeForArray<T extends PlainJS>(
 	value: PlainJSArray<T>,
 	setValue: Dispatch<SetStateAction<PlainJSArray<T>>>
 ) {
+	const edges = {} as Record<number, T>;
+
+	const set = (property: number, next: SetStateAction<T>) => {
+		const current = value[property];
+		const nextValue = typeof next === 'function' ? next(current) : next;
+		setValue((value) => [
+			...value.slice(0, property),
+			nextValue,
+			...value.slice(property + 1),
+		]);
+	};
+
 	return new Proxy(value, {
 		set: (target, property, value) => {
 			if (typeof property === 'number') {
-				const set = (next: SetStateAction<T>) => {
-					const v = typeof next === 'function' ? next(value) : next;
-					const edge = createEdge(v, set);
-					setValue((v) => [
-						...v.slice(0, property),
-						edge,
-						...v.slice(property + 1),
-					]);
-				};
-
-				set(value);
+				set(property, value);
 			}
 			return true;
 		},
 		// @ts-expect-error
 		get: (target, property: keyof PlainJSArray<T>[]) => {
-			if (typeof property === 'number') {
-				return target[property];
+			if (
+				typeof property === 'number' ||
+				(typeof property === 'string' && /\d+/.test(property))
+			) {
+				property = +property;
+				if (property in edges) {
+					return edges[property];
+				}
+
+				const item = target[property];
+				const setThis = set.bind(null, property);
+				const edge = createEdge(item, setThis);
+				edges[property] = edge;
+				return edge;
 			} else {
 				// @ts-ignore
 				if (inPlaceArrayOperations.includes(property)) {
@@ -132,8 +146,6 @@ export default function useImmutable<T extends PlainJS>(
 	const [value, setValue] = useState(initial);
 
 	const edge = useMemo(() => createEdge(value, setValue), [value]);
-
-	console.log('rerendered useImmutable');
 
 	return [edge, setValue];
 }
