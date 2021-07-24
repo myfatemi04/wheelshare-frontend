@@ -1,5 +1,6 @@
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
+import UIPressable from '../UI/UIPressable';
 import { CarpoolContext } from './Carpool';
 
 function MemberRow({ member }: { member: { id: number; name: string } }) {
@@ -27,8 +28,13 @@ const shownMembersCount = 2;
 
 export default function MemberList() {
 	const { carpool } = useContext(CarpoolContext);
+	const [expanded, setExpanded] = useState(false);
+
 	const members = carpool.members;
-	const membersToShow = members.slice(0, shownMembersCount);
+	const membersToShow = useMemo(
+		() => (expanded ? members : members.slice(0, shownMembersCount)),
+		[members, expanded]
+	);
 	const hiddenMemberCount = members.length - membersToShow.length;
 
 	return (
@@ -38,15 +44,28 @@ export default function MemberList() {
 				flexDirection: 'column',
 				alignSelf: 'center',
 				alignItems: 'center',
+				boxSizing: 'border-box',
+				padding: '0rem 2rem',
+				width: '100%',
 			}}
 		>
 			<h2 style={{ marginBlockEnd: '0.5rem' }}>Members</h2>
 			{members.length > 0 ? (
-				<div style={{ display: 'flex', flexDirection: 'column' }}>
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						width: '100%',
+						// alignItems: 'center',
+					}}
+				>
 					{membersToShow.map((member) => (
 						<MemberRow member={member} key={member.id} />
 					))}
-					{formatOthers(hiddenMemberCount)}
+					<br />
+					<UIPressable onClick={() => setExpanded((e) => !e)}>
+						{expanded ? 'Hide' : formatOthers(hiddenMemberCount)}
+					</UIPressable>
 				</div>
 			) : (
 				'This carpool has no members.'

@@ -46,11 +46,20 @@ export default function CarpoolRouteEstimator() {
 
 	return (
 		<div
-			style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				width: '100%',
+				boxSizing: 'border-box',
+				padding: '0rem 2rem',
+			}}
 		>
 			<h2>Route Optimization</h2>
 			{path ? (
-				<div style={{ display: 'flex', flexDirection: 'column' }}>
+				<div
+					style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+				>
 					<span>Best route: {path.distance.toFixed(1)} miles</span>
 					<br />
 					{(() => {
