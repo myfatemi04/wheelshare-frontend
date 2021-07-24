@@ -1,5 +1,10 @@
 import { useCallback } from 'react';
-import { acceptInvite, acceptRequest, denyInvite, denyRequest } from '../api';
+import {
+	acceptInvite,
+	acceptCarpoolRequest,
+	denyInvite,
+	denyCarpoolRequest,
+} from '../api';
 import { IInvitation } from '../types';
 import UIButton from '../UI/UIButton';
 
@@ -11,11 +16,11 @@ export default function Notification({
 	const carpoolId = notification.carpool.id;
 
 	const acceptReq = useCallback(() => {
-		acceptRequest(carpoolId, notification.user.id);
+		acceptCarpoolRequest(carpoolId, notification.user.id);
 	}, [carpoolId, notification.user.id]);
 
 	const rejectReq = useCallback(() => {
-		denyRequest(carpoolId, notification.user.id);
+		denyCarpoolRequest(carpoolId, notification.user.id);
 	}, [carpoolId, notification.user.id]);
 
 	const acceptInv = useCallback(() => {
@@ -30,12 +35,12 @@ export default function Notification({
 
 	return (
 		<div className="notification">
-			{notification.user.name}
+			{notification.user.name}{' '}
 			{notification.isRequest ? (
-				<span> request you to join </span>
+				<span>requested to join</span>
 			) : (
-				<span> invited you to join </span>
-			)}
+				<span>invited you to join</span>
+			)}{' '}
 			{notification.carpool.name + ' at ' + sentTime.toLocaleString()}
 			{notification.isRequest ? (
 				<div className="notification-buttons" style={{ display: 'flex' }}>

@@ -1,6 +1,8 @@
 import { createContext, useCallback, useEffect } from 'react';
 import {
+	acceptCarpoolRequest,
 	cancelCarpoolInvite,
+	denyCarpoolRequest,
 	getCarpool,
 	leaveCarpool,
 	sendCarpoolInvite,
@@ -25,13 +27,19 @@ type CarpoolState = {
 
 export const CarpoolContext = createContext({
 	carpool: {} as CarpoolState,
-	sendInvite: (user: { id: number; name: string }) => {
+	async sendInvite(user: { id: number; name: string }) {
 		console.error('not implemented: sendInvite');
 	},
-	cancelInvite: (user: { id: number; name: string }) => {
+	async cancelInvite(user: { id: number; name: string }) {
 		console.error('not implemented: cancelInvite');
 	},
-	leave: () => {
+	async acceptRequest(userId: number) {
+		console.error('not implemented: acceptRequest');
+	},
+	async denyRequest(userId: number) {
+		console.error('not implemented: denyRequest');
+	},
+	leave() {
 		console.error('not implemented: leave');
 	},
 });
@@ -55,46 +63,83 @@ export default function Carpool({ id }: { id: number }) {
 		});
 	}, [id, setCarpool]);
 
+	const acceptRequest = useCallback(
+		async (userId: number) => {
+			if (!carpool) {
+				console.error(
+					'Trying to accept request when carpool has not been loaded.'
+				);
+				return;
+			}
+			await acceptCarpoolRequest(id, userId);
+			const invite = carpool.invitations[userId];
+			const name = invite.user.name;
+			delete carpool.invitations[userId];
+			carpool.members.push({ id: userId, name });
+		},
+		[carpool, id]
+	);
+
+	const denyRequest = useCallback(
+		async (userId: number) => {
+			if (!carpool) {
+				console.error(
+					'Trying to deny request when carpool has not been loaded.'
+				);
+				return;
+			}
+			await denyCarpoolRequest(id, userId);
+			delete carpool.invitations[userId];
+		},
+		[carpool, id]
+	);
+
 	const sendInvite = useCallback(
-		(user: { id: number; name: string }) => {
-			if (carpool) {
-				sendCarpoolInvite(id, user.id)
-					.then(() => {
-						carpool.invitations[user.id] = { isRequest: false, user };
-					})
-					.catch(console.error);
-			} else {
+		async (user: { id: number; name: string }) => {
+			if (!carpool) {
 				console.error(
 					'Trying to send invite when carpool has not been loaded.'
 				);
+				return;
+			}
+			try {
+				await sendCarpoolInvite(id, user.id);
+				carpool.invitations[user.id] = { isRequest: false, user };
+			} catch (e) {
+				console.error(e);
 			}
 		},
 		[carpool, id]
 	);
 
 	const cancelInvite = useCallback(
-		(user: { id: number; name: string }) => {
+		async (user: { id: number; name: string }) => {
 			if (!carpool) {
-				return null;
+				console.error(
+					'Trying to cancel invite when carpool has not been loaded.'
+				);
+				return;
 			}
-			cancelCarpoolInvite(id, user.id)
-				.then(() => {
-					delete carpool.invitations[user.id];
-				})
-				.catch(console.error);
+			try {
+				await cancelCarpoolInvite(id, user.id);
+			} catch (e) {
+				console.error(e);
+			}
+			delete carpool.invitations[user.id];
 		},
 		[carpool, id]
 	);
 
 	const eventId = carpool?.event.id;
 
-	const leave = useCallback(() => {
+	const leave = useCallback(async () => {
 		if (eventId) {
-			leaveCarpool(id)
-				.then(() => {
-					window.location.href = '/events/' + eventId;
-				})
-				.catch(console.error);
+			try {
+				await leaveCarpool(id);
+				window.location.href = '/events/' + eventId;
+			} catch (e) {
+				console.error(e);
+			}
 		}
 	}, [eventId, id]);
 
@@ -108,6 +153,8 @@ export default function Carpool({ id }: { id: number }) {
 				carpool,
 				sendInvite,
 				cancelInvite,
+				acceptRequest,
+				denyRequest,
 				leave,
 			}}
 		>

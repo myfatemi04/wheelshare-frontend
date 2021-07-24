@@ -5,16 +5,19 @@ import { useContext } from 'react';
 import useToggle from '../useToggle';
 import { CarpoolContext } from './Carpool';
 import InvitationList from './InvitationList';
+import RequestList from './RequestList';
 
 const spanStyle = {
 	padding: '0.5rem',
 	display: 'flex',
 	alignItems: 'center',
 	cursor: 'pointer',
-};
+	userSelect: 'none',
+} as const;
 
 export default function CarpoolTopButtonsMembersOnly() {
 	const [invitationsOpen, toggleInvitationsOpen] = useToggle(false);
+	const [requestsOpen, toggleRequestsOpen] = useToggle(false);
 	const { leave } = useContext(CarpoolContext);
 
 	return (
@@ -26,8 +29,8 @@ export default function CarpoolTopButtonsMembersOnly() {
 					margin: '0.5rem 0',
 				}}
 			>
-				<span style={spanStyle} onClick={console.log}>
-					<MailOutlineIcon style={{ marginRight: '0.5rem' }} /> 1 request
+				<span style={spanStyle} onClick={toggleRequestsOpen}>
+					<MailOutlineIcon style={{ marginRight: '0.5rem' }} /> View requests
 				</span>
 				<span style={spanStyle} onClick={toggleInvitationsOpen}>
 					<PersonAddIcon style={{ marginRight: '0.5rem' }} /> Invite
@@ -38,6 +41,7 @@ export default function CarpoolTopButtonsMembersOnly() {
 			</div>
 
 			{invitationsOpen && <InvitationList />}
+			{requestsOpen && <RequestList />}
 		</>
 	);
 }
