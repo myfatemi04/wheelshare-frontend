@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { useCallback } from 'react';
 
 const baseStyle = {
@@ -13,10 +14,14 @@ export default function UITextInput({
 	value,
 	disabled = false,
 	onChangeText,
+	password = false,
+	style = {},
 }: {
 	value: string;
 	disabled?: boolean;
 	onChangeText: (text: string) => void;
+	password?: boolean;
+	style?: CSSProperties;
 }) {
 	const onChange = useCallback(
 		(e) => onChangeText(e.target.value),
@@ -24,10 +29,12 @@ export default function UITextInput({
 	);
 	return (
 		<input
-			style={baseStyle}
+			style={{ ...baseStyle, ...style }}
 			value={value}
 			disabled={disabled}
 			onChange={onChange}
+			type={password ? 'password' : 'text'}
+			autoCapitalize="new-password"
 		/>
 	);
 }

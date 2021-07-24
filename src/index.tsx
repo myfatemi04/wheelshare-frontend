@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App';
+import App from './mvp/App';
+import WheelShareProvider from './mvp/WheelShareProvider';
 import reportWebVitals from './reportWebVitals';
-import AuthenticationWrapper from './components/Authentication/AuthenticationWrapper';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<AuthenticationWrapper>
+		{/* <AuthenticationWrapper>
 			<App />
-		</AuthenticationWrapper>
+		</AuthenticationWrapper> */}
+		<WheelShareProvider>
+			<App />
+		</WheelShareProvider>
 	</React.StrictMode>,
 	document.getElementById('root')
 );

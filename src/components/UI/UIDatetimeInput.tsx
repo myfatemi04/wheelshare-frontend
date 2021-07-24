@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { CSSProperties, useCallback } from 'react';
 
 const baseStyle = {
 	marginTop: '0.5em',
@@ -12,9 +12,11 @@ const baseStyle = {
 export default function UIDatetimeInput({
 	onChangedDate,
 	disabled = false,
+	style = {},
 }: {
 	onChangedDate: (date: Date | null) => void;
 	disabled?: boolean;
+	style?: CSSProperties;
 }) {
 	const onChange = useCallback(
 		(e) => {
@@ -28,7 +30,7 @@ export default function UIDatetimeInput({
 	);
 	return (
 		<input
-			style={baseStyle}
+			style={{ ...baseStyle, ...style }}
 			type="datetime-local"
 			disabled={disabled}
 			onChange={onChange}

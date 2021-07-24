@@ -23,26 +23,34 @@ export default function estimateOptimalPath<
 	const { from, to, waypoints } = path;
 	let sequence = [from, to];
 
+	console.log('Sequence:', sequence, '; distance:', getDistance(...sequence));
+
 	// Calculates all possible paths from the start to the end of the given path
 	// and returns the one with the minimum distance
 	for (let waypoint of waypoints) {
 		// Iterate over all possible insertion points for the waypoint
 		let minDistance = Infinity;
-		let insertionPoint = 0;
+		let minI = 0;
 		for (let i = 0; i < sequence.length - 1; i++) {
-			const [start, end] = sequence.slice(i, i + 2);
-
-			const distance = getDistance(start, waypoint, end);
+			const temporarySequence = [
+				...sequence.slice(0, i + 1),
+				waypoint,
+				...sequence.slice(i + 1),
+			];
+			const distance = getDistance(...temporarySequence);
 			if (distance < minDistance) {
 				minDistance = distance;
-				insertionPoint = i;
+				minI = i;
 			}
 		}
 
-		sequence = sequence
-			.slice(0, insertionPoint + 1)
-			.concat([waypoint])
-			.concat(sequence.slice(insertionPoint + 1));
+		sequence = [
+			...sequence.slice(0, minI + 1),
+			waypoint,
+			...sequence.slice(minI + 1),
+		];
+
+		console.log('Sequence:', sequence, '; distance:', getDistance(...sequence));
 	}
 
 	const newWaypoints = sequence.slice(1, sequence.length - 1);
