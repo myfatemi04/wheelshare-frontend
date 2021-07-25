@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import getPlaceDetails from '../../lib/getPlaceDetails';
 import { addOrUpdateEventSignup, removeEventSignup } from '../api';
@@ -14,6 +14,15 @@ export default function EventInterestForm() {
 	const me = useMe() || { id: 0, name: '' };
 	const placeIdRef = useRef<string | null>(null);
 	const canDriveRef = useRef(false);
+
+	{
+		const signup = event.signups[me.id];
+
+		useEffect(() => {
+			placeIdRef.current = signup?.placeId ?? null;
+			canDriveRef.current = signup?.canDrive ?? false;
+		}, [signup?.canDrive, signup?.placeId]);
+	}
 
 	const updateSignup = useCallback(async () => {
 		const placeId = placeIdRef.current;
