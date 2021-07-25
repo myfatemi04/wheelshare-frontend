@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import getPlaceDetails from '../../lib/getPlaceDetails';
 import { addOrUpdateEventSignup, removeEventSignup } from '../api';
@@ -12,31 +12,35 @@ import EventSignups from './EventSignups';
 export default function EventInterestForm() {
 	const event = useMutableEvent();
 	const me = useMe() || { id: 0, name: '' };
+	const placeIdRef = useRef<string | null>(null);
+	const canDriveRef = useRef(false);
 
-	const updateSignup = useCallback(
-		async (placeId: string | null) => {
-			await addOrUpdateEventSignup(event.id, placeId);
+	const updateSignup = useCallback(async () => {
+		const placeId = placeIdRef.current;
+		const canDrive = canDriveRef.current;
 
-			if (placeId) {
-				const details = await getPlaceDetails(placeId);
+		await addOrUpdateEventSignup(event.id, placeIdRef.current, canDrive);
 
-				event.signups[me.id] = {
-					user: { id: me.id, name: me.name },
-					placeId,
-					...details,
-				};
-			} else {
-				event.signups[me.id] = {
-					user: { id: me.id, name: me.name },
-					placeId: null,
-					latitude: null,
-					longitude: null,
-					formattedAddress: null,
-				};
-			}
-		},
-		[event.id, event.signups, me.id, me.name]
-	);
+		if (placeId) {
+			const details = await getPlaceDetails(placeId);
+
+			event.signups[me.id] = {
+				user: { id: me.id, name: me.name },
+				placeId,
+				...details,
+				canDrive,
+			};
+		} else {
+			event.signups[me.id] = {
+				user: { id: me.id, name: me.name },
+				placeId: null,
+				latitude: null,
+				longitude: null,
+				formattedAddress: null,
+				canDrive,
+			};
+		}
+	}, [event.id, event.signups, me.id, me.name]);
 
 	const removeSignup = useCallback(async () => {
 		await removeEventSignup(event.id);
@@ -48,10 +52,19 @@ export default function EventInterestForm() {
 
 	const interested = !!event.signups[me.id];
 
+	const canDrive = !!event.signups[me.id]?.canDrive;
+
 	return (
 		<>
 			<UIButton
-				onClick={interested ? () => removeSignup() : () => updateSignup(null)}
+				onClick={
+					interested
+						? () => removeSignup()
+						: () => {
+								placeIdRef.current = null;
+								updateSignup();
+						  }
+				}
 				style={{
 					backgroundColor: interested ? green : lightgrey,
 					color: interested ? 'white' : 'black',
@@ -62,10 +75,24 @@ export default function EventInterestForm() {
 			</UIButton>
 			{interested && (
 				<>
+					<UIButton
+						onClick={() => {
+							canDriveRef.current = !canDriveRef.current;
+							updateSignup();
+						}}
+						style={{
+							backgroundColor: canDrive ? green : lightgrey,
+							color: canDrive ? 'white' : 'black',
+							transition: 'color 0.2s, background-color 0.2s',
+						}}
+					>
+						{canDrive ? 'Can drive' : "Can't drive"}
+					</UIButton>
 					<UIPlacesAutocomplete
 						placeholder="Pickup and dropoff location"
 						onSelected={(_address, placeId) => {
-							updateSignup(placeId);
+							placeIdRef.current = placeId;
+							updateSignup();
 						}}
 						style={
 							event.signups[me.id]?.placeId != null

@@ -92,6 +92,7 @@ export type IEventSignupComplete = {
 		id: number;
 		name: string;
 	};
+	canDrive: boolean;
 	placeId: string;
 	formattedAddress: string;
 	latitude: number;
@@ -103,6 +104,7 @@ export type IEventSignupIncomplete = {
 		id: number;
 		name: string;
 	};
+	canDrive: boolean;
 	placeId: null;
 	formattedAddress: null;
 	latitude: null;

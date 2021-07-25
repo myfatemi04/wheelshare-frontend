@@ -47,8 +47,6 @@ export default function estimateOptimalPath<
 
 	const newWaypoints = sequence.slice(1, sequence.length - 1);
 
-	console.log({ sequence, path });
-
 	return {
 		path: {
 			from,
