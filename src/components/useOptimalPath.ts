@@ -1,12 +1,10 @@
 import { useDebugValue, useMemo } from 'react';
-import estimateOptimalPath, {
-	Location,
-	Path,
-} from '../lib/estimateoptimalpath';
+import estimateOptimalPath, { Path } from '../lib/estimateoptimalpath';
+import { ICarpool, IEventSignupComplete } from './types';
 
-export default function useOptimalPath<M extends Location, D extends Location>(
-	members: M[],
-	destination: D
+export default function useOptimalPath(
+	members: IEventSignupComplete[],
+	destination: ICarpool['event']
 ) {
 	const path = useMemo(() => {
 		if (members.length === 0) {
@@ -15,13 +13,17 @@ export default function useOptimalPath<M extends Location, D extends Location>(
 
 		// O(n^2)
 		const path = members.reduce((prev, driver) => {
+			if (!driver.canDrive) {
+				return prev;
+			}
+
 			// O(n)
 			const passengerLocations = members.filter(
 				(location) => location !== driver
 			);
 
 			// O(n)
-			const path = estimateOptimalPath<M, D>({
+			const path = estimateOptimalPath({
 				from: driver,
 				waypoints: passengerLocations,
 				to: destination,
@@ -36,7 +38,7 @@ export default function useOptimalPath<M extends Location, D extends Location>(
 			}
 
 			return prev;
-		}, null! as { path: Path<M, D>; distance: number });
+		}, null! as { path: Path<IEventSignupComplete, ICarpool['event']>; distance: number });
 
 		return path;
 	}, [destination, members]);

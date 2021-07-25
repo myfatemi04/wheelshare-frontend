@@ -2,14 +2,13 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import { useCallback, useContext, useMemo } from 'react';
-import { Location } from '../../lib/estimateoptimalpath';
 import {
 	useCancelCarpoolRequest,
 	useInvitationState,
 	useSendCarpoolRequest,
 } from '../../state/Notifications/NotificationsHooks';
 import { useMe } from '../hooks';
-import { IEvent } from '../types';
+import { IEvent, IEventSignupComplete } from '../types';
 import useOptimalPath from '../useOptimalPath';
 import EventContext from './EventContext';
 import { useMySignup } from './EventHooks';
@@ -34,7 +33,7 @@ function useMemberLocations(members: IEvent['carpools'][0]['members']) {
 						longitude: signup.longitude,
 					};
 				})
-				.filter(Boolean) as Location[],
+				.filter(Boolean) as IEventSignupComplete[],
 		[members, signups]
 	);
 }
@@ -60,37 +59,21 @@ function CarpoolRow({
 		cancelCarpoolRequest(carpool.id);
 	}, [cancelCarpoolRequest, carpool.id]);
 
-	const {
-		event: { latitude, longitude },
-	} = useContext(EventContext);
+	const { event } = useContext(EventContext);
 
 	const mySignup = useMySignup();
 
-	const myLocation =
-		mySignup && mySignup.latitude !== null
-			? {
-					latitude: mySignup.latitude,
-					longitude: mySignup.longitude,
-			  }
-			: null;
-
 	const memberLocations = useMemberLocations(carpool.members);
 
-	const pathInCarpool = useOptimalPath(memberLocations, {
-		latitude,
-		longitude,
-	});
+	const pathInCarpool = useOptimalPath(memberLocations, event);
 
 	const pathNotInCarpool = useOptimalPath(
-		myLocation ? [...memberLocations, myLocation] : [],
-		{
-			latitude,
-			longitude,
-		}
+		mySignup.latitude !== null ? [...memberLocations, mySignup] : [],
+		event
 	);
 
 	const extraDistance =
-		myLocation && pathInCarpool && pathNotInCarpool
+		mySignup.latitude !== null && pathInCarpool && pathNotInCarpool
 			? pathInCarpool.distance - pathNotInCarpool.distance
 			: null;
 
