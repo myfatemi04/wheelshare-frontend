@@ -1,13 +1,19 @@
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useContext, useMemo, useState } from 'react';
+import { IEventSignup } from '../types';
 import UIPressable from '../UI/UIPressable';
 import { CarpoolContext } from './Carpool';
+import useSignups from './useSignups';
 
-function MemberRow({ member }: { member: { id: number; name: string } }) {
+function MemberRow({ signup }: { signup: IEventSignup }) {
 	return (
-		<div style={{ display: 'flex', alignItems: 'center' }} key={member.id}>
-			<AccountCircleIcon style={{ marginRight: '8px' }} />
-			<div>{member.name}</div>
+		<div
+			style={{ display: 'flex', flexDirection: 'column', padding: '0.5rem' }}
+		>
+			<div style={{ display: 'flex', alignItems: 'center' }}>
+				<div>{signup.user.name}</div>
+			</div>
+			<span>{signup.formattedAddress}</span>
+			{signup.canDrive && <b>Can drive</b>}
 		</div>
 	);
 }
@@ -24,13 +30,18 @@ function formatOthers(hiddenMemberCount: number) {
 	return `${hiddenMemberCount} others...`;
 }
 
-const shownMembersCount = 2;
+const shownMembersCount = 4;
 
 export default function MemberList() {
 	const { carpool } = useContext(CarpoolContext);
 	const [expanded, setExpanded] = useState(false);
 
-	const members = carpool.members;
+	const memberIDs = useMemo(
+		() => carpool.members.map((member) => member.id),
+		[carpool]
+	);
+	const members = useSignups(carpool.id, memberIDs);
+
 	const membersToShow = useMemo(
 		() => (expanded ? members : members.slice(0, shownMembersCount)),
 		[members, expanded]
@@ -60,7 +71,7 @@ export default function MemberList() {
 					}}
 				>
 					{membersToShow.map((member) => (
-						<MemberRow member={member} key={member.id} />
+						<MemberRow signup={member} key={member.user.id} />
 					))}
 					<br />
 					<UIPressable onClick={() => setExpanded((e) => !e)}>

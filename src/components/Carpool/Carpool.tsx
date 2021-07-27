@@ -167,8 +167,8 @@ export default function Carpool({ id }: { id: number }) {
 				<CarpoolDetails />
 				<Members>
 					<CarpoolRouteEstimator />
+					<MemberList />
 				</Members>
-				<MemberList />
 			</UISecondaryBox>
 		</CarpoolContext.Provider>
 	);

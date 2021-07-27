@@ -1,27 +1,10 @@
-import { useMemo, useState } from 'react';
-import { useEffect } from 'react';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { Location } from '../../lib/estimateoptimalpath';
 import getDistance from '../../lib/getdistance';
-import { getEventSignupsBulk } from '../api';
-import { IEventSignupComplete, IEventSignup } from '../types';
+import { IEventSignupComplete } from '../types';
 import useOptimalPath from '../useOptimalPath';
 import { CarpoolContext } from './Carpool';
-
-function useSignups(eventId: number, userIds: number[]) {
-	// Fetchs bulk signups from the API for the given event and user ids
-	// and returns a memoized result.
-
-	const [signups, setSignups] = useState<IEventSignup[]>([]);
-
-	useEffect(() => {
-		getEventSignupsBulk(eventId, userIds).then((signups) => {
-			setSignups(signups);
-		});
-	}, [eventId, userIds]);
-
-	return signups;
-}
+import useSignups from './useSignups';
 
 export default function CarpoolRouteEstimator() {
 	const { carpool } = useContext(CarpoolContext);
@@ -34,7 +17,7 @@ export default function CarpoolRouteEstimator() {
 
 	const signups = useSignups(carpool.event.id, memberIds);
 
-	const signupsWithLocation = useMemo(
+	const completedSignups = useMemo(
 		() =>
 			signups.filter(
 				(signup) => signup.latitude !== null
@@ -42,7 +25,7 @@ export default function CarpoolRouteEstimator() {
 		[signups]
 	);
 
-	const path = useOptimalPath(signupsWithLocation, carpool.event);
+	const path = useOptimalPath(completedSignups, carpool.event);
 
 	return (
 		<div
