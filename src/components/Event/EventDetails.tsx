@@ -5,8 +5,10 @@ import { useContext } from 'react';
 import EventContext from './EventContext';
 
 export default function EventDetails() {
-	const { startTime, endTime, formattedAddress } =
+	const { startTime, duration, formattedAddress } =
 		useContext(EventContext).event;
+
+	const endTime = new Date(new Date(startTime).getTime() + duration * 60);
 
 	return (
 		<div
@@ -25,7 +27,7 @@ export default function EventDetails() {
 			>
 				<EventIcon style={{ marginRight: '1rem' }} />
 				{endTime
-					? formatStartAndEndTime(startTime, endTime)
+					? formatStartAndEndTime(startTime, endTime.toISOString())
 					: new Date(startTime).toLocaleString()}
 			</div>
 			<br />
