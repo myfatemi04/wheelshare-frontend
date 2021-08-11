@@ -9,6 +9,8 @@ export default function GroupSettings({ group }: { group: IGroup }) {
 	const [deletionSuccessful, setDeletionSuccessful] =
 		useState<boolean | null>(null);
 
+	const [confirmingDeletion, setConfirmingDeletion] = useState(false);
+
 	const onClickedDelete = useCallback(() => {
 		deleteGroup(group.id)
 			.then(({ status }) => {
@@ -19,12 +21,29 @@ export default function GroupSettings({ group }: { group: IGroup }) {
 			});
 	}, [group.id]);
 
+	const confirmDeletion = useCallback(() => {
+		setConfirmingDeletion(false);
+		onClickedDelete();
+	}, [onClickedDelete]);
+
+	const cancelDeletion = useCallback(() => {
+		setConfirmingDeletion(false);
+	}, [setConfirmingDeletion]);
+
 	return (
-		<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
-			<h1>Settings</h1>
-			{deletionSuccessful !== true && (
-				<UIPressable onClick={onClickedDelete}>Delete Group</UIPressable>
-			)}
+		<UISecondaryBox style={{ textAlign: 'center', minWidth: '20rem' }}>
+			<h3>Settings</h3>
+			{deletionSuccessful !== true &&
+				(confirmingDeletion ? (
+					<>
+						<UIPressable onClick={confirmDeletion}>Confirm</UIPressable>
+						<UIPressable onClick={cancelDeletion}>Cancel</UIPressable>
+					</>
+				) : (
+					<UIPressable onClick={() => setConfirmingDeletion(true)}>
+						Delete Group
+					</UIPressable>
+				))}
 			{deletionSuccessful !== null &&
 				(deletionSuccessful ? (
 					<span>

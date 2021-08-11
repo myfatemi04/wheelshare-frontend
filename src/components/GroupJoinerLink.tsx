@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { joinGroup, resolveCode } from './api';
 import UIButton from './UI/UIButton';
 import UIPressable from './UI/UIPressable';
-import UISecondaryBox from './UI/UISecondaryBox';
 import UITextInput from './UI/UITextInput';
 import useToggle from './useToggle';
 
@@ -11,19 +10,21 @@ export type GroupPreview = {
 	id: number;
 };
 
-function GroupJoiner() {
+export function GroupJoiner() {
 	const [code, setCode] = useState('');
 	const [joining, setJoining] = useState(false);
 
 	const [group, setGroup] = useState<GroupPreview | null>(null);
 
 	useEffect(() => {
-		const initialCode = code;
-		resolveCode(code).then((group) => {
-			if (code === initialCode) {
-				setGroup(group);
-			}
-		});
+		if (code) {
+			const initialCode = code;
+			resolveCode(code).then((group) => {
+				if (code === initialCode) {
+					setGroup(group);
+				}
+			});
+		}
 	}, [code]);
 
 	const join = useCallback(() => {
@@ -44,10 +45,13 @@ function GroupJoiner() {
 	const buttonEnabled = code.length > 0 && !joining;
 
 	return (
-		<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
-			<h3>Join Group</h3>
-			Code
-			<UITextInput value={code} onChangeText={setCode} />
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<span style={{ fontSize: '0.875rem' }}>Join group with code:</span>
+			<UITextInput
+				value={code}
+				onChangeText={setCode}
+				style={{ border: '2px solid grey' }}
+			/>
 			{group && (
 				<>
 					<br />
@@ -62,7 +66,7 @@ function GroupJoiner() {
 					</UIButton>
 				</>
 			)}
-		</UISecondaryBox>
+		</div>
 	);
 }
 

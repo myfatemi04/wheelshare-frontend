@@ -1,6 +1,7 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { addGroupAdmin, removeGroupAdmin } from '../api';
 import { useMe } from '../hooks';
+import UIDialogShell from '../UI/UIDialogShell';
 import UIPressable from '../UI/UIPressable';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import { GroupContext } from './Group';
@@ -47,9 +48,14 @@ export default function GroupMembersLink() {
 		<>
 			<UIPressable onClick={handleClick}>Members</UIPressable>
 			{open && (
-				<>
-					<br />
-					<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
+				<UIDialogShell onClose={() => setOpen(false)}>
+					<UISecondaryBox
+						style={{
+							textAlign: 'center',
+							backgroundColor: '#fdfdfd',
+						}}
+						cancelClicks
+					>
 						<h3>Members</h3>
 
 						{group.users.map(({ name, id }) => (
@@ -71,7 +77,7 @@ export default function GroupMembersLink() {
 
 						<GroupInviteCode />
 					</UISecondaryBox>
-				</>
+				</UIDialogShell>
 			)}
 		</>
 	);

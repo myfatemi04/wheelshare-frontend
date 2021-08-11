@@ -84,11 +84,11 @@ export default function EventCreator({ group }: { group: IGroup }) {
 	]);
 
 	return (
-		<UISecondaryBox style={{ textAlign: 'center' }}>
-			<h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+		<UISecondaryBox style={{ textAlign: 'center', minWidth: '25rem' }}>
+			<h3 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
 				Create Event
-			</h1>
-			<h3 style={{ textAlign: 'center', marginTop: '0.5rem' }}>{group.name}</h3>
+			</h3>
+			<h4 style={{ textAlign: 'center', marginTop: '0.5rem' }}>{group.name}</h4>
 			Name
 			<UITextInput value={name} onChangeText={setName} disabled={creating} />
 			<br />

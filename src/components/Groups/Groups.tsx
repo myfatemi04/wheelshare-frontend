@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getGroups } from '../api';
-import { IGroup } from '../types';
 import GroupCreatorLink from '../GroupCreator/GroupCreatorLink';
-import GroupJoinerLink from '../GroupJoinerLink';
+import { GroupJoiner } from '../GroupJoinerLink';
+import { IGroup } from '../types';
 import GroupList from './GroupList';
 
 export default function Groups() {
@@ -21,7 +21,7 @@ export default function Groups() {
 			}}
 		>
 			<h1 style={{ textAlign: 'center' }}>Groups</h1>
-			<GroupJoinerLink />
+			<GroupJoiner />
 			<br />
 			<GroupCreatorLink />
 			<br />

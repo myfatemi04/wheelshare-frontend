@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import UIDialogShell from '../UI/UIDialogShell';
 import UIPressable from '../UI/UIPressable';
 import useToggle from '../useToggle';
 import { GroupContext } from './Group';
@@ -12,10 +13,9 @@ export default function GroupSettingsLink() {
 		<>
 			<UIPressable onClick={toggle}>Settings</UIPressable>
 			{open && (
-				<>
-					<br />
+				<UIDialogShell onClose={toggle}>
 					<GroupSettings group={group} />
-				</>
+				</UIDialogShell>
 			)}
 		</>
 	);

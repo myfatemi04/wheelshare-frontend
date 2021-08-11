@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { GroupContext } from '../Group/Group';
+import UIDialogShell from '../UI/UIDialogShell';
 import UIPressable from '../UI/UIPressable';
 import useToggle from '../useToggle';
 import EventCreator from './EventCreator';
@@ -12,10 +13,9 @@ export default function EventCreatorLink() {
 		<>
 			<UIPressable onClick={toggle}>Create Event</UIPressable>
 			{open && (
-				<>
-					<br />
+				<UIDialogShell onClose={toggle}>
 					<EventCreator group={group} />
-				</>
+				</UIDialogShell>
 			)}
 		</>
 	);

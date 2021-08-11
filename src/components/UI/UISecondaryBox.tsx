@@ -13,9 +13,11 @@ const baseStyle: CSSProperties = {
 export default function UISecondaryBox({
 	children,
 	style,
+	cancelClicks = true,
 }: {
 	children: ReactNode;
 	style?: CSSProperties;
+	cancelClicks?: boolean;
 }) {
 	const computedStyle = useMemo(() => {
 		if (!style) {
@@ -23,5 +25,12 @@ export default function UISecondaryBox({
 		}
 		return { ...baseStyle, ...style };
 	}, [style]);
-	return <div style={computedStyle}>{children}</div>;
+	return (
+		<div
+			style={computedStyle}
+			{...(cancelClicks ? { onClick: (e) => e.stopPropagation() } : {})}
+		>
+			{children}
+		</div>
+	);
 }

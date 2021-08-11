@@ -28,7 +28,7 @@ export default function GroupCreator() {
 	const buttonEnabled = name.length > 0 && !creating;
 
 	return (
-		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
+		<UISecondaryBox style={{ minWidth: '25rem' }}>
 			<h3 style={{ textAlign: 'center' }}>Create Group</h3>
 			Name
 			<UITextInput onChangeText={setName} value={name} />

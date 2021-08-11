@@ -1,25 +1,20 @@
-import GroupCreator from './GroupCreator';
+import UIButton from '../UI/UIButton';
+import UIDialogShell from '../UI/UIDialogShell';
 import useToggle from '../useToggle';
+import GroupCreator from './GroupCreator';
 
 export default function GroupCreatorLink() {
 	const [open, toggle] = useToggle(false);
 
 	return (
 		<div style={{ width: '100%', textAlign: 'center' }}>
-			<div
-				style={{
-					cursor: 'pointer',
-					userSelect: 'none',
-				}}
-				onClick={toggle}
-			>
+			<UIButton onClick={toggle} style={{ backgroundColor: '#f3f3f3' }}>
 				Create Group
-			</div>
+			</UIButton>
 			{open && (
-				<>
-					<br />
+				<UIDialogShell onClose={toggle}>
 					<GroupCreator />
-				</>
+				</UIDialogShell>
 			)}
 		</div>
 	);

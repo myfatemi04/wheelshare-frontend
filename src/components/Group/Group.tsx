@@ -30,7 +30,14 @@ export default function Group({ id }: { id: number }) {
 	useEffect(() => {
 		setLoading(true);
 		getGroup(id)
-			.then(setGroup)
+			.then((group) => {
+				// @ts-ignore
+				if ('status' in group && group.status === 'error') {
+					setGroup(null);
+				} else {
+					setGroup(group);
+				}
+			})
 			.finally(() => setLoading(false));
 	}, [id, setGroup]);
 
@@ -54,7 +61,7 @@ export default function Group({ id }: { id: number }) {
 						style={{
 							display: 'flex',
 							flexDirection: 'column',
-							minWidth: '10rem',
+							minWidth: '15rem',
 						}}
 					>
 						<h1>{group.name}</h1>
