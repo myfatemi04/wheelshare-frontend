@@ -65,6 +65,7 @@ export default function EventInterestForm() {
 
 	return (
 		<>
+			<span style={{ fontSize: '0.875em' }}>Click to toggle your interest</span>
 			<UIButton
 				onClick={
 					interested
@@ -84,6 +85,9 @@ export default function EventInterestForm() {
 			</UIButton>
 			{interested && (
 				<>
+					<span style={{ fontSize: '0.875em' }}>
+						Click to toggle your driving availability
+					</span>
 					<UIButton
 						onClick={() => {
 							canDriveRef.current = !canDriveRef.current;

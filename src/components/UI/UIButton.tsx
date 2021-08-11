@@ -5,7 +5,8 @@ const baseStyle: CSSProperties = {
 	borderRadius: '0.5em',
 	textTransform: 'uppercase',
 	fontWeight: 500,
-	margin: '0.5em',
+	marginTop: '0.5rem',
+	marginBottom: '0.5rem',
 	cursor: 'pointer',
 	userSelect: 'none',
 };

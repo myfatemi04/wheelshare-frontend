@@ -83,6 +83,7 @@ export default function EventSignups() {
 	const { event } = useContext(EventContext);
 	const signups = event.signups;
 	const carpools = event.carpools;
+	const me = useMe();
 
 	const signupsWithoutCarpool = useMemo(() => {
 		// A list of users not in any carpool
@@ -94,10 +95,24 @@ export default function EventSignups() {
 			.map((id) => signups[id]);
 	}, [signups, carpools]);
 
+	const hasCarpool = useMemo(
+		() =>
+			event.carpools.some((carpool) =>
+				carpool.members.some((member) => member.id === me?.id)
+			),
+		[event.carpools, me?.id]
+	);
+
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBlockEnd: '0' }}>People without a carpool</h3>
 			<EventCarpoolCreateButton />
+			{!hasCarpool && (
+				<span style={{ fontSize: '0.875em' }}>
+					Click <PersonAddIcon style={{ fontSize: '0.875rem' }} /> to add
+					someone to the temporary invite list
+				</span>
+			)}
 			{signupsWithoutCarpool.map((signup) => (
 				<EventSignup key={signup.user.id} signup={signup} />
 			))}

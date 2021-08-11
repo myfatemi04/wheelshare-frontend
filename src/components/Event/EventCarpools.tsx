@@ -141,6 +141,10 @@ export default function Carpools() {
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<h3 style={{ marginBottom: '0' }}>Carpools</h3>
+			<span style={{ fontSize: '0.875rem' }}>
+				Click <EmojiPeopleIcon style={{ fontSize: '0.875rem' }} /> to request to
+				join a carpool.
+			</span>
 			{event.carpools.map((carpool) => (
 				<CarpoolRow
 					carpool={carpool}

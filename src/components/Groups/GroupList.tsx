@@ -1,30 +1,39 @@
 import { IGroup } from '../types';
+import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
 
 function GroupListItem({ group }: { group: IGroup }) {
 	return (
-		<UISecondaryBox>
-			<h2
+		<div style={{ display: 'flex', alignItems: 'center' }}>
+			<span
 				style={{
-					textAlign: 'center',
-					cursor: 'pointer',
-				}}
-				onClick={() => {
-					window.location.href = `/groups/${group.id}`;
+					fontSize: '1.5rem',
+					fontWeight: 'bold',
+					display: 'block',
+					marginTop: '1rem',
+					marginBottom: '1rem',
+					marginRight: '2rem',
 				}}
 			>
 				{group.name}
-			</h2>
-		</UISecondaryBox>
+			</span>
+			<UILink href={`/groups/${group.id}`}>View group</UILink>
+		</div>
 	);
 }
 
 export default function GroupList({ groups }: { groups: IGroup[] }) {
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+		<UISecondaryBox
+			style={{
+				width: '100%',
+				boxSizing: 'border-box',
+				alignItems: 'center',
+			}}
+		>
 			{groups.map((group) => (
 				<GroupListItem group={group} key={group.id} />
 			))}
-		</div>
+		</UISecondaryBox>
 	);
 }

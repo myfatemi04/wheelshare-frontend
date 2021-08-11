@@ -55,7 +55,7 @@ export default function EventCarpoolCreateButton() {
 				</span>
 			) : (
 				<>
-					<span>Available to drive?</span>
+					<span style={{ fontSize: '0.875em' }}>Available to drive?</span>
 					<UIButton
 						onClick={createCarpoolCallback}
 						style={{ backgroundColor: lightgrey }}
