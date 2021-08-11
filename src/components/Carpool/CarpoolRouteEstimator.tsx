@@ -43,7 +43,12 @@ export default function CarpoolRouteEstimator() {
 				<div
 					style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
 				>
-					<span>Best route: {path.distance.toFixed(1)} miles</span>
+					<span>Best route (estimate): {path.distance.toFixed(1)} miles</span>
+					<br />
+					<em>
+						This number is lower than the distance of the actual route, and
+						should only be used to get a rough idea of the distance.
+					</em>
 					<br />
 					{(() => {
 						const driver = path.path.from;

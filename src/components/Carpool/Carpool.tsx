@@ -12,6 +12,8 @@ import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import useImmutable from '../useImmutable';
 import CarpoolDetails from './CarpoolDetails';
+import CarpoolMap from './CarpoolMap';
+import CarpoolMapLegend from './CarpoolMapLegend';
 import CarpoolRouteEstimator from './CarpoolRouteEstimator';
 import CarpoolTopButtons from './CarpoolTopButtons';
 import MemberList from './MemberList';
@@ -168,6 +170,9 @@ export default function Carpool({ id }: { id: number }) {
 				<Members>
 					<CarpoolRouteEstimator />
 					<MemberList />
+					<h2>Map</h2>
+					<CarpoolMapLegend />
+					<CarpoolMap />
 				</Members>
 			</UISecondaryBox>
 		</CarpoolContext.Provider>
