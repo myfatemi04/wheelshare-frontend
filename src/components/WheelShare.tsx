@@ -5,9 +5,38 @@ import Groups from './Groups/Groups';
 export default function WheelShare() {
 	return (
 		<>
-			<Groups />
-			<ActiveCarpools />
-			<ActiveEvents />
+			<div
+				style={{
+					display: 'flex',
+					width: '60rem',
+					maxWidth: '100vw',
+					flexWrap: 'wrap',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						flex: 1,
+						padding: '1rem',
+						minWidth: '20rem',
+					}}
+				>
+					<ActiveCarpools />
+					<Groups />
+				</div>
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						flex: 1,
+						padding: '1rem',
+						minWidth: '20rem',
+					}}
+				>
+					<ActiveEvents />
+				</div>
+			</div>
 		</>
 	);
 }

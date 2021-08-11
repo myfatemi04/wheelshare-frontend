@@ -1,17 +1,15 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getActiveCarpools } from '../api';
 import { ICarpool } from '../types';
+import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
-import UISecondaryHeader from '../UI/UISecondaryHeader';
 
 function ActiveCarpoolListItem({ carpool }: { carpool: ICarpool }) {
 	return (
-		<UISecondaryBox>
-			<UISecondaryHeader>
-				<a href={'/carpools/' + carpool.id}>{carpool.name}</a>
-			</UISecondaryHeader>
-		</UISecondaryBox>
+		<div>
+			<h2>{carpool.name}</h2>
+			<UILink href={`/carpools/${carpool.id}`}>View carpool</UILink>
+		</div>
 	);
 }
 
@@ -23,13 +21,18 @@ export default function ActiveCarpools() {
 	}, []);
 
 	return (
-		<>
-			<h1>Carpools</h1>
-			<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
+			<h1 style={{ textAlign: 'center' }}>Carpools</h1>
+			<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
 				{activeCarpools.map((carpool) => (
 					<ActiveCarpoolListItem carpool={carpool} key={carpool.id} />
 				))}
-			</div>
-		</>
+			</UISecondaryBox>
+		</div>
 	);
 }

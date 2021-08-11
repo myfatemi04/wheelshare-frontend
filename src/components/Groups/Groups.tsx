@@ -13,8 +13,13 @@ export default function Groups() {
 	}, []);
 
 	return (
-		<>
-			<h1>Groups</h1>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
+			<h1 style={{ textAlign: 'center' }}>Groups</h1>
 			<GroupJoinerLink />
 			<br />
 			<GroupCreatorLink />
@@ -28,6 +33,6 @@ export default function Groups() {
 					an invite link.
 				</span>
 			)}
-		</>
+		</div>
 	);
 }

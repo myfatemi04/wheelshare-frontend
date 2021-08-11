@@ -16,9 +16,9 @@ export default function ActiveEvents() {
 	}, [hasEvents, setEvents]);
 
 	return (
-		<>
-			<h1>Events</h1>
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<h1 style={{ textAlign: 'center' }}>Events</h1>
 			<EventStream events={events} />
-		</>
+		</div>
 	);
 }

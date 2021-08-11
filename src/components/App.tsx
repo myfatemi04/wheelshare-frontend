@@ -20,7 +20,7 @@ const style: CSSProperties = {
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
-	width: '30rem',
+	// width: '30rem',
 	maxWidth: '100%',
 	marginLeft: 'auto',
 	marginRight: 'auto',

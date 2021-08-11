@@ -7,6 +7,7 @@ const baseStyle: CSSProperties = {
 	borderRadius: '0.5rem',
 	padding: '1rem',
 	marginBottom: '1em',
+	boxSizing: 'border-box',
 };
 
 export default function UISecondaryBox({

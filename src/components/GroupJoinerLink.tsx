@@ -70,7 +70,7 @@ export default function GroupJoinerLink() {
 	const [open, toggle] = useToggle(false);
 
 	return (
-		<>
+		<div style={{ width: '100%', textAlign: 'center' }}>
 			<UIPressable onClick={toggle}>Join Group</UIPressable>
 			{open && (
 				<>
@@ -78,6 +78,6 @@ export default function GroupJoinerLink() {
 					<GroupJoiner />
 				</>
 			)}
-		</>
+		</div>
 	);
 }
