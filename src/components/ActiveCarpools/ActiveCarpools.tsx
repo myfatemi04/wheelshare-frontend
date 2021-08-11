@@ -7,7 +7,7 @@ import UISecondaryBox from '../UI/UISecondaryBox';
 function ActiveCarpoolListItem({ carpool }: { carpool: ICarpool }) {
 	return (
 		<div>
-			<h2>{carpool.name}</h2>
+			<h4>{carpool.name}</h4>
 			<UILink href={`/carpools/${carpool.id}`}>View carpool</UILink>
 		</div>
 	);
@@ -25,6 +25,7 @@ export default function ActiveCarpools() {
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
+				width: '19rem',
 			}}
 		>
 			<h1 style={{ textAlign: 'center' }}>Carpools</h1>

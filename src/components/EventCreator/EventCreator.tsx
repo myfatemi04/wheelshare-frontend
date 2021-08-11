@@ -84,7 +84,7 @@ export default function EventCreator({ group }: { group: IGroup }) {
 	]);
 
 	return (
-		<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
+		<UISecondaryBox style={{ textAlign: 'center' }}>
 			<h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
 				Create Event
 			</h1>

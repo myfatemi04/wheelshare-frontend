@@ -45,7 +45,7 @@ function GroupJoiner() {
 
 	return (
 		<UISecondaryBox style={{ width: '100%', textAlign: 'center' }}>
-			<h1>Join Group</h1>
+			<h3>Join Group</h3>
 			Code
 			<UITextInput value={code} onChangeText={setCode} />
 			{group && (

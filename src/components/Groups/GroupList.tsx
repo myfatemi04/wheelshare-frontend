@@ -5,7 +5,7 @@ import UISecondaryBox from '../UI/UISecondaryBox';
 function GroupListItem({ group }: { group: IGroup }) {
 	return (
 		<div>
-			<h2>{group.name}</h2>
+			<h4>{group.name}</h4>
 			<UILink href={`/groups/${group.id}`}>View group</UILink>
 		</div>
 	);

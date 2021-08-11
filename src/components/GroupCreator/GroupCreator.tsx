@@ -29,7 +29,7 @@ export default function GroupCreator() {
 
 	return (
 		<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
-			<h1 style={{ textAlign: 'center' }}>Create Group</h1>
+			<h3 style={{ textAlign: 'center' }}>Create Group</h3>
 			Name
 			<UITextInput onChangeText={setName} value={name} />
 			<UIButton

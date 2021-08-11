@@ -17,6 +17,7 @@ export default function Groups() {
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
+				width: '19rem',
 			}}
 		>
 			<h1 style={{ textAlign: 'center' }}>Groups</h1>

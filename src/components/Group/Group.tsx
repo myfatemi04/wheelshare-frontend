@@ -6,6 +6,7 @@ import EventStream from '../EventStream';
 import { useMe } from '../hooks';
 import { IGroup } from '../types';
 import UILink from '../UI/UILink';
+import UITwoColumns from '../UI/UITwoColumns';
 import useImmutable from '../useImmutable';
 import GroupMembersLink from './GroupMembersLink';
 import GroupSettingsLink from './GroupSettingsLink';
@@ -47,36 +48,41 @@ export default function Group({ id }: { id: number }) {
 
 	return group ? (
 		<GroupContext.Provider value={{ group }}>
-			<h1>{group.name}</h1>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					width: '100%',
-					alignItems: 'center',
-				}}
-			>
-				<UILink href="/">Home</UILink>
-				<br />
-				<GroupMembersLink />
-				<br />
-				{isAdmin && (
-					<>
-						<GroupSettingsLink />
+			<UITwoColumns
+				first={
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							minWidth: '10rem',
+						}}
+					>
+						<h1>{group.name}</h1>
+						<UILink href="/">Home</UILink>
 						<br />
-					</>
-				)}
-				<EventCreatorLink />
-			</div>
-			<br />
-
-			{group.events?.length > 0 ? (
-				<EventStream events={group.events} />
-			) : (
-				<span>
-					There are no events yet. Click 'create event' above to add one!
-				</span>
-			)}
+						<GroupMembersLink />
+						<br />
+						{isAdmin && (
+							<>
+								<GroupSettingsLink />
+								<br />
+							</>
+						)}
+						<EventCreatorLink />
+					</div>
+				}
+				firstFlex={1}
+				second={
+					group.events?.length > 0 ? (
+						<EventStream events={group.events} />
+					) : (
+						<span>
+							There are no events yet. Click 'create event' above to add one!
+						</span>
+					)
+				}
+				secondFlex={2}
+			/>
 		</GroupContext.Provider>
 	) : (
 		<h1>Group not found</h1>
