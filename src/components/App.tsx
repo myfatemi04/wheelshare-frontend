@@ -2,6 +2,7 @@ import { CSSProperties, lazy, Suspense, useContext, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NotificationsProvider from '../state/Notifications/NotificationsProvider';
 import AuthenticationContext from './Authentication/AuthenticationContext';
+import Footer from './Footer';
 import Header from './Header/Header';
 import {
 	hasLoginContinueURL,
@@ -42,7 +43,14 @@ export default function App() {
 	}, [loaded, user]);
 
 	return (
-		<div style={{ padding: '1rem', maxWidth: '100vw' }}>
+		<div
+			style={{
+				padding: '1rem',
+				maxWidth: '100vw',
+				minHeight: 'calc(100vh - 2rem)',
+				position: 'relative',
+			}}
+		>
 			<div style={style}>
 				<Suspense fallback={null}>
 					<BrowserRouter>
@@ -68,6 +76,7 @@ export default function App() {
 					</BrowserRouter>
 				</Suspense>
 			</div>
+			<Footer />
 		</div>
 	);
 }
