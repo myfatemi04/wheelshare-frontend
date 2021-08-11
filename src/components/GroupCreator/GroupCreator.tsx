@@ -33,7 +33,7 @@ export default function GroupCreator() {
 			Name
 			<UITextInput onChangeText={setName} value={name} />
 			<UIButton
-				onClick={onClickedCreateGroup}
+				onClick={buttonEnabled ? onClickedCreateGroup : () => {}}
 				style={!buttonEnabled ? { color: 'grey' } : {}}
 			>
 				{creating ? 'Creating group' : 'Create group'}
