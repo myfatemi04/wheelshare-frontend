@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { createContext, useEffect, useState } from 'react';
 import { getGroup } from '../api';
 import EventCreatorLink from '../EventCreator/EventCreatorLink';
 import EventStream from '../EventStream';
+import { useMe } from '../hooks';
 import { IGroup } from '../types';
 import UILink from '../UI/UILink';
 import useImmutable from '../useImmutable';
@@ -13,6 +15,7 @@ const DEFAULT_GROUP = (): IGroup => ({
 	name: '',
 	users: [],
 	events: [],
+	admins: [],
 	joinCode: null,
 });
 
@@ -21,6 +24,7 @@ export const GroupContext = createContext({ group: DEFAULT_GROUP() });
 export default function Group({ id }: { id: number }) {
 	const [group, setGroup] = useImmutable<IGroup | null>(null);
 	const [loading, setLoading] = useState(false);
+	const me = useMe();
 
 	useEffect(() => {
 		setLoading(true);
@@ -28,6 +32,14 @@ export default function Group({ id }: { id: number }) {
 			.then(setGroup)
 			.finally(() => setLoading(false));
 	}, [id, setGroup]);
+
+	const isAdmin = useMemo(() => {
+		if (!group) {
+			return false;
+		}
+
+		return group.admins.some((a) => a.id === me?.id);
+	}, [group, me?.id]);
 
 	if (loading) {
 		return <h1>Loading...</h1>;
@@ -48,8 +60,12 @@ export default function Group({ id }: { id: number }) {
 				<br />
 				<GroupMembersLink />
 				<br />
-				<GroupSettingsLink />
-				<br />
+				{isAdmin && (
+					<>
+						<GroupSettingsLink />
+						<br />
+					</>
+				)}
 				<EventCreatorLink />
 			</div>
 			<br />

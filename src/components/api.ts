@@ -145,6 +145,22 @@ export async function createGroup(name: string): Promise<{ id: number }> {
 	return { id };
 }
 
+export async function addGroupAdmin(
+	id: number,
+	userId: number
+): Promise<{ status: 'success' | 'error' }> {
+	const { status } = await post(`/groups/${id}/add_admin`, { userId });
+	return { status };
+}
+
+export async function removeGroupAdmin(
+	id: number,
+	userId: number
+): Promise<{ status: 'success' | 'error' }> {
+	const { status } = await post(`/groups/${id}/remove_admin`, { userId });
+	return { status };
+}
+
 export async function getNotifications() {
 	return await get('/users/@me/received_requests_and_invites');
 }

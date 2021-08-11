@@ -1,11 +1,20 @@
+import { useMemo } from 'react';
 import { useCallback, useContext, useState } from 'react';
 import { lightgrey } from '../../lib/colors';
 import { generateCode, resetCode } from '../api';
+import { useMe } from '../hooks';
 import UIButton from '../UI/UIButton';
 import { GroupContext } from './Group';
 
-export default function GroupInviteCodeGenerator() {
+export default function GroupInviteCode() {
 	const { group } = useContext(GroupContext);
+
+	const me = useMe();
+
+	const isAdmin = useMemo(
+		() => group.admins.some((a) => a.id === me?.id),
+		[group.admins, me?.id]
+	);
 
 	const [shown, setShown] = useState(false);
 
@@ -34,44 +43,50 @@ export default function GroupInviteCodeGenerator() {
 					</code>{' '}
 					(click to show/hide)
 				</span>
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					<UIButton
-						onClick={resetJoinCode}
-						style={{
-							backgroundColor: lightgrey,
-							margin: '0.5rem',
-							flex: 1,
-						}}
-					>
-						Reset
-					</UIButton>
-					<UIButton
-						onClick={generateJoinCode}
-						style={{
-							backgroundColor: lightgrey,
-							margin: '0.5rem',
-							flex: 1,
-						}}
-					>
-						Regenerate
-					</UIButton>
-				</div>
+				{isAdmin && (
+					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+						<UIButton
+							onClick={resetJoinCode}
+							style={{
+								backgroundColor: lightgrey,
+								margin: '0.5rem',
+								flex: 1,
+							}}
+						>
+							Reset
+						</UIButton>
+						<UIButton
+							onClick={generateJoinCode}
+							style={{
+								backgroundColor: lightgrey,
+								margin: '0.5rem',
+								flex: 1,
+							}}
+						>
+							Regenerate
+						</UIButton>
+					</div>
+				)}
 			</>
 		);
 	} else {
 		return (
 			<>
 				This group has no way for new members to join.
-				<UIButton
-					onClick={generateJoinCode}
-					style={{
-						backgroundColor: lightgrey,
-						marginTop: '0.5rem',
-						marginBottom: '0.5rem',
-					}}
-				>
-					Generate a code
-				</UIButton>
+				{isAdmin ? (
+					<UIButton
+						onClick={generateJoinCode}
+						style={{
+							backgroundColor: lightgrey,
+							marginTop: '0.5rem',
+							marginBottom: '0.5rem',
+						}}
+					>
+						Generate a code
+					</UIButton>
+				) : (
+					'Contact an admin to create a code'
+				)}
 			</>
 		);
 	}
