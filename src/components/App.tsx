@@ -1,8 +1,13 @@
-import { CSSProperties, lazy, Suspense } from 'react';
+import { CSSProperties, lazy, Suspense, useContext, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NotificationsProvider from '../state/Notifications/NotificationsProvider';
+import AuthenticationContext from './Authentication/AuthenticationContext';
 import Header from './Header/Header';
-import { useMe } from './hooks';
+import {
+	hasLoginContinueURL,
+	popLoginContinueURL,
+	setLoginContinueURL,
+} from './loginContinueUrl';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
 
@@ -22,7 +27,19 @@ const style: CSSProperties = {
 };
 
 export default function App() {
-	const user = useMe();
+	const { user, loaded } = useContext(AuthenticationContext);
+
+	useEffect(() => {
+		if (!loaded) return;
+
+		if (!user) {
+			if (!window.location.pathname.startsWith('/auth/')) {
+				setLoginContinueURL(window.location.href);
+			}
+		} else if (hasLoginContinueURL()) {
+			window.location.href = popLoginContinueURL()!;
+		}
+	}, [loaded, user]);
 
 	return (
 		<div style={{ padding: '1rem', maxWidth: '100vw' }}>
