@@ -1,6 +1,6 @@
 # WheelShare
 
-By Michael Fatemi, Rushil Umaretiya, Joshua Hsueh, Nitin Kanchinadam
+By Michael Fatemi, Joshua Hsueh, Nitin Kanchinadam, Rushil Umaretiya
 
 (Frontend Repository created with Create React App)
 
