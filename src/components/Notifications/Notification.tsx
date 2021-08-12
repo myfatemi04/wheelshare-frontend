@@ -1,6 +1,10 @@
-import { useCallback, useContext } from 'react';
-import { NotificationsContext } from '../../state/Notifications/NotificationsProvider';
-import { acceptCarpoolRequest, denyCarpoolRequest } from '../api';
+import { useCallback } from 'react';
+import {
+	acceptCarpoolRequest,
+	acceptInvite,
+	denyCarpoolRequest,
+	denyInvite,
+} from '../api';
 import { IInvitation } from '../types';
 import UIButton from '../UI/UIButton';
 
@@ -13,8 +17,6 @@ export default function Notification({
 }) {
 	const carpoolId = notification.carpool.id;
 
-	const notifs = useContext(NotificationsContext);
-
 	const acceptReq = useCallback(() => {
 		acceptCarpoolRequest(carpoolId, notification.user.id).finally(refresh);
 	}, [carpoolId, notification.user.id, refresh]);
@@ -24,12 +26,12 @@ export default function Notification({
 	}, [carpoolId, notification.user.id, refresh]);
 
 	const acceptInv = useCallback(() => {
-		notifs.acceptCarpoolInvite(carpoolId);
-	}, [carpoolId, notifs]);
+		acceptInvite(carpoolId).finally(refresh);
+	}, [carpoolId, refresh]);
 
 	const rejectInv = useCallback(() => {
-		notifs.denyCarpoolInvite(carpoolId);
-	}, [carpoolId, notifs]);
+		denyInvite(carpoolId).finally(refresh);
+	}, [carpoolId, refresh]);
 
 	const sentTime = new Date(notification.sentTime);
 
