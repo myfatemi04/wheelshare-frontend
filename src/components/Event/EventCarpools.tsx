@@ -145,13 +145,13 @@ export default function Carpools() {
 				Click <EmojiPeopleIcon style={{ fontSize: '0.875rem' }} /> to request to
 				join a carpool.
 			</span>
-			{event.carpools.map((carpool) => (
+			{event.carpools.length>0 ? event.carpools.map((carpool) => (
 				<CarpoolRow
 					carpool={carpool}
 					key={carpool.id}
 					inCarpoolAlready={alreadyInCarpool}
 				/>
-			))}
+			)) : "No Carpools"}
 		</div>
 	);
 }

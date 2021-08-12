@@ -30,9 +30,9 @@ export default function ActiveCarpools() {
 		>
 			<h1 style={{ textAlign: 'center' }}>Carpools</h1>
 			<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
-				{activeCarpools.map((carpool) => (
+				{activeCarpools.length > 0 ? activeCarpools.map((carpool) => (
 					<ActiveCarpoolListItem carpool={carpool} key={carpool.id} />
-				))}
+				)) : "No Carpools"}
 			</UISecondaryBox>
 		</div>
 	);
