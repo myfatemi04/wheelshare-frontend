@@ -2,6 +2,7 @@ import { CSSProperties, lazy, Suspense, useContext, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NotificationsProvider from '../state/Notifications/NotificationsProvider';
 import AuthenticationContext from './Authentication/AuthenticationContext';
+import EasterEgg from './EasterEgg';
 import Footer from './Footer';
 import Header from './Header/Header';
 import {
@@ -54,6 +55,7 @@ export default function App() {
 			}}
 		>
 			<div style={style}>
+				<EasterEgg />
 				<Suspense fallback={null}>
 					{user ? (
 						<NotificationsProvider>
