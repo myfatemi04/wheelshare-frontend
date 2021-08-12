@@ -9,6 +9,7 @@ import {
 	popLoginContinueURL,
 	setLoginContinueURL,
 } from './loginContinueUrl';
+import NotFound from './NotFound';
 import WheelShare from './WheelShare';
 import WheelShareLoggedOut from './WheelShareLoggedOut';
 
@@ -54,11 +55,11 @@ export default function App() {
 		>
 			<div style={style}>
 				<Suspense fallback={null}>
-					<BrowserRouter>
-						<Switch>
-							{user ? (
-								<NotificationsProvider>
-									<Header />
+					{user ? (
+						<NotificationsProvider>
+							<Header />
+							<BrowserRouter>
+								<Switch>
 									<Route path="/" exact component={WheelShare} />
 									<Route
 										path="/join/:code"
@@ -67,18 +68,19 @@ export default function App() {
 									<Route path="/carpools/:id" component={CarpoolPage} />
 									<Route path="/events/:id" component={EventPage} />
 									<Route path="/groups/:id" component={GroupPage} />
-								</NotificationsProvider>
-							) : (
-								<>
-									<WheelShareLoggedOut />
-									<Route
-										component={Authenticator}
-										path="/auth/:provider/callback"
-									/>
-								</>
-							)}
-						</Switch>
-					</BrowserRouter>
+									<Route path="/:url" component={NotFound} />
+								</Switch>
+							</BrowserRouter>
+						</NotificationsProvider>
+					) : (
+						<BrowserRouter>
+							<WheelShareLoggedOut />
+							<Route
+								component={Authenticator}
+								path="/auth/:provider/callback"
+							/>
+						</BrowserRouter>
+					)}
 				</Suspense>
 			</div>
 			<Footer />
