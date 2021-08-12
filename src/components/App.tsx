@@ -16,6 +16,7 @@ const Authenticator = lazy(() => import('./Authentication/Authenticator'));
 const CarpoolPage = lazy(() => import('./Carpool/CarpoolPage'));
 const EventPage = lazy(() => import('./Event/EventPage'));
 const GroupPage = lazy(() => import('./Group/GroupPage'));
+const GroupSharedLinkResolver = lazy(() => import('./GroupSharedLinkResolver'));
 
 const style: CSSProperties = {
 	display: 'flex',
@@ -59,6 +60,10 @@ export default function App() {
 								<NotificationsProvider>
 									<Header />
 									<Route path="/" exact component={WheelShare} />
+									<Route
+										path="/join/:code"
+										component={GroupSharedLinkResolver}
+									/>
 									<Route path="/carpools/:id" component={CarpoolPage} />
 									<Route path="/events/:id" component={EventPage} />
 									<Route path="/groups/:id" component={GroupPage} />
