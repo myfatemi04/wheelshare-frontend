@@ -1,45 +1,44 @@
-import { useCallback } from 'react';
-import {
-	acceptInvite,
-	acceptCarpoolRequest,
-	denyInvite,
-	denyCarpoolRequest,
-} from '../api';
+import { useCallback, useContext } from 'react';
+import { NotificationsContext } from '../../state/Notifications/NotificationsProvider';
+import { acceptCarpoolRequest, denyCarpoolRequest } from '../api';
 import { IInvitation } from '../types';
 import UIButton from '../UI/UIButton';
 
 export default function Notification({
 	notification,
+	refresh,
 }: {
 	notification: IInvitation;
+	refresh: () => void;
 }) {
 	const carpoolId = notification.carpool.id;
 
+	const notifs = useContext(NotificationsContext);
+
 	const acceptReq = useCallback(() => {
-		acceptCarpoolRequest(carpoolId, notification.user.id);
-	}, [carpoolId, notification.user.id]);
+		acceptCarpoolRequest(carpoolId, notification.user.id).finally(refresh);
+	}, [carpoolId, notification.user.id, refresh]);
 
 	const rejectReq = useCallback(() => {
-		denyCarpoolRequest(carpoolId, notification.user.id);
-	}, [carpoolId, notification.user.id]);
+		denyCarpoolRequest(carpoolId, notification.user.id).finally(refresh);
+	}, [carpoolId, notification.user.id, refresh]);
 
 	const acceptInv = useCallback(() => {
-		acceptInvite(carpoolId);
-	}, [carpoolId]);
+		notifs.acceptCarpoolInvite(carpoolId);
+	}, [carpoolId, notifs]);
 
 	const rejectInv = useCallback(() => {
-		denyInvite(carpoolId);
-	}, [carpoolId]);
+		notifs.denyCarpoolInvite(carpoolId);
+	}, [carpoolId, notifs]);
 
 	const sentTime = new Date(notification.sentTime);
 
 	return (
 		<div className="notification">
-			{notification.user.name}{' '}
 			{notification.isRequest ? (
-				<span>requested to join</span>
+				<span>{notification.user.name} requested to join</span>
 			) : (
-				<span>invited you to join</span>
+				<span>You're invited to join</span>
 			)}{' '}
 			{notification.carpool.name + ' at ' + sentTime.toLocaleString()}
 			{notification.isRequest ? (

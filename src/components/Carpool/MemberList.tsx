@@ -40,7 +40,7 @@ export default function MemberList() {
 		() => carpool.members.map((member) => member.id),
 		[carpool]
 	);
-	const members = useSignups(carpool.id, memberIDs);
+	const members = useSignups(carpool.event.id, memberIDs);
 	console.log(members);
 
 	const membersToShow = useMemo(
