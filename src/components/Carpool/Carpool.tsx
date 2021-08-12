@@ -203,11 +203,11 @@ export default function Carpool({ id }: { id: number }) {
 				<CarpoolTopButtons />
 				<CarpoolDetails />
 				<Members>
-					<CarpoolRouteEstimator />
-					<MemberList />
-					<h2>Map</h2>
+					<h2 style={{ marginBlockEnd: 0 }}>Map</h2>
 					<CarpoolMapLegend />
 					<CarpoolMap />
+					<CarpoolRouteEstimator />
+					<MemberList />
 				</Members>
 			</UISecondaryBox>
 		</CarpoolContext.Provider>
