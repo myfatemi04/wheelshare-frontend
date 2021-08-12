@@ -245,7 +245,7 @@ export async function leaveCarpool(carpoolId: number) {
 }
 
 export async function sendCarpoolRequest(carpoolId: number) {
-	await post('/carpools/' + carpoolId + '/request', {});
+	await post(`/carpools/${carpoolId}/request`, {});
 }
 
 export async function cancelCarpoolRequest(carpoolId: number) {

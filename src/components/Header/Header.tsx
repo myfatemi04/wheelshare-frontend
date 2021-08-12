@@ -8,7 +8,7 @@ import UIPrimaryTitle from '../UI/UIPrimaryTitle';
 
 export default function Header() {
 	const me = useMe();
-	const notifications = useNotifications();
+	const [notifications, refreshNotifications] = useNotifications();
 
 	return (
 		<div
@@ -31,7 +31,10 @@ export default function Header() {
 					<UIPressable onClick={logout}>Log out</UIPressable>
 					<br />
 					{notifications.length > 0 ? (
-						<Notifications notifications={notifications} />
+						<Notifications
+							notifications={notifications}
+							refresh={refreshNotifications}
+						/>
 					) : (
 						<span>No notifications</span>
 					)}

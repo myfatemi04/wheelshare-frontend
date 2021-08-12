@@ -39,7 +39,7 @@ const CarpoolMap = () => {
 			google={google}
 			style={{ width: '100%', height: '100%' }}
 			containerStyle={{
-				width: '30rem',
+				width: 'min(30rem, 100%)',
 				height: '25rem',
 				position: 'relative',
 				borderRadius: '0.5rem',

@@ -160,7 +160,9 @@ export default function Carpool({ id }: { id: number }) {
 				leave,
 			}}
 		>
-			<UISecondaryBox style={{ width: '100%', alignItems: 'center' }}>
+			<UISecondaryBox
+				style={{ width: '45rem', maxWidth: '100vw', alignItems: 'center' }}
+			>
 				<h1>{carpool.name}</h1>
 				<UILink href={'/events/' + carpool.event.id}>
 					{carpool.event.name}
