@@ -53,7 +53,7 @@ export default function Event({
 				tentativeInvites,
 			}}
 		>
-			<UISecondaryBox style={{ minWidth: '15rem' }}>
+			<UISecondaryBox style={{ width: '35rem' }}>
 				<div style={{ textAlign: 'center' }}>
 					<UISecondaryHeader>{name}</UISecondaryHeader>
 					{group && <GroupName group={group} />}

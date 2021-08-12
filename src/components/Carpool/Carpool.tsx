@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect } from 'react';
+import { createContext, useCallback, useEffect, useMemo } from 'react';
 import {
 	acceptCarpoolRequest,
 	cancelCarpoolInvite,
@@ -7,6 +7,7 @@ import {
 	leaveCarpool,
 	sendCarpoolInvite,
 } from '../api';
+import { useMe } from '../hooks';
 import { ICarpool } from '../types';
 import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
@@ -25,6 +26,7 @@ type CarpoolState = {
 	event: ICarpool['event'];
 	members: { id: number; name: string }[];
 	invitations: Record<number, ICarpool['invitations'][0]>;
+	creatorId: number;
 };
 
 export const CarpoolContext = createContext({
@@ -49,6 +51,12 @@ export const CarpoolContext = createContext({
 export default function Carpool({ id }: { id: number }) {
 	const [carpool, setCarpool] = useImmutable<CarpoolState | null>(null);
 
+	const me = useMe();
+	const isCreator = useMemo(
+		() => carpool?.creatorId === me?.id,
+		[carpool?.creatorId, me?.id]
+	);
+
 	useEffect(() => {
 		getCarpool(id).then((carpool) => {
 			const invitationsMap: Record<number, ICarpool['invitations'][0]> = {};
@@ -60,6 +68,7 @@ export default function Carpool({ id }: { id: number }) {
 				name: carpool.name,
 				event: carpool.event,
 				members: carpool.members,
+				creatorId: carpool.creatorId,
 				invitations: invitationsMap,
 			});
 		});
@@ -67,6 +76,10 @@ export default function Carpool({ id }: { id: number }) {
 
 	const acceptRequest = useCallback(
 		async (userId: number) => {
+			if (!isCreator) {
+				console.error('Trying to accept request as noncreator');
+				return;
+			}
 			if (!carpool) {
 				console.error(
 					'Trying to accept request when carpool has not been loaded.'
@@ -79,11 +92,15 @@ export default function Carpool({ id }: { id: number }) {
 			delete carpool.invitations[userId];
 			carpool.members.push({ id: userId, name });
 		},
-		[carpool, id]
+		[carpool, id, isCreator]
 	);
 
 	const denyRequest = useCallback(
 		async (userId: number) => {
+			if (!isCreator) {
+				console.error('Trying to deny request as noncreator');
+				return;
+			}
 			if (!carpool) {
 				console.error(
 					'Trying to deny request when carpool has not been loaded.'
@@ -93,11 +110,15 @@ export default function Carpool({ id }: { id: number }) {
 			await denyCarpoolRequest(id, userId);
 			delete carpool.invitations[userId];
 		},
-		[carpool, id]
+		[carpool, id, isCreator]
 	);
 
 	const sendInvite = useCallback(
 		async (user: { id: number; name: string }) => {
+			if (!isCreator) {
+				console.error('Trying to send invitation as noncreator');
+				return;
+			}
 			if (!carpool) {
 				console.error(
 					'Trying to send invite when carpool has not been loaded.'
@@ -111,11 +132,15 @@ export default function Carpool({ id }: { id: number }) {
 				console.error(e);
 			}
 		},
-		[carpool, id]
+		[carpool, id, isCreator]
 	);
 
 	const cancelInvite = useCallback(
 		async (user: { id: number; name: string }) => {
+			if (!isCreator) {
+				console.error('Trying to cancel invitation as noncreator');
+				return;
+			}
 			if (!carpool) {
 				console.error(
 					'Trying to cancel invite when carpool has not been loaded.'
@@ -129,7 +154,12 @@ export default function Carpool({ id }: { id: number }) {
 			}
 			delete carpool.invitations[user.id];
 		},
-		[carpool, id]
+		[carpool, id, isCreator]
+	);
+
+	const creatorName = useMemo(
+		() => carpool?.members.find((m) => m.id === carpool.creatorId)?.name,
+		[carpool]
 	);
 
 	const eventId = carpool?.event.id;
@@ -164,6 +194,9 @@ export default function Carpool({ id }: { id: number }) {
 				style={{ width: '45rem', maxWidth: '100vw', alignItems: 'center' }}
 			>
 				<h1>{carpool.name}</h1>
+				{isCreator
+					? 'You are the creator of this carpool.'
+					: `${creatorName} is the creator of this carpool`}
 				<UILink href={'/events/' + carpool.event.id}>
 					{carpool.event.name}
 				</UILink>
