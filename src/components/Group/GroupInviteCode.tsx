@@ -65,6 +65,13 @@ export default function GroupInviteCode() {
 						>
 							Regenerate
 						</UIButton>
+						<UIButton onClick={() => {navigator.clipboard.writeText("https://www.wheelshare.app/join/"+group.joinCode)}} style={{
+								backgroundColor: lightgrey,
+								margin: '0.5rem',
+								flex: 1,
+							}}>
+							Copy Link
+						</UIButton>
 					</div>
 				)}
 			</>
