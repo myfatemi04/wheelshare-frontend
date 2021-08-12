@@ -53,27 +53,48 @@ export default function GroupMembersLink() {
 						style={{
 							textAlign: 'center',
 							backgroundColor: '#fdfdfd',
+							maxHeight: 'calc(100vh - 4rem)',
+							position: 'relative',
 						}}
-						cancelClicks
 					>
 						<h3>Members</h3>
 
-						{group.users.map(({ name, id }) => (
-							<span key={id}>
-								{name} {adminIds.has(id) && ' (admin)'}{' '}
-								{amIAdmin &&
-									(adminIds.has(id) ? (
-										<button onClick={() => removeAdmin(id)}>
-											Remove as admin
-										</button>
-									) : (
-										<button onClick={() => addAdmin(id, name)}>
-											Add as admin
-										</button>
-									))}
-							</span>
-						))}
-						<br />
+						<span>Member count: {group.users.length}</span>
+
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								overflowY: 'auto',
+								padding: '2rem 0.5rem',
+								textAlign: 'left',
+							}}
+						>
+							{group.users.map(({ name, id }) => (
+								<div
+									key={id}
+									style={{
+										display: 'flex',
+										justifyContent: 'space-between',
+										margin: '0.5rem 0',
+									}}
+								>
+									<span>
+										{name} {adminIds.has(id) && ' (admin)'}
+									</span>
+									{amIAdmin &&
+										(adminIds.has(id) ? (
+											<button onClick={() => removeAdmin(id)}>
+												Remove admin
+											</button>
+										) : (
+											<button onClick={() => addAdmin(id, name)}>
+												Make admin
+											</button>
+										))}
+								</div>
+							))}
+						</div>
 
 						<GroupInviteCode />
 					</UISecondaryBox>
