@@ -43,37 +43,46 @@ export default function GroupInviteCode() {
 					</code>{' '}
 					(click to show/hide)
 				</span>
-				{isAdmin && (
-					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<UIButton
-							onClick={resetJoinCode}
-							style={{
-								backgroundColor: lightgrey,
-								margin: '0.5rem',
-								flex: 1,
-							}}
-						>
-							Reset
-						</UIButton>
-						<UIButton
-							onClick={generateJoinCode}
-							style={{
-								backgroundColor: lightgrey,
-								margin: '0.5rem',
-								flex: 1,
-							}}
-						>
-							Regenerate
-						</UIButton>
-						<UIButton onClick={() => {navigator.clipboard.writeText("https://www.wheelshare.app/join/"+group.joinCode)}} style={{
-								backgroundColor: lightgrey,
-								margin: '0.5rem',
-								flex: 1,
-							}}>
-							Copy Link
-						</UIButton>
-					</div>
-				)}
+				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+					{isAdmin && (
+						<>
+							<UIButton
+								onClick={resetJoinCode}
+								style={{
+									backgroundColor: lightgrey,
+									margin: '0.5rem',
+									flex: 1,
+								}}
+							>
+								Reset
+							</UIButton>
+							<UIButton
+								onClick={generateJoinCode}
+								style={{
+									backgroundColor: lightgrey,
+									margin: '0.5rem',
+									flex: 1,
+								}}
+							>
+								Regenerate
+							</UIButton>
+						</>
+					)}
+					<UIButton
+						onClick={() => {
+							navigator.clipboard.writeText(
+								'https://www.wheelshare.app/join/' + group.joinCode
+							);
+						}}
+						style={{
+							backgroundColor: lightgrey,
+							margin: '0.5rem',
+							flex: 1,
+						}}
+					>
+						Copy Link
+					</UIButton>
+				</div>
 			</>
 		);
 	} else {
