@@ -24,11 +24,6 @@ export type ICarpool = {
 		longitude: number;
 		placeId: string;
 	};
-	// driverId: number | null;
-	// driver: {
-	// 	id: number;
-	// 	name: string;
-	// };
 	creatorId: number;
 	members: {
 		id: number;
@@ -70,6 +65,10 @@ export type IEvent = {
 	id: number;
 	name: string;
 	group: {
+		id: number;
+		name: string;
+	} | null;
+	creator: {
 		id: number;
 		name: string;
 	};

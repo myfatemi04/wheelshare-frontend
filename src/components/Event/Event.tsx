@@ -10,7 +10,9 @@ import EventDetails from './EventDetails';
 import EventInterestForm from './EventInterestForm';
 import EventPlaceholder from './EventPlaceholder';
 
-function GroupName({ group }: { group: IEvent['group'] }) {
+type NotNull<T> = T extends null ? never : T;
+
+function GroupName({ group }: { group: NotNull<IEvent['group']> }) {
 	return <UILink href={`/groups/${group.id}`}>{group.name}</UILink>;
 }
 
@@ -56,6 +58,8 @@ export default function Event({
 			<UISecondaryBox style={{ width: '35rem', maxWidth: '100vw' }}>
 				<div style={{ textAlign: 'center' }}>
 					<UISecondaryHeader>{name}</UISecondaryHeader>
+					<span>Created by {event.creator.name}</span>
+					<br />
 					{group && <GroupName group={group} />}
 				</div>
 				<EventDetails />
