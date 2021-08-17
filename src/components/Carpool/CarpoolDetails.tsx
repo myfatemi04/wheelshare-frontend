@@ -19,7 +19,7 @@ export default function CarpoolDetails() {
 	);
 
 	return (
-		<div>
+		<div style={{ width: '80%' }}>
 			<div
 				style={{
 					color: '#303030',

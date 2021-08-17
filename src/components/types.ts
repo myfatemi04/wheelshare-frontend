@@ -76,6 +76,7 @@ export type IEvent = {
 	carpools: {
 		id: number;
 		name: string;
+		note: string;
 		members: {
 			id: number;
 			name: string;

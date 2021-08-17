@@ -41,7 +41,6 @@ export default function MemberList() {
 		[carpool]
 	);
 	const members = useSignups(carpool.event.id, memberIDs);
-	console.log(members);
 
 	const membersToShow = useMemo(
 		() => (expanded ? members : members.slice(0, shownMembersCount)),

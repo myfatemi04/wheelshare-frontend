@@ -1,10 +1,9 @@
+import CancelIcon from '@material-ui/icons/Clear';
+import DoneIcon from '@material-ui/icons/Done';
+import EditIcon from '@material-ui/icons/Edit';
 import { useCallback, useEffect, useState } from 'react';
-import UIPressable from '../UI/UIPressable';
 import UITextInput from '../UI/UITextInput';
 import useIsCreator from './useIsCreator';
-import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
-import CancelIcon from '@material-ui/icons/Clear';
 
 export default function CarpoolNote({
 	note,
@@ -32,7 +31,7 @@ export default function CarpoolNote({
 	}, [editText, setNote]);
 
 	return (
-		<div style={{ marginTop: '0.5rem', padding: '1rem' }}>
+		<div style={{ margin: '1rem 0rem', maxWidth: '100%' }}>
 			<b>Note</b>
 			<br />
 			<br />

@@ -29,6 +29,7 @@ export default function EventCarpoolCreateButton() {
 		try {
 			event.carpools.push({
 				id,
+				note: '',
 				name: me.name + "'s Carpool",
 				members: [{ id: me.id, name: me.name }],
 			});

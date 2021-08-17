@@ -91,7 +91,6 @@ function CarpoolRow({
 				marginBottom: '0.5rem',
 			}}
 		>
-			{/* <div> */}
 			<span
 				style={{ cursor: 'pointer' }}
 				onClick={() => {
@@ -100,9 +99,8 @@ function CarpoolRow({
 			>
 				<b>{carpool.name}</b>
 				{extraDistance !== null && ' +' + extraDistance.toFixed(1) + ' miles'}
+				{carpool.note && ' - ' + carpool.note}
 			</span>
-			<br />
-			<br />
 			{!inCarpoolAlready && (
 				<>
 					{inviteState === 'none' ? (
@@ -116,7 +114,7 @@ function CarpoolRow({
 							onClick={cancelButton}
 						/>
 					) : (
-						// inviteState === 'invited
+						// inviteState === invited
 						<CheckIcon style={{ fontSize: '2em', cursor: 'pointer' }} />
 					)}
 				</>

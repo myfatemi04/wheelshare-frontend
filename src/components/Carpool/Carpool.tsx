@@ -195,7 +195,11 @@ export default function Carpool({ id }: { id: number }) {
 			}}
 		>
 			<UISecondaryBox
-				style={{ width: '45rem', maxWidth: '100vw', alignItems: 'center' }}
+				style={{
+					width: '45rem',
+					maxWidth: 'min(45rem, 100vw)',
+					alignItems: 'center',
+				}}
 			>
 				<h1>{carpool.name}</h1>
 				{isCreator
