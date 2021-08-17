@@ -33,7 +33,12 @@ export default function EventContent() {
 			</div>
 			<EventDetails />
 			<EventInterestForm />
-			{isEventCreator && <EventAdminControls />}
+			{isEventCreator && (
+				<>
+					<hr />
+					<EventAdminControls />
+				</>
+			)}
 		</UISecondaryBox>
 	);
 }

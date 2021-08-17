@@ -37,9 +37,26 @@ export default function EventAdminControls() {
 
 	// const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null);
 
-	const [onPressDelete, deletionStatus] = useAsyncCallback(
-		useCallback(() => deleteEvent(id), [id])
-	);
+	const [eventDeletionConfirmationShown, setEventDeletionConfirmationShown] =
+		useState(false);
+	const [eventDeletionStatus, setEventDeletionStatus] =
+		useState<null | 'deleting' | 'deleted' | 'errored'>(null);
+
+	const onPressInitialDelete = useCallback(() => {
+		setEventDeletionConfirmationShown(true);
+	}, []);
+
+	const onPressCancelDelete = useCallback(() => {
+		setEventDeletionConfirmationShown(false);
+	}, []);
+
+	const onPressConfirmDelete = useCallback(() => {
+		setEventDeletionConfirmationShown(false);
+		setEventDeletionStatus('deleting');
+		deleteEvent(id)
+			.then(() => setEventDeletionStatus('deleted'))
+			.catch(() => setEventDeletionStatus('errored'));
+	}, [id]);
 
 	// const [onSaveDescription, saveDescriptionStatus] = useAsyncCallback(
 	// 	useCallback(() => {
@@ -55,11 +72,23 @@ export default function EventAdminControls() {
 
 	return (
 		<div style={{ display: 'flex' }}>
-			{deletionStatus === AsyncCallbackStatus.NONE ? (
-				<UIPressable onClick={onPressDelete}>Delete</UIPressable>
-			) : deletionStatus === AsyncCallbackStatus.PENDING ? (
+			{eventDeletionConfirmationShown ? (
+				<>
+					<UIPressable
+						onClick={onPressCancelDelete}
+						style={{ marginRight: '1rem' }}
+					>
+						Cancel deletion
+					</UIPressable>
+					<UIPressable onClick={onPressConfirmDelete}>
+						Confirm deletion
+					</UIPressable>
+				</>
+			) : eventDeletionStatus === null ? (
+				<UIPressable onClick={onPressInitialDelete}>Delete</UIPressable>
+			) : eventDeletionStatus === 'deleting' ? (
 				<span>Deleting...</span>
-			) : deletionStatus === AsyncCallbackStatus.RESOLVED ? (
+			) : eventDeletionStatus === 'deleted' ? (
 				<span>Deleted</span>
 			) : (
 				<span>Delete failed</span>
