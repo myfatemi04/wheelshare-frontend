@@ -29,7 +29,7 @@ function useToken(
 	useEffect(() => {
 		if (code) {
 			setPending(true);
-			createSession(code, inferRedirectUrl())
+			createSession(code, provider, inferRedirectUrl())
 				.then(({ token }) => {
 					setToken(token ?? null);
 				})
@@ -75,7 +75,7 @@ export default function Authenticator() {
 				children = (
 					<>
 						<h1>Sign In Error</h1>
-						We couldn't use your Ion account to log in.
+						We couldn't authenticate your account.
 					</>
 				);
 				break;

@@ -1,4 +1,4 @@
-import authorizationEndpoint from '../Authentication/authorizationEndpoint';
+import { ionAuthorizationEndpoint } from '../Authentication/authorizationEndpoint';
 import logout from '../Authentication/logout';
 import { useMe, useNotifications } from '../hooks';
 import Notifications from '../Notifications/Notifications';
@@ -40,7 +40,7 @@ export default function Header() {
 					)}
 				</>
 			) : (
-				<UILink href={authorizationEndpoint}>Log in</UILink>
+				<UILink href={ionAuthorizationEndpoint}>Log in</UILink>
 			)}
 		</div>
 	);
