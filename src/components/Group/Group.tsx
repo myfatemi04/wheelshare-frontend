@@ -30,14 +30,8 @@ export default function Group({ id }: { id: number }) {
 	useEffect(() => {
 		setLoading(true);
 		getGroup(id)
-			.then((group) => {
-				// @ts-ignore
-				if ('status' in group && group.status === 'error') {
-					setGroup(null);
-				} else {
-					setGroup(group);
-				}
-			})
+			.then(setGroup)
+			.catch(console.error) // TODO error handling
 			.finally(() => setLoading(false));
 	}, [id, setGroup]);
 

@@ -46,7 +46,9 @@ export default function InvitationList() {
 		useImmutable<PotentialInvitee[] | null>(null);
 
 	useEffect(() => {
-		getPotentialInvitees(carpool.id).then(setAvailableSignups);
+		getPotentialInvitees(carpool.id)
+			.then(setAvailableSignups)
+			.catch(console.error); // TODO error handling
 	}, [carpool.id, setAvailableSignups]);
 
 	const invitedUserIDs = useMemo(

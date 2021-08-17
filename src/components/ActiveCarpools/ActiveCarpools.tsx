@@ -17,7 +17,7 @@ export default function ActiveCarpools() {
 	const [activeCarpools, setActiveCarpools] = useState<ICarpool[]>([]);
 
 	useEffect(() => {
-		getActiveCarpools().then(setActiveCarpools);
+		getActiveCarpools().then(setActiveCarpools).catch(console.error); // TODO error handling
 	}, []);
 
 	return (
@@ -30,9 +30,11 @@ export default function ActiveCarpools() {
 		>
 			<h1 style={{ textAlign: 'center' }}>Carpools</h1>
 			<UISecondaryBox style={{ width: '100%', boxSizing: 'border-box' }}>
-				{activeCarpools.length > 0 ? activeCarpools.map((carpool) => (
-					<ActiveCarpoolListItem carpool={carpool} key={carpool.id} />
-				)) : "No Carpools"}
+				{activeCarpools.length > 0
+					? activeCarpools.map((carpool) => (
+							<ActiveCarpoolListItem carpool={carpool} key={carpool.id} />
+					  ))
+					: 'No Carpools'}
 			</UISecondaryBox>
 		</div>
 	);

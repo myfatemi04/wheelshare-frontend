@@ -19,6 +19,7 @@ export default function GroupCreator() {
 					setCreationSuccessful(true);
 					setCreatedGroupId(id);
 				})
+				.catch(console.error) // TODO error handling
 				.finally(() => {
 					setCreating(false);
 				});

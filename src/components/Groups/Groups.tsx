@@ -9,7 +9,7 @@ export default function Groups() {
 	const [groups, setGroups] = useState<IGroup[]>([]);
 
 	useEffect(() => {
-		getGroups().then(setGroups);
+		getGroups().then(setGroups).catch(console.error); // TODO error handling
 	}, []);
 
 	return (

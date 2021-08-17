@@ -19,11 +19,13 @@ export function GroupJoiner() {
 	useEffect(() => {
 		if (code) {
 			const initialCode = code;
-			resolveCode(code).then((group) => {
-				if (code === initialCode) {
-					setGroup(group);
-				}
-			});
+			resolveCode(code)
+				.then((group) => {
+					if (code === initialCode) {
+						setGroup(group);
+					}
+				})
+				.catch(console.error);
 		}
 	}, [code]);
 
@@ -38,6 +40,7 @@ export function GroupJoiner() {
 						window.location.href = '/groups/' + id;
 					}
 				})
+				.catch(console.error)
 				.finally(() => setJoining(false));
 		}
 	}, [code, group?.id]);

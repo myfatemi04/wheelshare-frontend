@@ -27,7 +27,7 @@ export default function CarpoolTopButtonsNonMembersOnly() {
 	const me = useMe() || defaultMe;
 
 	const sendRequest = useCallback(() => {
-		sendCarpoolRequest(carpool.id);
+		sendCarpoolRequest(carpool.id); // TODO carpool request error handling
 	}, [carpool.id, sendCarpoolRequest]);
 
 	const cancelRequest = useCallback(() => {
@@ -35,15 +35,19 @@ export default function CarpoolTopButtonsNonMembersOnly() {
 	}, [carpool.id, cancelCarpoolRequest]);
 
 	const acceptInvitation = useCallback(() => {
-		acceptCarpoolInvite(carpool.id).then(() => {
-			members.push(me);
-		});
+		acceptCarpoolInvite(carpool.id)
+			.then(() => {
+				members.push(me);
+			})
+			.catch(console.error); // TODO error handling
 	}, [acceptCarpoolInvite, carpool.id, members, me]);
 
 	const denyInvitation = useCallback(() => {
-		denyCarpoolInvite(carpool.id).then(() => {
-			members.push(me);
-		});
+		denyCarpoolInvite(carpool.id)
+			.then(() => {
+				members.push(me);
+			})
+			.catch(console.error); // TODO error handling
 	}, [carpool.id, denyCarpoolInvite, me, members]);
 
 	const invitationState = useInvitationState(carpool.id);

@@ -10,7 +10,9 @@ export function useNotifications() {
 	const [notifications, setNotifications] = useState<IInvitation[]>([]);
 
 	const refresh = useCallback(() => {
-		getReceivedInvitationsAndRequests().then(setNotifications);
+		getReceivedInvitationsAndRequests()
+			.then(setNotifications)
+			.catch(console.error); // TODO error handling
 	}, []);
 
 	useEffect(refresh, [refresh]);

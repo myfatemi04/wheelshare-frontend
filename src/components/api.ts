@@ -23,6 +23,9 @@ async function post(path: string, data: any) {
 			'Content-Type': 'application/json',
 		},
 	});
+	if (res.status !== 200) {
+		throw new Error(`${path}: ${await res.text()}`);
+	}
 	return await res.json();
 }
 
@@ -35,6 +38,9 @@ async function delete$(path: string, body?: any) {
 		},
 		body: body ? JSON.stringify(body) : undefined,
 	});
+	if (res.status !== 200) {
+		throw new Error(`${path}: ${await res.text()}`);
+	}
 	return await res.json();
 }
 
@@ -45,12 +51,10 @@ async function get(path: string) {
 		},
 	});
 	const result = await res.json();
+	if (res.status !== 200) {
+		throw new Error(`${path}: ${await res.text()}`);
+	}
 	return result;
-	// if (res.ok) {
-	// 	return result;
-	// } else {
-	// 	throw new Error(result.message);
-	// }
 }
 
 export async function getEventSignupsBulk(

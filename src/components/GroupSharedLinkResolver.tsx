@@ -15,6 +15,7 @@ export default function GroupSharedLinkResolver() {
 		setResolving(true);
 		resolveCode(code)
 			.then(setGroup)
+			.catch(console.error)
 			.finally(() => setResolving(false));
 	}, [code]);
 
@@ -29,6 +30,7 @@ export default function GroupSharedLinkResolver() {
 						window.location.href = '/groups/' + id;
 					}
 				})
+				.catch(console.error)
 				.finally(() => setJoining(false));
 		}
 	}, [code, group?.id]);

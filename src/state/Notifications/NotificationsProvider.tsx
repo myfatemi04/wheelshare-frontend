@@ -33,20 +33,23 @@ export default function NotificationsProvider({
 	>({});
 
 	useEffect(() => {
-		api.getSentRequestsAndInvites().then((invitations) => {
-			const invited = {} as Record<number, boolean>;
-			const requested = {} as Record<number, boolean>;
-			for (let invitation of invitations) {
-				if (invitation.isRequest) {
-					invited[invitation.carpool.id] = true;
-				} else {
-					requested[invitation.carpool.id] = true;
+		api
+			.getSentRequestsAndInvites()
+			.then((invitations) => {
+				const invited = {} as Record<number, boolean>;
+				const requested = {} as Record<number, boolean>;
+				for (let invitation of invitations) {
+					if (invitation.isRequest) {
+						invited[invitation.carpool.id] = true;
+					} else {
+						requested[invitation.carpool.id] = true;
+					}
 				}
-			}
 
-			setInvitedCarpoolIds(invited);
-			setRequestedCarpoolIds(requested);
-		});
+				setInvitedCarpoolIds(invited);
+				setRequestedCarpoolIds(requested);
+			})
+			.catch(console.error); // TODO error handling
 	}, [setInvitedCarpoolIds, setRequestedCarpoolIds]);
 
 	const sendCarpoolRequest = useCallback(

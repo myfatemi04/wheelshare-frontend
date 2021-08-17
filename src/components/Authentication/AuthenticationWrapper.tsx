@@ -15,15 +15,19 @@ export default function AuthenticationWrapper({
 			const sessionToken = localStorage.getItem('session_token');
 
 			if (sessionToken) {
-				const user = await getMe();
-				if (!('status' in user && user.status === 'error')) {
-					setUser(user);
-					return;
+				try {
+					setUser(await getMe());
+				} catch (e) {
+					console.error(e);
+					setUser(null);
 				}
+			} else {
+				setUser(null);
 			}
-			setUser(null);
 		}
-		refresh_().finally(() => setLoaded(true));
+		refresh_()
+			.catch(console.error) // TODO error handling
+			.finally(() => setLoaded(true));
 	}, []);
 
 	useEffect(refresh, [refresh]);

@@ -70,6 +70,7 @@ export default function EventCreator({ group }: { group: IGroup }) {
 				.then(({ id }) => {
 					setCreatedEventId(id);
 				})
+				.catch(console.error) // TODO error handling
 				.finally(() => setCreating(false));
 		}
 	}, [

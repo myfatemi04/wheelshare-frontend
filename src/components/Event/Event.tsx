@@ -21,6 +21,7 @@ export default function Event({
 		setLoading(true);
 		getEvent(id)
 			.then((e) => e && setEvent(e))
+			.catch(console.error) // TODO error handling
 			.finally(() => setLoading(false));
 	}, [id, setEvent]);
 

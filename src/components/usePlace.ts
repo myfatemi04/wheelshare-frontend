@@ -9,7 +9,7 @@ export default function usePlace(placeId: string | null) {
 		if (placeId == null) {
 			setPlaceDetails(null);
 		} else {
-			getPlaceDetails(placeId).then(setPlaceDetails);
+			getPlaceDetails(placeId).then(setPlaceDetails).catch(console.error); // TODO error handling
 		}
 	}, [placeId]);
 

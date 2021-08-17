@@ -22,11 +22,13 @@ export default function GroupMembersLink() {
 
 	const addAdmin = useCallback(
 		(adminId: number, adminName: string) => {
-			addGroupAdmin(group.id, adminId).then(({ status }) => {
-				if (status === 'success') {
-					group.admins.push({ id: adminId, name: adminName });
-				}
-			});
+			addGroupAdmin(group.id, adminId)
+				.then(({ status }) => {
+					if (status === 'success') {
+						group.admins.push({ id: adminId, name: adminName });
+					}
+				})
+				.catch(console.error); // TODO error handling
 		},
 		[group.admins, group.id]
 	);
@@ -35,11 +37,13 @@ export default function GroupMembersLink() {
 
 	const removeAdmin = useCallback(
 		(adminId: number) => {
-			removeGroupAdmin(group.id, adminId).then((res) => {
-				if (res.status === 'success') {
-					group.admins = group.admins.filter((admin) => admin.id !== adminId);
-				}
-			});
+			removeGroupAdmin(group.id, adminId)
+				.then((res) => {
+					if (res.status === 'success') {
+						group.admins = group.admins.filter((admin) => admin.id !== adminId);
+					}
+				})
+				.catch(console.error); // TODO error handling
 		},
 		[group]
 	);

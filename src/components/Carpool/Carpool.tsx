@@ -58,20 +58,22 @@ export default function Carpool({ id }: { id: number }) {
 	);
 
 	useEffect(() => {
-		getCarpool(id).then((carpool) => {
-			const invitationsMap: Record<number, ICarpool['invitations'][0]> = {};
-			carpool.invitations.forEach((invite) => {
-				invitationsMap[invite.user.id] = invite;
-			});
-			setCarpool({
-				id: carpool.id,
-				name: carpool.name,
-				event: carpool.event,
-				members: carpool.members,
-				creatorId: carpool.creatorId,
-				invitations: invitationsMap,
-			});
-		});
+		getCarpool(id)
+			.then((carpool) => {
+				const invitationsMap: Record<number, ICarpool['invitations'][0]> = {};
+				carpool.invitations.forEach((invite) => {
+					invitationsMap[invite.user.id] = invite;
+				});
+				setCarpool({
+					id: carpool.id,
+					name: carpool.name,
+					event: carpool.event,
+					members: carpool.members,
+					creatorId: carpool.creatorId,
+					invitations: invitationsMap,
+				});
+			})
+			.catch(console.error); // TODO error handling
 	}, [id, setCarpool]);
 
 	const acceptRequest = useCallback(

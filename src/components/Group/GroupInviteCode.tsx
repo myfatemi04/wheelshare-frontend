@@ -19,15 +19,19 @@ export default function GroupInviteCode() {
 	const [shown, setShown] = useState(false);
 
 	const generateJoinCode = useCallback(() => {
-		generateCode(group.id).then((code) => {
-			group.joinCode = code;
-		});
+		generateCode(group.id)
+			.then((code) => {
+				group.joinCode = code;
+			})
+			.catch(console.error); // TODO error handling
 	}, [group]);
 
 	const resetJoinCode = useCallback(() => {
-		resetCode(group.id).then((code) => {
-			group.joinCode = null;
-		});
+		resetCode(group.id)
+			.then((code) => {
+				group.joinCode = null;
+			})
+			.catch(console.error); // TODO error handling
 	}, [group]);
 
 	if (group.joinCode) {

@@ -33,6 +33,7 @@ function useToken(
 				.then(({ token }) => {
 					setToken(token ?? null);
 				})
+				.catch(console.error) // TODO error handling
 				.finally(() => setPending(false));
 		}
 	}, [code, provider]);

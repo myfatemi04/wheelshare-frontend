@@ -16,9 +16,7 @@ export default function GroupSettings({ group }: { group: IGroup }) {
 			.then(({ status }) => {
 				setDeletionSuccessful(status === 'success');
 			})
-			.catch(() => {
-				setDeletionSuccessful(false);
-			});
+			.catch(() => setDeletionSuccessful(false));
 	}, [group.id]);
 
 	const confirmDeletion = useCallback(() => {

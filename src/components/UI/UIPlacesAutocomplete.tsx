@@ -60,13 +60,15 @@ export default function UIPlacesAutocomplete({
 
 	useEffect(() => {
 		if (placeId) {
-			getPlaceDetails(placeId).then((result) => {
-				if (result.formattedAddress.startsWith(result.name)) {
-					setLocation(result.formattedAddress);
-				} else {
-					setLocation(`${result.name}, ${result.formattedAddress}`);
-				}
-			});
+			getPlaceDetails(placeId)
+				.then((result) => {
+					if (result.formattedAddress.startsWith(result.name)) {
+						setLocation(result.formattedAddress);
+					} else {
+						setLocation(`${result.name}, ${result.formattedAddress}`);
+					}
+				})
+				.catch(console.error); // TODO error handling
 		}
 	}, [placeId]);
 

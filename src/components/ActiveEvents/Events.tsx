@@ -11,7 +11,7 @@ export default function ActiveEvents() {
 
 	useEffect(() => {
 		if (!hasEvents) {
-			getActiveEvents().then(setEvents);
+			getActiveEvents().then(setEvents).catch(console.error); // TODO error handling
 		}
 	}, [hasEvents, setEvents]);
 
