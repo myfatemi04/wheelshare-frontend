@@ -10,7 +10,8 @@ export default function WheelShareLoggedOut() {
 		<>
 			<UIPrimaryTitle>WheelShare</UIPrimaryTitle>
 			<p>To get started, log in with your Ion account.</p>
-			<UILink href={ionAuthorizationEndpoint}>Log in</UILink>
+			<UILink href={ionAuthorizationEndpoint}>Log in with Ion</UILink>
+			<br />
 			<UILink href={googleAuthorizationEndpoint}>Log in with Google</UILink>
 		</>
 	);
