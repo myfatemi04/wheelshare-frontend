@@ -1,9 +1,9 @@
 import { useDebugValue, useMemo } from 'react';
 import estimateOptimalPath, { Path } from '../lib/estimateoptimalpath';
-import { ICarpool, IEventSignupComplete } from './types';
+import { ICarpool, IEventSignupWithLocation } from './types';
 
 export default function useOptimalPath(
-	members: IEventSignupComplete[],
+	members: IEventSignupWithLocation[],
 	destination: ICarpool['event']
 ) {
 	const path = useMemo(() => {
@@ -38,7 +38,7 @@ export default function useOptimalPath(
 			}
 
 			return prev;
-		}, null! as { path: Path<IEventSignupComplete, ICarpool['event']>; distance: number });
+		}, null! as { path: Path<IEventSignupWithLocation, ICarpool['event']>; distance: number });
 
 		return path;
 	}, [destination, members]);

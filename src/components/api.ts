@@ -75,9 +75,10 @@ export async function getEventSignups(
 export async function addOrUpdateEventSignup(
 	eventId: number,
 	placeId: string | null,
-	canDrive: boolean
+	canDrive: boolean,
+	note: string
 ) {
-	await post(`/events/${eventId}/signup`, { placeId, canDrive });
+	await post(`/events/${eventId}/signup`, { placeId, canDrive, note });
 }
 
 export async function removeEventSignup(eventId: number) {

@@ -1,4 +1,5 @@
-import { CSSProperties, useCallback } from 'react';
+import { forwardRef } from 'react';
+import { CSSProperties, ForwardedRef, useCallback } from 'react';
 
 const baseStyle = {
 	marginTop: '0.5em',
@@ -9,23 +10,27 @@ const baseStyle = {
 	border: '0px',
 };
 
-export default function UITextInput({
-	value,
-	disabled = false,
-	onChangeText,
-	style,
-}: {
-	value: string;
-	disabled?: boolean;
-	onChangeText: (text: string) => void;
-	style?: CSSProperties;
-}) {
+function UITextInput(
+	{
+		value,
+		disabled = false,
+		onChangeText,
+		style,
+	}: {
+		value?: string;
+		disabled?: boolean;
+		onChangeText?: (text: string) => void;
+		style?: CSSProperties;
+	},
+	ref: ForwardedRef<HTMLInputElement>
+) {
 	const onChange = useCallback(
-		(e) => onChangeText(e.target.value),
+		(e) => onChangeText?.(e.target.value),
 		[onChangeText]
 	);
 	return (
 		<input
+			ref={ref}
 			style={style ? { ...baseStyle, ...style } : baseStyle}
 			value={value}
 			disabled={disabled}
@@ -33,3 +38,5 @@ export default function UITextInput({
 		/>
 	);
 }
+
+export default forwardRef(UITextInput);

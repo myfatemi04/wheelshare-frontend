@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { green, lightgrey } from '../../lib/colors';
 import getPlaceDetails from '../../lib/getPlaceDetails';
 import { addOrUpdateEventSignup, removeEventSignup } from '../api';
 import { useMe } from '../hooks';
 import UIButton from '../UI/UIButton';
 import UIPlacesAutocomplete from '../UI/UIPlacesAutocomplete';
+import UITextInput from '../UI/UITextInput';
 import EventCarpools from './EventCarpools';
 import { useMutableEvent } from './EventHooks';
 import EventSignups from './EventSignups';
@@ -14,6 +15,9 @@ export default function EventInterestForm() {
 	const me = useMe() || { id: 0, name: '' };
 	const placeIdRef = useRef<string | null>(null);
 	const canDriveRef = useRef(false);
+	const [note, setNote] = useState('');
+	const [noteSaved, setNoteSaved] = useState(true);
+	const noteUpdateTimerRef = useRef<NodeJS.Timeout | null>(null);
 
 	{
 		const signup = event.signups[me.id];
@@ -22,34 +26,48 @@ export default function EventInterestForm() {
 			placeIdRef.current = signup?.placeId ?? null;
 			canDriveRef.current = signup?.canDrive ?? false;
 		}, [signup?.canDrive, signup?.placeId]);
+
+		useEffect(() => {
+			setNote(signup?.note || '');
+		}, [signup?.note]);
 	}
 
-	const updateSignup = useCallback(async () => {
-		const placeId = placeIdRef.current;
-		const canDrive = canDriveRef.current;
+	const updateSignup = useCallback(
+		async (note: string) => {
+			const placeId = placeIdRef.current;
+			const canDrive = canDriveRef.current;
 
-		await addOrUpdateEventSignup(event.id, placeIdRef.current, canDrive);
-
-		if (placeId) {
-			const details = await getPlaceDetails(placeId);
-
-			event.signups[me.id] = {
-				user: { id: me.id, name: me.name },
-				placeId,
-				...details,
+			await addOrUpdateEventSignup(
+				event.id,
+				placeIdRef.current,
 				canDrive,
-			};
-		} else {
-			event.signups[me.id] = {
-				user: { id: me.id, name: me.name },
-				placeId: null,
-				latitude: null,
-				longitude: null,
-				formattedAddress: null,
-				canDrive,
-			};
-		}
-	}, [event.id, event.signups, me.id, me.name]);
+				note
+			);
+
+			if (placeId) {
+				const details = await getPlaceDetails(placeId);
+
+				event.signups[me.id] = {
+					user: { id: me.id, name: me.name },
+					placeId,
+					...details,
+					canDrive,
+					note,
+				};
+			} else {
+				event.signups[me.id] = {
+					user: { id: me.id, name: me.name },
+					placeId: null,
+					latitude: null,
+					longitude: null,
+					formattedAddress: null,
+					canDrive,
+					note,
+				};
+			}
+		},
+		[event.id, event.signups, me.id, me.name]
+	);
 
 	const removeSignup = useCallback(async () => {
 		await removeEventSignup(event.id);
@@ -58,6 +76,20 @@ export default function EventInterestForm() {
 			delete event.signups[me.id];
 		}
 	}, [event.id, event.signups, me.id]);
+
+	const updateNote = useCallback(
+		(newNote: string) => {
+			setNote(newNote);
+			setNoteSaved(false);
+			if (noteUpdateTimerRef.current) {
+				clearTimeout(noteUpdateTimerRef.current);
+			}
+			noteUpdateTimerRef.current = setTimeout(() => {
+				updateSignup(newNote).then(() => setNoteSaved(true));
+			}, 1000);
+		},
+		[updateSignup]
+	);
 
 	const interested = !!event.signups[me.id];
 
@@ -72,7 +104,7 @@ export default function EventInterestForm() {
 						? () => removeSignup()
 						: () => {
 								placeIdRef.current = null;
-								updateSignup();
+								updateSignup(note);
 						  }
 				}
 				style={{
@@ -91,7 +123,7 @@ export default function EventInterestForm() {
 					<UIButton
 						onClick={() => {
 							canDriveRef.current = !canDriveRef.current;
-							updateSignup();
+							updateSignup(note);
 						}}
 						style={{
 							backgroundColor: canDrive ? green : lightgrey,
@@ -105,7 +137,7 @@ export default function EventInterestForm() {
 						placeholder="Pickup and dropoff location"
 						onSelected={(_address, placeId) => {
 							placeIdRef.current = placeId;
-							updateSignup();
+							updateSignup(note);
 						}}
 						style={
 							event.signups[me.id]?.placeId != null
@@ -113,6 +145,15 @@ export default function EventInterestForm() {
 								: {}
 						}
 						placeId={event.signups[me.id]?.placeId}
+					/>
+					<br />
+					<span style={{ fontSize: '0.875em' }}>
+						Note (e.g. "Monday, Tuesday, Wednesday")
+					</span>
+					<UITextInput
+						value={note}
+						onChangeText={updateNote}
+						style={noteSaved ? { border: '2px solid ' + green } : {}}
 					/>
 					<br />
 					<EventCarpools />

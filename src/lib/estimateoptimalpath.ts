@@ -1,4 +1,4 @@
-import { ICarpool, IEventSignupComplete } from '../components/types';
+import { ICarpool, IEventSignupWithLocation } from '../components/types';
 import getDistance from './getdistance';
 
 export type Location = {
@@ -13,9 +13,9 @@ export type Path<M extends Location, D extends Location> = {
 };
 
 export default function estimateOptimalPath(
-	path: Path<IEventSignupComplete, ICarpool['event']>
+	path: Path<IEventSignupWithLocation, ICarpool['event']>
 ): {
-	path: Path<IEventSignupComplete, ICarpool['event']>;
+	path: Path<IEventSignupWithLocation, ICarpool['event']>;
 	distance: number;
 } {
 	const { from, to, waypoints } = path;
@@ -49,7 +49,7 @@ export default function estimateOptimalPath(
 		path: {
 			from,
 			to,
-			waypoints: newWaypoints as IEventSignupComplete[],
+			waypoints: newWaypoints as IEventSignupWithLocation[],
 		},
 		distance: getDistance(from, ...sequence, to),
 	};

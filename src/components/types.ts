@@ -92,24 +92,23 @@ export type IEvent = {
 	longitude: number;
 };
 
-export type IEventSignupComplete = {
+export type IEventSignupBase = {
 	user: {
 		id: number;
 		name: string;
 	};
 	canDrive: boolean;
+	note: string;
+};
+
+export type IEventSignupWithLocation = IEventSignupBase & {
 	placeId: string;
 	formattedAddress: string;
 	latitude: number;
 	longitude: number;
 };
 
-export type IEventSignupIncomplete = {
-	user: {
-		id: number;
-		name: string;
-	};
-	canDrive: boolean;
+export type IEventSignupWithoutLocation = IEventSignupBase & {
 	placeId: null;
 	formattedAddress: null;
 	latitude: null;
@@ -120,7 +119,9 @@ export type IEventSignupIncomplete = {
  * Model EventSignup
  */
 
-export type IEventSignup = IEventSignupComplete | IEventSignupIncomplete;
+export type IEventSignup =
+	| IEventSignupWithLocation
+	| IEventSignupWithoutLocation;
 
 export type IInvitation = {
 	user: {

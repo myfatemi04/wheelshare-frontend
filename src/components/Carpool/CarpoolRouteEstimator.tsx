@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { Location } from '../../lib/estimateoptimalpath';
 import getDistance from '../../lib/getdistance';
-import { IEventSignupComplete } from '../types';
+import { IEventSignupWithLocation } from '../types';
 import useOptimalPath from '../useOptimalPath';
 import { CarpoolContext } from './Carpool';
 import useSignups from './useSignups';
@@ -21,7 +21,7 @@ export default function CarpoolRouteEstimator() {
 		() =>
 			signups.filter(
 				(signup) => signup.latitude !== null
-			) as IEventSignupComplete[],
+			) as IEventSignupWithLocation[],
 		[signups]
 	);
 

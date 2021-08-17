@@ -8,7 +8,7 @@ import {
 	useSendCarpoolRequest,
 } from '../../state/Notifications/NotificationsHooks';
 import { useMe } from '../hooks';
-import { IEvent, IEventSignupComplete } from '../types';
+import { IEvent, IEventSignupWithLocation } from '../types';
 import useOptimalPath from '../useOptimalPath';
 import EventContext from './EventContext';
 import { useCurrentEventSignup } from './EventHooks';
@@ -33,7 +33,7 @@ function useMemberLocations(members: IEvent['carpools'][0]['members']) {
 						longitude: signup.longitude,
 					};
 				})
-				.filter(Boolean) as IEventSignupComplete[],
+				.filter(Boolean) as IEventSignupWithLocation[],
 		[members, signups]
 	);
 }
