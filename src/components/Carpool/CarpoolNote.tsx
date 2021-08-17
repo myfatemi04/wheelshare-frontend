@@ -32,9 +32,7 @@ export default function CarpoolNote({
 
 	return (
 		<div style={{ margin: '1rem 0rem', maxWidth: '100%' }}>
-			<b>Note</b>
-			<br />
-			<br />
+			<h3>Description</h3>
 			{editing ? (
 				<div>
 					<UITextInput

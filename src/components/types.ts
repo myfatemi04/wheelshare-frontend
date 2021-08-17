@@ -24,6 +24,9 @@ export type ICarpool = {
 		latitude: number;
 		longitude: number;
 		placeId: string;
+		startTime: string | null;
+		endTime: string | null;
+		duration: number;
 	};
 	creatorId: number;
 	members: {

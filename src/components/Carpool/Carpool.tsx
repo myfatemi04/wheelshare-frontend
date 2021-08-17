@@ -205,9 +205,6 @@ export default function Carpool({ id }: { id: number }) {
 				{isCreator
 					? 'You are the creator of this carpool.'
 					: `${creatorName} is the creator of this carpool`}
-				<UILink href={'/events/' + carpool.event.id}>
-					{carpool.event.name}
-				</UILink>
 				<CarpoolTopButtons />
 				<CarpoolDetails />
 				<Members>
