@@ -15,6 +15,7 @@ export type IUser = {
 export type ICarpool = {
 	id: number;
 	name: string;
+	note: string;
 	eventId: number | null;
 	event: {
 		id: number;

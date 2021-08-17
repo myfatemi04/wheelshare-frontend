@@ -27,6 +27,7 @@ type CarpoolState = {
 	members: { id: number; name: string }[];
 	invitations: Record<number, ICarpool['invitations'][0]>;
 	creatorId: number;
+	note: string;
 };
 
 export const CarpoolContext = createContext({
@@ -66,6 +67,7 @@ export default function Carpool({ id }: { id: number }) {
 				});
 				setCarpool({
 					id: carpool.id,
+					note: carpool.note,
 					name: carpool.name,
 					event: carpool.event,
 					members: carpool.members,

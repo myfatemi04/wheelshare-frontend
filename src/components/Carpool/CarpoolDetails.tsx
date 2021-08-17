@@ -1,11 +1,23 @@
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { useCallback } from 'react';
 import { useContext } from 'react';
+import { setCarpoolNote } from '../api';
 
 import { CarpoolContext } from './Carpool';
+import CarpoolNote from './CarpoolNote';
 
 export default function CarpoolDetails() {
 	const { carpool } = useContext(CarpoolContext);
+	const onSaveCarpoolNote = useCallback(
+		(note) => {
+			setCarpoolNote(carpool.id, note).then(() => {
+				carpool.note = note;
+			});
+		},
+		[carpool]
+	);
+
 	return (
 		<div>
 			<div
@@ -28,6 +40,7 @@ export default function CarpoolDetails() {
 				<EventIcon style={{ marginRight: '1rem' }} />
 				DAWN - DUSK
 			</div>
+			<CarpoolNote note={carpool.note} setNote={onSaveCarpoolNote} />
 		</div>
 	);
 }

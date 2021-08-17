@@ -248,6 +248,10 @@ export async function createCarpool({
 	return { id };
 }
 
+export async function setCarpoolNote(carpoolId: number, note: string) {
+	return await post(`/carpools/${carpoolId}/set_note`, { note });
+}
+
 export async function sendCarpoolInvite(carpoolId: number, userId: number) {
 	await post(`/carpools/${carpoolId}/invite`, { userId });
 }
