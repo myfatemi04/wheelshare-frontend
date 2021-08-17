@@ -80,6 +80,7 @@ export type IEvent = {
 			name: string;
 		}[];
 	}[];
+	description: string;
 	signups: Record<string, IEventSignup>;
 	startTime: string; // Datestring
 	duration: number;

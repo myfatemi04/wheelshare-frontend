@@ -5,7 +5,7 @@ import { useMe } from '../hooks';
 import UIButton from '../UI/UIButton';
 import UILink from '../UI/UILink';
 import EventContext from './EventContext';
-import { useMyCarpool } from './EventHooks';
+import { useCurrentEventCarpool } from './EventHooks';
 
 type CreationStatus = null | 'pending' | 'completed' | 'errored';
 
@@ -16,7 +16,7 @@ export default function EventCarpoolCreateButton() {
 	const [createdCarpoolId, setCreatedCarpoolId] = useState<null | number>(null);
 
 	const me = useMe() || { id: 0, name: '' };
-	const myCarpool = useMyCarpool();
+	const myCarpool = useCurrentEventCarpool();
 
 	const createCarpoolCallback = useCallback(async () => {
 		setCreationStatus('pending');

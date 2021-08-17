@@ -113,6 +113,17 @@ export async function createEvent({
 	};
 }
 
+export async function setEventDescription(
+	eventId: number,
+	description: string
+) {
+	return await post(`/events/${eventId}/update`, { description });
+}
+
+export async function deleteEvent(eventId: number) {
+	return await delete$(`/events/${eventId}`);
+}
+
 export async function getEvents(): Promise<IEvent[]> {
 	return await get('/events');
 }

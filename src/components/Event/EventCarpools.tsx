@@ -11,7 +11,7 @@ import { useMe } from '../hooks';
 import { IEvent, IEventSignupComplete } from '../types';
 import useOptimalPath from '../useOptimalPath';
 import EventContext from './EventContext';
-import { useMySignup } from './EventHooks';
+import { useCurrentEventSignup } from './EventHooks';
 
 function useMemberLocations(members: IEvent['carpools'][0]['members']) {
 	const { event } = useContext(EventContext);
@@ -61,7 +61,7 @@ function CarpoolRow({
 
 	const { event } = useContext(EventContext);
 
-	const mySignup = useMySignup();
+	const mySignup = useCurrentEventSignup();
 
 	const memberLocations = useMemberLocations(carpool.members);
 
@@ -145,13 +145,15 @@ export default function Carpools() {
 				Click <EmojiPeopleIcon style={{ fontSize: '0.875rem' }} /> to request to
 				join a carpool.
 			</span>
-			{event.carpools.length>0 ? event.carpools.map((carpool) => (
-				<CarpoolRow
-					carpool={carpool}
-					key={carpool.id}
-					inCarpoolAlready={alreadyInCarpool}
-				/>
-			)) : "No Carpools"}
+			{event.carpools.length > 0
+				? event.carpools.map((carpool) => (
+						<CarpoolRow
+							carpool={carpool}
+							key={carpool.id}
+							inCarpoolAlready={alreadyInCarpool}
+						/>
+				  ))
+				: 'No Carpools'}
 		</div>
 	);
 }

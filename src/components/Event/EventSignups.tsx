@@ -7,13 +7,13 @@ import { IEventSignup } from '../types';
 import EventCarpoolCreateButton from './EventCarpoolCreateButton';
 import EventContext from './EventContext';
 import pickLatLong from './pickLatLong';
-import { useMySignup } from './EventHooks';
+import { useCurrentEventSignup } from './EventHooks';
 
 function EventSignup({ signup }: { signup: IEventSignup }) {
 	const { user } = signup;
 	const me = useMe();
 	const { tentativeInvites, event } = useContext(EventContext);
-	const mySignup = useMySignup();
+	const mySignup = useCurrentEventSignup();
 	const myLocation = pickLatLong(mySignup);
 	const theirLocation = pickLatLong(signup);
 	const eventLocation = pickLatLong(event)!;
