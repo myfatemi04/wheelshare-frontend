@@ -9,7 +9,6 @@ import {
 } from '../api';
 import { useMe } from '../hooks';
 import { ICarpool } from '../types';
-import UILink from '../UI/UILink';
 import UISecondaryBox from '../UI/UISecondaryBox';
 import useImmutable from '../useImmutable';
 import CarpoolDetails from './CarpoolDetails';
