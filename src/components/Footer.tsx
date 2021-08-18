@@ -6,7 +6,8 @@ export default function Footer() {
 				bottom: '0.5rem',
 				fontSize: '0.75rem',
 				textAlign: 'center',
-				width: '100%',
+				left: 0,
+				right: 0,
 			}}
 		>
 			Made by <a href="https://linkedin.com/in/michaelfatemi">Michael Fatemi</a>
@@ -19,6 +20,7 @@ export default function Footer() {
 			Code:{' '}
 			<a href="https://github.com/myfatemi04/wheelshare-frontend">frontend</a>,{' '}
 			<a href="https://github.com/myfatemi04/wheelshare-altbackend">backend</a>{' '}
+			<a href="/error-report">Report an error</a>{' '}
 			<a
 				href="https://ko-fi.com/michaelfatemi"
 				target="_blank"
@@ -31,6 +33,7 @@ export default function Footer() {
 					padding: '0.5em',
 					color: 'white',
 					textDecoration: 'none',
+					marginTop: '0.5rem',
 				}}
 			>
 				<img

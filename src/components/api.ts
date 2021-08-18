@@ -298,3 +298,17 @@ export async function getPotentialInvitees(
 ): Promise<PotentialInvitee[]> {
 	return await get(`/carpools/${carpoolId}/potential_invitees`);
 }
+
+export async function sendErrorReport(error: string) {
+	const response = await fetch(`${domain}user_reported_error`, {
+		method: 'post',
+		body: JSON.stringify({ error }),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (response.status !== 200) {
+		throw new Error(response.statusText);
+	}
+}

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NotificationsProvider from '../state/Notifications/NotificationsProvider';
 import AuthenticationContext from './Authentication/AuthenticationContext';
 import EasterEgg from './EasterEgg';
+import ErrorReport from './ErrorReport';
 import Footer from './Footer';
 import Header from './Header/Header';
 import {
@@ -49,7 +50,7 @@ export default function App() {
 		<div
 			style={{
 				padding: '1rem',
-				maxWidth: '100vw',
+				maxWidth: 'calc(100vw - 0.75rem)',
 				minHeight: 'calc(100vh - 2rem)',
 				position: 'relative',
 			}}
@@ -77,6 +78,7 @@ export default function App() {
 					) : (
 						<BrowserRouter>
 							<WheelShareLoggedOut />
+							<Route component={ErrorReport} path="/error-report" />
 							<Route
 								component={Authenticator}
 								path="/auth/:provider/callback"
