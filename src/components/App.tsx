@@ -64,6 +64,7 @@ export default function App() {
 							<BrowserRouter>
 								<Switch>
 									<Route path="/" exact component={WheelShare} />
+									<Route path="/error-report" component={ErrorReport} />
 									<Route
 										path="/join/:code"
 										component={GroupSharedLinkResolver}
