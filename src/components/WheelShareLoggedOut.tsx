@@ -16,7 +16,11 @@ export default function WheelShareLoggedOut() {
 			<br />
 			<p>
 				If you're new to Ion, follow{' '}
-				<a href="https://guides.tjhsst.edu/ion/resetting-your-ion-password">
+				<a
+					href="https://guides.tjhsst.edu/ion/resetting-your-ion-password"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
 					this guide
 				</a>{' '}
 				to create an account and reset your password
