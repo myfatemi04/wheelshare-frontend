@@ -13,6 +13,14 @@ export default function WheelShareLoggedOut() {
 			<UILink href={ionAuthorizationEndpoint}>Log in with Ion</UILink>
 			<br />
 			<UILink href={googleAuthorizationEndpoint}>Log in with Google</UILink>
+			<br />
+			<p>
+				If you're new to Ion, follow{' '}
+				<a href="https://guides.tjhsst.edu/ion/resetting-your-ion-password">
+					this guide
+				</a>{' '}
+				to create an account and reset your password
+			</p>
 		</>
 	);
 }
