@@ -61,6 +61,12 @@ function EventSignup({ signup }: { signup: IEventSignup }) {
 				<b>{user.name}</b>
 				{extraDistance && ` +${extraDistance.toFixed(1)} miles`}{' '}
 				{signup.canDrive && ' (can drive)'}
+				{signup.note && (
+					<>
+						<br />
+						<span style={{ fontStyle: 'italic' }}>{signup.note}</span>
+					</>
+				)}
 			</span>
 
 			{!hasCarpool &&
