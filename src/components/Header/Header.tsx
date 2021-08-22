@@ -30,6 +30,7 @@ export default function Header() {
 					{me.name}
 					{me.email && ` (${me.email})`}
 					<UIPressable onClick={logout}>Log out</UIPressable>
+					<a href="/me">Profile</a>
 					<br />
 					{notifications.length > 0 ? (
 						<Notifications

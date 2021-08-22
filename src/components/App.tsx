@@ -19,6 +19,7 @@ const CarpoolPage = lazy(() => import('./Carpool/CarpoolPage'));
 const EventPage = lazy(() => import('./Event/EventPage'));
 const GroupPage = lazy(() => import('./Group/GroupPage'));
 const GroupSharedLinkResolver = lazy(() => import('./GroupSharedLinkResolver'));
+const ProfileForSelf = lazy(() => import('./ProfileForSelf/ProfileForSelf'));
 
 const style: CSSProperties = {
 	display: 'flex',
@@ -63,6 +64,7 @@ export default function App() {
 							<BrowserRouter>
 								<Switch>
 									<Route path="/" exact component={WheelShare} />
+									<Route path="/me" exact component={ProfileForSelf} />
 									<Route
 										path="/join/:code"
 										component={GroupSharedLinkResolver}

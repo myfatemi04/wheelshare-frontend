@@ -298,3 +298,7 @@ export async function getPotentialInvitees(
 ): Promise<PotentialInvitee[]> {
 	return await get(`/carpools/${carpoolId}/potential_invitees`);
 }
+
+export async function updateBio(bio: string) {
+	return await post('/users/@me/bio', { bio });
+}
