@@ -312,3 +312,7 @@ export async function sendErrorReport(error: string) {
 		throw new Error(response.statusText);
 	}
 }
+
+export async function updateBio(bio: string) {
+	return await post('/users/@me/bio', { bio });
+}

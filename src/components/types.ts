@@ -101,6 +101,7 @@ export type IEventSignupBase = {
 	user: {
 		id: number;
 		name: string;
+		bio: string;
 	};
 	canDrive: boolean;
 	note: string;
