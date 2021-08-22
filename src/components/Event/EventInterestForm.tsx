@@ -10,9 +10,11 @@ import EventCarpools from './EventCarpools';
 import { useMutableEvent } from './EventHooks';
 import EventSignups from './EventSignups';
 
+const defaultMe = { id: 0, name: '', bio: '' };
+
 export default function EventInterestForm() {
 	const event = useMutableEvent();
-	const me = useMe() || { id: 0, name: '' };
+	const me = useMe() || defaultMe;
 	const placeIdRef = useRef<string | null>(null);
 	const canDriveRef = useRef(false);
 	const [note, setNote] = useState('');
@@ -48,7 +50,7 @@ export default function EventInterestForm() {
 				const details = await getPlaceDetails(placeId);
 
 				event.signups[me.id] = {
-					user: { id: me.id, name: me.name },
+					user: me,
 					placeId,
 					...details,
 					canDrive,
@@ -56,7 +58,7 @@ export default function EventInterestForm() {
 				};
 			} else {
 				event.signups[me.id] = {
-					user: { id: me.id, name: me.name },
+					user: me,
 					placeId: null,
 					latitude: null,
 					longitude: null,
@@ -66,7 +68,7 @@ export default function EventInterestForm() {
 				};
 			}
 		},
-		[event.id, event.signups, me.id, me.name]
+		[event.id, event.signups, me]
 	);
 
 	const removeSignup = useCallback(async () => {
