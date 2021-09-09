@@ -135,6 +135,12 @@ export default function EventInterestForm() {
 					>
 						{canDrive ? 'Can drive' : "Can't drive"}
 					</UIButton>
+					<span style={{ fontSize: '0.875em' }}>
+						Your pickup/dropoff location lets you see who would add the least
+						driving distance. It's only visible to members of your carpool. As
+						an alternative, you could write your general location in the note
+						section, such as "Chantilly".
+					</span>
 					<UIPlacesAutocomplete
 						placeholder="Pickup and dropoff location"
 						onSelected={(_address, placeId) => {
