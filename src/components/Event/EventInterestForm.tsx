@@ -115,7 +115,7 @@ export default function EventInterestForm() {
 					transition: 'color 0.2s, background-color 0.2s',
 				}}
 			>
-				{interested ? 'Interested' : 'Not interested'}
+				{interested ? 'Leave event' : 'Join event'}
 			</UIButton>
 			{interested && (
 				<>
